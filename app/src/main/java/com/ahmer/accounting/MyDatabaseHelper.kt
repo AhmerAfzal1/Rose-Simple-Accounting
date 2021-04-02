@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-
-const val LOG_NAME: String = "SimpleAccounting"
+import com.ahmer.accounting.Constants.Companion.LOG_TAG
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -30,20 +29,20 @@ class MyDatabaseHelper(context: Context) :
     override fun onCreate(db: SQLiteDatabase?) {
         try {
             val createTable = "CREATE TABLE IF NOT EXISTS $TABLE_NAME (" +
-                    "$CUSTOMER_ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL," +
-                    "$CUSTOMER_NAME TEXT NOT NULL," +
-                    "$CUSTOMER_GENDER VARCHAR(7) NOT NULL," +
-                    "$CUSTOMER_ADDRESS TEXT," +
-                    "$CUSTOMER_CITY TEXT," +
-                    "$CUSTOMER_PHONE1 TEXT," +
-                    "$CUSTOMER_PHONE2 TEXT," +
-                    "$CUSTOMER_PHONE3 TEXT," +
+                    "$CUSTOMER_ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, " +
+                    "$CUSTOMER_NAME TEXT NOT NULL, " +
+                    "$CUSTOMER_GENDER VARCHAR(7) NOT NULL, " +
+                    "$CUSTOMER_ADDRESS TEXT, " +
+                    "$CUSTOMER_CITY TEXT, " +
+                    "$CUSTOMER_PHONE1 TEXT, " +
+                    "$CUSTOMER_PHONE2 TEXT, " +
+                    "$CUSTOMER_PHONE3 TEXT, " +
                     "CHECK($CUSTOMER_GENDER IN ('Male', 'Female', 'Unknown'))" +
                     ")"
+            Log.v(LOG_TAG, createTable)
             db?.execSQL(createTable)
-            Log.v(LOG_NAME, createTable)
         } catch (e: SQLiteException) {
-            Log.v(LOG_NAME, e.printStackTrace().toString())
+            Log.v(LOG_TAG, e.printStackTrace().toString())
         }
     }
 
@@ -54,8 +53,8 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun insertData(
-        name: String, gender: String, address: String, city: String,
-        phone1: String, phone2: String, phone3: String
+        name: String, gender: String, address: String?, city: String?,
+        phone1: String?, phone2: String?, phone3: String?
     ) {
         val dataValues = ContentValues()
         dataValues.put(CUSTOMER_NAME, name)
@@ -103,10 +102,10 @@ class MyDatabaseHelper(context: Context) :
                     .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2)))
                 stringBuilder.append("\nPhone3: ")
                     .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3)))
-                Log.v(LOG_NAME, stringBuilder.toString())
+                Log.v(LOG_TAG, stringBuilder.toString())
             }
         } catch (e: Exception) {
-            Log.v(LOG_NAME, e.printStackTrace().toString())
+            Log.v(LOG_TAG, e.printStackTrace().toString())
         } finally {
             cursor.close()
         }
