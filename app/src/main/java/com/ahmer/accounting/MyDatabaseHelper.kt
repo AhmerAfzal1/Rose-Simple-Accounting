@@ -73,8 +73,9 @@ class MyDatabaseHelper(context: Context) :
         writeDatabase.close()
     }
 
-    fun getData() {
+    fun getData(): ArrayList<CustomerProfile> {
         val readDatabase: SQLiteDatabase = this.readableDatabase
+        val customersList = ArrayList<CustomerProfile>()
         val queryContent = arrayOf<String>(
             CUSTOMER_ID,
             CUSTOMER_NAME,
@@ -90,6 +91,24 @@ class MyDatabaseHelper(context: Context) :
             readDatabase.query(TABLE_NAME, queryContent, null, null, null, null, null)
         try {
             while (cursor.moveToNext()) {
+                val customerProfile = CustomerProfile()
+                customerProfile.id = cursor.getInt(cursor.getColumnIndexOrThrow(CUSTOMER_ID))
+                customerProfile.name = cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_NAME))
+                customerProfile.gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_GENDER))
+                customerProfile.address =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_ADDRESS))
+                customerProfile.city =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_CITY))
+                customerProfile.phone1 =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE1))
+                customerProfile.phone2 =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2))
+                customerProfile.phone3 =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3))
+                customerProfile.comment =
+                    cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS))
+                customersList.add(customerProfile)
                 val stringBuilder = StringBuilder()
                 stringBuilder.append("ID: ")
                     .append(cursor.getInt(cursor.getColumnIndexOrThrow(CUSTOMER_ID)))
@@ -116,5 +135,7 @@ class MyDatabaseHelper(context: Context) :
         } finally {
             cursor.close()
         }
+
+        return customersList
     }
 }

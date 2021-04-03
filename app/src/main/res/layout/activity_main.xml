@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/see_customer_record"
+                android:text="@string/all_customer_record"
                 android:textAllCaps="false" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Rose Simple Accounting</string>
     <string name="add_new_customer">Add New Customer</string>
-    <string name="see_customer_record">See Customer Record</string>
+    <string name="all_customer_record">All Customers Record</string>
     <string name="name">Name</string>
     <string name="gender">Select Gender</string>
     <string name="male">Male</string>
@@ -13,4 +13,13 @@
     <string name="comments">Comments</string>
     <string name="title_toolbar_add_customer">Add Customer Data</string>
     <string name="save">Save</string>
+    <string name="customer_id">ID:</string>
+    <string name="customer_name">Name:</string>
+    <string name="customer_gender">Gender:</string>
+    <string name="customer_address">Address:</string>
+    <string name="customer_city">City:</string>
+    <string name="customer_phone1">Phone1:</string>
+    <string name="customer_phone2">Phone2:</string>
+    <string name="customer_phone3">Phone3:</string>
+    <string name="customer_comments">Comments:</string>
 </resources>
