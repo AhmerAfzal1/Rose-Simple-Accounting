@@ -1,7 +1,10 @@
 package com.ahmer.accounting
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -9,31 +12,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val databaseHelper = MyDatabaseHelper(applicationContext)
-
-        /*
-        val customerProfile = CustomerProfile()
-        customerProfile.name = "Ahmer Afzal"
-        customerProfile.gender = "Male"
-        customerProfile.address =
-            "Ward No. 16, Street No. 01, House No. 548, Darbar Road, Ghareeb Mohallah, Hasilpur, " +
-                    "(District) Bahawalpur."
-        customerProfile.city = "Hasilpur"
-        customerProfile.phone1 = "03023339589"
-        customerProfile.phone2 = "03002039589"
-        customerProfile.phone3 = ""
-
-        databaseHelper.insertData(
-            customerProfile.name,
-            customerProfile.gender,
-            customerProfile.address,
-            customerProfile.city,
-            customerProfile.phone1,
-            customerProfile.phone2,
-            customerProfile.phone3
-        )
-        */
-
-        Thread.sleep(1500)
         databaseHelper.getData()
+
+        val addRecord = findViewById<MaterialButton>(R.id.addCustomerProfile)
+        val seeRecord = findViewById<MaterialButton>(R.id.getCustomerRecord)
+
+        addRecord.setOnClickListener {
+            val intent = Intent(this, AddCustomerData::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                ) {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            }
+            startActivity(intent)
+        }
     }
 }

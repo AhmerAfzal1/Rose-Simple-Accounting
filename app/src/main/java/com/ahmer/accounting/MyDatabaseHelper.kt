@@ -24,6 +24,7 @@ class MyDatabaseHelper(context: Context) :
         private const val CUSTOMER_PHONE1: String = "Phone1"
         private const val CUSTOMER_PHONE2: String = "Phone2"
         private const val CUSTOMER_PHONE3: String = "Phone3"
+        private const val CUSTOMER_COMMENTS: String = "Comments"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -37,6 +38,7 @@ class MyDatabaseHelper(context: Context) :
                     "$CUSTOMER_PHONE1 TEXT, " +
                     "$CUSTOMER_PHONE2 TEXT, " +
                     "$CUSTOMER_PHONE3 TEXT, " +
+                    "$CUSTOMER_COMMENTS TEXT, " +
                     "CHECK($CUSTOMER_GENDER IN ('Male', 'Female', 'Unknown'))" +
                     ")"
             Log.v(LOG_TAG, createTable)
@@ -53,17 +55,19 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun insertData(
-        name: String, gender: String, address: String?, city: String?,
-        phone1: String?, phone2: String?, phone3: String?
+        name: String, gender: String, address: String?, city: String?, phone1: String?,
+        phone2: String?, phone3: String?, comments: String?
     ) {
-        val dataValues = ContentValues()
-        dataValues.put(CUSTOMER_NAME, name)
-        dataValues.put(CUSTOMER_GENDER, gender)
-        dataValues.put(CUSTOMER_ADDRESS, address)
-        dataValues.put(CUSTOMER_CITY, city)
-        dataValues.put(CUSTOMER_PHONE1, phone1)
-        dataValues.put(CUSTOMER_PHONE2, phone2)
-        dataValues.put(CUSTOMER_PHONE3, phone3)
+        val dataValues = ContentValues().apply {
+            put(CUSTOMER_NAME, name)
+            put(CUSTOMER_GENDER, gender)
+            put(CUSTOMER_ADDRESS, address)
+            put(CUSTOMER_CITY, city)
+            put(CUSTOMER_PHONE1, phone1)
+            put(CUSTOMER_PHONE2, phone2)
+            put(CUSTOMER_PHONE3, phone3)
+            put(CUSTOMER_COMMENTS, comments)
+        }
         val writeDatabase: SQLiteDatabase = this.writableDatabase
         writeDatabase.insert(TABLE_NAME, null, dataValues)
         writeDatabase.close()
@@ -79,7 +83,8 @@ class MyDatabaseHelper(context: Context) :
             CUSTOMER_CITY,
             CUSTOMER_PHONE1,
             CUSTOMER_PHONE2,
-            CUSTOMER_PHONE3
+            CUSTOMER_PHONE3,
+            CUSTOMER_COMMENTS
         )
         val cursor: Cursor =
             readDatabase.query(TABLE_NAME, queryContent, null, null, null, null, null)
@@ -102,6 +107,8 @@ class MyDatabaseHelper(context: Context) :
                     .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2)))
                 stringBuilder.append("\nPhone3: ")
                     .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3)))
+                stringBuilder.append("\nComments: ")
+                    .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS)))
                 Log.v(LOG_TAG, stringBuilder.toString())
             }
         } catch (e: Exception) {
