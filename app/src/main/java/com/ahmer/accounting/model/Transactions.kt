@@ -2,6 +2,8 @@ package com.ahmer.accounting.model
 
 class Transactions {
 
+    var id: Int = 0
+
     var credit: Double = 0.toDouble()
 
     var date: String = ""
@@ -10,5 +12,5 @@ class Transactions {
 
     var description: String = ""
 
-    var total: Double = 0.toDouble()
+    var balance: Double = 0.toDouble()
 }

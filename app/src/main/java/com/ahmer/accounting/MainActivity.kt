@@ -11,9 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val databaseHelper = MyDatabaseHelper(applicationContext)
-        databaseHelper.getCustomerProfileData()
-
         val addRecord = findViewById<MaterialButton>(R.id.addCustomerProfile)
         val getRecord = findViewById<MaterialButton>(R.id.getCustomerRecord)
 
