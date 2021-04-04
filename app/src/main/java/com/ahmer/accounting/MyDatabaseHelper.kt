@@ -186,7 +186,7 @@ class MyDatabaseHelper(context: Context) :
         val transactions = ArrayList<Transactions>()
         val getFromDatabase = this.readableDatabase
         val columnsArray = arrayOf<String>(
-            ID, DATE, DESCRIPTION, CREDIT, DEBIT,
+            ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE
         )
         try {
             val cursor: Cursor = getFromDatabase.query(
@@ -209,6 +209,20 @@ class MyDatabaseHelper(context: Context) :
                         balance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
                     }
                     transactions.add(transaction)
+                    val stringBuilder = StringBuilder()
+                    stringBuilder.append("ID: ")
+                        .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
+                    stringBuilder.append("\nDate: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DATE)))
+                    stringBuilder.append("\nDescription: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION)))
+                    stringBuilder.append("\nCredit: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CREDIT)))
+                    stringBuilder.append("\nDebit: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DEBIT)))
+                    stringBuilder.append("\nBalance: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(BALANCE)))
+                    Log.v(LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
                 Log.v(LOG_TAG, e.printStackTrace().toString())
@@ -219,5 +233,45 @@ class MyDatabaseHelper(context: Context) :
             Log.v(LOG_TAG, e.printStackTrace().toString())
         }
         return transactions
+    }
+
+    fun getPreviousBalance(): Double {
+        var previousBalance: Double = 0.toDouble()
+        val getBalanceFromDatabase = this.readableDatabase
+        val columnsArray = arrayOf<String>(
+            ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE
+        )
+        try {
+            val cursor: Cursor = getBalanceFromDatabase.query(
+                TRANSACTIONS_TABLE_NAME,
+                columnsArray,
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+            try {
+                while (cursor.moveToNext()) {
+                    /*val transaction = Transactions().apply {
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                        date = cursor.getString(cursor.getColumnIndexOrThrow(DATE))
+                        description = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION))
+                        credit = cursor.getDouble(cursor.getColumnIndexOrThrow(CREDIT))
+                        debit = cursor.getDouble(cursor.getColumnIndexOrThrow(DEBIT))
+                        balance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
+                    }*/
+                    previousBalance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
+                }
+            } catch (e: Exception) {
+                Log.v(LOG_TAG, e.printStackTrace().toString())
+            } finally {
+                cursor.close()
+            }
+        } catch (e: Exception) {
+            Log.v(LOG_TAG, e.printStackTrace().toString())
+        }
+
+        return previousBalance
     }
 }

@@ -17,6 +17,9 @@
         <activity
             android:name=".GetCustomerData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
+        <activity
+            android:name=".AddTransactions"
+            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

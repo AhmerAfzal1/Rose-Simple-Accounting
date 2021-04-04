@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.ahmer.accounting"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
     }
 
