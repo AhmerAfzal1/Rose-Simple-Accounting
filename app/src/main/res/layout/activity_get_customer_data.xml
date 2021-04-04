@@ -17,7 +17,7 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/all_customer_record"
+        app:title="All Customers Record"
         app:titleMarginStart="0dp" />
 
     <androidx.recyclerview.widget.RecyclerView

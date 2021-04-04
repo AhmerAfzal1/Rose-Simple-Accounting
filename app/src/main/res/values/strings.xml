@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Rose Simple Accounting</string>
-    <string name="add_new_customer">Add New Customer</string>
-    <string name="all_customer_record">All Customers Record</string>
+    <string name="add_new_customer">Add New Customer in Database</string>
+    <string name="all_customer_record">All Customers Record from Database</string>
     <string name="name">Name</string>
     <string name="gender">Select Gender</string>
     <string name="male">Male</string>
