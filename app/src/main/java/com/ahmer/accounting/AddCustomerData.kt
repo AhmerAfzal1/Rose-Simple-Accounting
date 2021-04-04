@@ -8,6 +8,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.model.CustomerProfile
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 
@@ -27,8 +28,8 @@ class AddCustomerData : AppCompatActivity() {
         val customerPhone2 = findViewById<TextInputLayout>(R.id.inputLayoutPhone2)
         val customerPhone3 = findViewById<TextInputLayout>(R.id.inputLayoutPhone3)
         val customerComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
-        var typeGender: String = ""
-        customerGender.setOnCheckedChangeListener { group, checkedId ->
+        var typeGender = ""
+        customerGender.setOnCheckedChangeListener { _, checkedId ->
             val rbGender = findViewById<RadioButton>(checkedId)
             typeGender = rbGender.text.toString()
         }
@@ -48,7 +49,7 @@ class AddCustomerData : AppCompatActivity() {
                     }
                     try {
                         val myDatabaseHelper = MyDatabaseHelper(this)
-                        myDatabaseHelper.insertData(
+                        myDatabaseHelper.insertCustomerProfileData(
                             name = customerProfile.name,
                             gender = customerProfile.gender,
                             address = customerProfile.address,

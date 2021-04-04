@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.model.CustomerProfile
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -54,7 +55,7 @@ class MyDatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun insertData(
+    fun insertCustomerProfileData(
         name: String, gender: String, address: String?, city: String?, phone1: String?,
         phone2: String?, phone3: String?, comments: String?
     ) {
@@ -73,7 +74,7 @@ class MyDatabaseHelper(context: Context) :
         writeDatabase.close()
     }
 
-    fun getData(): ArrayList<CustomerProfile> {
+    fun getCustomerProfileData(): ArrayList<CustomerProfile> {
         val readDatabase: SQLiteDatabase = this.readableDatabase
         val customersList = ArrayList<CustomerProfile>()
         val queryContent = arrayOf<String>(

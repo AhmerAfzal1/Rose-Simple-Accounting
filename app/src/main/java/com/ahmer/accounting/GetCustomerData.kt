@@ -8,13 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.model.CustomerProfile
 import com.google.android.material.appbar.MaterialToolbar
-import java.sql.RowId
 
 class GetCustomerData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +29,7 @@ class GetCustomerData : AppCompatActivity() {
         }
         val recyclerView = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         val myDatabaseHelper = MyDatabaseHelper(this)
-        val adapter = CustomerDataAdapter(this, myDatabaseHelper.getData())
+        val adapter = CustomerDataAdapter(this, myDatabaseHelper.getCustomerProfileData())
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter

@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val databaseHelper = MyDatabaseHelper(applicationContext)
-        databaseHelper.getData()
+        databaseHelper.getCustomerProfileData()
 
         val addRecord = findViewById<MaterialButton>(R.id.addCustomerProfile)
         val getRecord = findViewById<MaterialButton>(R.id.getCustomerRecord)
