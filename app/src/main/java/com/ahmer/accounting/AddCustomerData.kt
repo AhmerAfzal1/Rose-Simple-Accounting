@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout
 class AddCustomerData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_customer_data)
+        setContentView(R.layout.add_customer_data)
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.setOnClickListener {
             finish()
