@@ -27,9 +27,32 @@
         android:layout_margin="10dp">
 
         <LinearLayout
+            android:id="@+id/layoutSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_customer">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/tvSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layoutBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/layoutSpinner"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +67,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top|start"
-                    android:hint="Initial Balance"
+                    android:hint="@string/previous_balance"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:textColor="@android:color/black" />
@@ -56,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layoutBalance"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +94,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top|start"
-                    android:hint="Credit Amount"
+                    android:hint="@string/credit_amount"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:textColor="@android:color/black" />
@@ -82,6 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layoutCredit"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -96,7 +121,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top|start"
-                    android:hint="Debit Amount"
+                    android:hint="@string/debit_amount"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:textColor="@android:color/black" />
@@ -108,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layoutDebit"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -125,7 +151,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top|start"
-                    android:hint="Date"
+                    android:hint="@string/date"
                     android:inputType="date"
                     android:lines="1"
                     android:textColor="@android:color/black" />
@@ -137,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:layout_weight="1"
-                android:text="Pick Date" />
+                android:text="@string/pick_date" />
         </LinearLayout>
 
         <LinearLayout
@@ -145,6 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layoutDate"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -159,7 +186,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top|start"
-                    android:hint="Enter Description"
+                    android:hint="@string/enter_description"
                     android:inputType="textMultiLine"
                     android:lines="2"
                     android:maxLines="3"
@@ -179,7 +206,7 @@
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save" />
+                android:text="@string/save" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

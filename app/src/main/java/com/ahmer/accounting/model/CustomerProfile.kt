@@ -19,4 +19,8 @@ class CustomerProfile {
     var phone3: String = ""
 
     var comment: String = ""
+
+    override fun toString(): String {
+        return "ID: $id - $name"
+    }
 }

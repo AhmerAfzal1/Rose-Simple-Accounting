@@ -22,4 +22,11 @@
     <string name="customer_phone2">Phone2:</string>
     <string name="customer_phone3">Phone3:</string>
     <string name="customer_comments">Comments:</string>
+    <string name="select_customer">Select Customer</string>
+    <string name="previous_balance">Previous Balance</string>
+    <string name="credit_amount">Credit Amount</string>
+    <string name="debit_amount">Debit Amount</string>
+    <string name="date">Date</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="enter_description">Enter Description</string>
 </resources>

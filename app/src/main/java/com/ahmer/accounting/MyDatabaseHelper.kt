@@ -52,7 +52,7 @@ class MyDatabaseHelper(context: Context) :
                     "CHECK($CUSTOMER_GENDER IN ('Male', 'Female', 'Unknown'))" +
                     ")"
             val createTransactionsTable = "CREATE TABLE IF NOT EXISTS $TRANSACTIONS_TABLE_NAME (" +
-                    "$ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, " +
+                    "$ID INTEGER PRIMARY KEY UNIQUE NOT NULL, " +
                     "$DATE DATE DEFAULT CURRENT_DATE NOT NULL, " +
                     "$DESCRIPTION TEXT NOT NULL, " +
                     "$CREDIT REAL, " +
@@ -170,6 +170,7 @@ class MyDatabaseHelper(context: Context) :
 
     fun insertTransactions(transactions: Transactions) {
         val contentValues = ContentValues().apply {
+            put(ID, transactions.id)
             put(DATE, transactions.date)
             put(DESCRIPTION, transactions.description)
             put(CREDIT, transactions.credit)

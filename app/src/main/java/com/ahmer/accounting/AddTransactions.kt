@@ -4,12 +4,14 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,6 +33,7 @@ class AddTransactions : AppCompatActivity() {
         val pickDate = findViewById<MaterialButton>(R.id.btnDate)
         val inputDescription = findViewById<TextInputEditText>(R.id.inputDescription)
         val saveButton = findViewById<MaterialButton>(R.id.btnSave)
+        val tvSpinner = findViewById<MaterialAutoCompleteTextView>(R.id.tvSpinner)
         initialBalance.setText("0")
         creditAmount.setText("0")
         debitAmount.setText("0")
@@ -55,12 +58,25 @@ class AddTransactions : AppCompatActivity() {
             datePicker.show()
         }
 
-        val listOfTrans = myDatabaseHelper.getTransactions()
-        for (trans: Transactions in listOfTrans) {
-            Log.v(LOG_TAG, trans.toString())
-        }
+        val customerProfileFromDatabase = myDatabaseHelper.getCustomerProfileData()
+        val customersAdapter = CustomersAdapter(this, customerProfileFromDatabase)
+        var customerId: Int = 0
+        tvSpinner.threshold = 1
+        tvSpinner.setAdapter(customersAdapter)
+        tvSpinner.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                customerId = customerProfileFromDatabase[position].id
+                when (position) {
+                    0 -> {
+                        Log.v(LOG_TAG, "Ahmer")
+                    }
+                    1 -> {
+                        Log.v(LOG_TAG, "Aamir")
+                    }
+                }
+            }
 
-        fun addTransaction(context: Context) {
+        fun addTransaction(context: Context, iD: Int) {
             try {
                 if (previousBalance > 0) {
                     initialBalance.setText(previousBalance.toString())
@@ -106,6 +122,7 @@ class AddTransactions : AppCompatActivity() {
                     val userInputDate: String = inputDate.text.toString()
                     val userInputDescription: String = inputDescription.text.toString().trim()
                     val transactions = Transactions().apply {
+                        id = iD
                         if (initialBalance.text.toString().trim().toDouble() > 0) {
                             userInputBalance = initialBalance.text.toString().trim().toDouble()
                             balance = userInputBalance
@@ -146,7 +163,7 @@ class AddTransactions : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            addTransaction(this)
+            addTransaction(this, customerId)
         }
     }
 }
