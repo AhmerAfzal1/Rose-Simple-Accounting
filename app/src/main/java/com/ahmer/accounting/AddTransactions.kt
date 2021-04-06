@@ -41,7 +41,7 @@ class AddTransactions : AppCompatActivity() {
         val myDatabaseHelper = MyDatabaseHelper(this)
         val customerProfileFromDatabase = myDatabaseHelper.getCustomerProfileData()
         val customersAdapter = CustomersAdapter(this, customerProfileFromDatabase)
-        var customerId: Int = 0
+        var customerId = 0
         var customerPreviousBalance: Double = 0.toDouble()
 
         pickDate.setOnClickListener {
@@ -77,7 +77,7 @@ class AddTransactions : AppCompatActivity() {
         fun addTransaction(context: Context, iD: Int, previousBalance: Double) {
             Log.v(LOG_TAG, "Previous Balance: $previousBalance")
             val transactionsList = myDatabaseHelper.getTransactions()
-            var transactionsId: Int = 0
+            var transactionsId = 0
             for (transaction in transactionsList) {
                 transactionsId = transaction.id
             }

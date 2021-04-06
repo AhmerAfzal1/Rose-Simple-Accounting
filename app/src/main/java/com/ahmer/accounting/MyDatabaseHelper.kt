@@ -92,7 +92,7 @@ class MyDatabaseHelper(context: Context) :
     fun getCustomerProfileData(): ArrayList<CustomerProfile> {
         val readDatabase: SQLiteDatabase = this.readableDatabase
         val customersList = ArrayList<CustomerProfile>()
-        val queryContent = arrayOf<String>(
+        val queryContent = arrayOf(
             ID,
             CUSTOMER_NAME,
             CUSTOMER_GENDER,

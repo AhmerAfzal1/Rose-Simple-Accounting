@@ -36,7 +36,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -57,7 +56,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -78,7 +76,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -99,7 +96,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -120,7 +116,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -141,7 +136,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -162,7 +156,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -183,7 +176,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />
@@ -204,7 +196,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:text="@string/customer_id"
                         android:textColor="@android:color/black" />

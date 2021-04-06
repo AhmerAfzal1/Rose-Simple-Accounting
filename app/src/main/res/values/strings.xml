@@ -3,7 +3,6 @@
     <string name="add_new_customer">Add New Customer in Database</string>
     <string name="all_customer_record">All Customers Record from Database</string>
     <string name="name">Name</string>
-    <string name="gender">Select Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="unknown">Unknown</string>
