@@ -160,6 +160,7 @@ class MyDatabaseHelper(context: Context) :
                 Log.v(LOG_TAG, e.printStackTrace().toString())
             } finally {
                 cursor.close()
+                readDatabase.close()
             }
         } catch (e: Exception) {
             Log.v(LOG_TAG, e.printStackTrace().toString())
@@ -186,9 +187,7 @@ class MyDatabaseHelper(context: Context) :
     fun getTransactions(): ArrayList<Transactions> {
         val transactions = ArrayList<Transactions>()
         val getFromDatabase = this.readableDatabase
-        val columnsArray = arrayOf<String>(
-            ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE
-        )
+        val columnsArray = arrayOf(ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE)
         try {
             val cursor: Cursor = getFromDatabase.query(
                 TRANSACTIONS_TABLE_NAME,
@@ -229,6 +228,7 @@ class MyDatabaseHelper(context: Context) :
                 Log.v(LOG_TAG, e.printStackTrace().toString())
             } finally {
                 cursor.close()
+                getFromDatabase.close()
             }
         } catch (e: Exception) {
             Log.v(LOG_TAG, e.printStackTrace().toString())
@@ -236,43 +236,46 @@ class MyDatabaseHelper(context: Context) :
         return transactions
     }
 
-    fun getPreviousBalance(): Double {
+    fun updateTransactions(id: Int, transactions: Transactions) {
+        val updateTransactions = this.writableDatabase
+        val contentValues = ContentValues().apply {
+            put(DATE, transactions.date)
+            put(DESCRIPTION, transactions.description)
+            put(CREDIT, transactions.credit)
+            put(DEBIT, transactions.debit)
+            put(BALANCE, transactions.balance)
+        }
+        try {
+            updateTransactions.update(
+                TRANSACTIONS_TABLE_NAME,
+                contentValues,
+                "$ID = ?",
+                arrayOf(id.toString())
+            )
+        } catch (e: Exception) {
+            Log.v(LOG_TAG, e.message.toString())
+        } finally {
+            updateTransactions.close()
+        }
+    }
+
+    fun getPreviousBalance(id: Int): Double {
         var previousBalance: Double = 0.toDouble()
         val getBalanceFromDatabase = this.readableDatabase
-        val columnsArray = arrayOf<String>(
-            ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE
-        )
+        val customerID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $ID = $id"
+        val cursor: Cursor = getBalanceFromDatabase.rawQuery(customerID, null)
         try {
-            val cursor: Cursor = getBalanceFromDatabase.query(
-                TRANSACTIONS_TABLE_NAME,
-                columnsArray,
-                null,
-                null,
-                null,
-                null,
-                null
-            )
-            try {
-                while (cursor.moveToNext()) {
-                    /*val transaction = Transactions().apply {
-                        id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
-                        date = cursor.getString(cursor.getColumnIndexOrThrow(DATE))
-                        description = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION))
-                        credit = cursor.getDouble(cursor.getColumnIndexOrThrow(CREDIT))
-                        debit = cursor.getDouble(cursor.getColumnIndexOrThrow(DEBIT))
-                        balance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
-                    }*/
+            if (cursor.moveToFirst()) {
+                do {
                     previousBalance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
-                }
-            } catch (e: Exception) {
-                Log.v(LOG_TAG, e.printStackTrace().toString())
-            } finally {
-                cursor.close()
+                } while (cursor.moveToNext())
             }
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.printStackTrace().toString())
+            Log.v(LOG_TAG, e.message.toString())
+        } finally {
+            cursor.close()
+            getBalanceFromDatabase.close()
         }
-
         return previousBalance
     }
 }

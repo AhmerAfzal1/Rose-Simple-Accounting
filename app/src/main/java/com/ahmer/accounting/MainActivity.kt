@@ -3,7 +3,9 @@ package com.ahmer.accounting
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.ahmer.accounting.Constants.Companion.LOG_TAG
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
             }
+            Log.v(LOG_TAG, "Add record activity opened")
             startActivity(intent)
         }
 

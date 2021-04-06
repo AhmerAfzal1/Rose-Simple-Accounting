@@ -21,6 +21,6 @@ class CustomerProfile {
     var comment: String = ""
 
     override fun toString(): String {
-        return "ID: $id - $name"
+        return "[$id] $name"
     }
 }

@@ -39,7 +39,10 @@ class AddTransactions : AppCompatActivity() {
         debitAmount.setText("0")
 
         val myDatabaseHelper = MyDatabaseHelper(this)
-        val previousBalance: Double = myDatabaseHelper.getPreviousBalance()
+        val customerProfileFromDatabase = myDatabaseHelper.getCustomerProfileData()
+        val customersAdapter = CustomersAdapter(this, customerProfileFromDatabase)
+        var customerId: Int = 0
+        var customerPreviousBalance: Double = 0.toDouble()
 
         pickDate.setOnClickListener {
             val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.UK)
@@ -58,103 +61,101 @@ class AddTransactions : AppCompatActivity() {
             datePicker.show()
         }
 
-        val customerProfileFromDatabase = myDatabaseHelper.getCustomerProfileData()
-        val customersAdapter = CustomersAdapter(this, customerProfileFromDatabase)
-        var customerId: Int = 0
         tvSpinner.threshold = 1
         tvSpinner.setAdapter(customersAdapter)
         tvSpinner.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 customerId = customerProfileFromDatabase[position].id
-                when (position) {
-                    0 -> {
-                        Log.v(LOG_TAG, "Ahmer")
-                    }
-                    1 -> {
-                        Log.v(LOG_TAG, "Aamir")
-                    }
+                customerPreviousBalance = myDatabaseHelper.getPreviousBalance(customerId)
+                if (customerPreviousBalance > 0) {
+                    initialBalance.setText(customerPreviousBalance.toString())
+                    initialBalance.isEnabled = false
+                    initialBalance.isClickable = false
                 }
             }
 
-        fun addTransaction(context: Context, iD: Int) {
+        fun addTransaction(context: Context, iD: Int, previousBalance: Double) {
+            Log.v(LOG_TAG, "Previous Balance: $previousBalance")
             try {
-                if (previousBalance > 0) {
-                    initialBalance.setText(previousBalance.toString())
-                    initialBalance.isEnabled = false
-                    initialBalance.isClickable = false
-                    var newBalance: Double = 0.toDouble()
-                    val newCredit: Double
-                    val newDebit: Double
-                    if (creditAmount.text.toString().trim().toDouble() > 0) {
-                        newCredit = creditAmount.text.toString().trim().toDouble()
-                        newBalance += newCredit
-                    } else {
-                        newCredit = 0.toDouble()
-                    }
-                    if (debitAmount.text.toString().trim().toDouble() > 0) {
-                        newDebit = debitAmount.text.toString().trim().toDouble()
-                        newBalance -= newDebit
-                    } else {
-                        newDebit = 0.toDouble()
-                    }
+                if (previousBalance <= 0) {
+                    val newInitialBalance: Double = initialBalance.text.toString().trim().toDouble()
+                    val newCredit: Double = creditAmount.text.toString().trim().toDouble()
+                    val newDebit: Double = debitAmount.text.toString().trim().toDouble()
+                    val newDate: String = inputDate.text.toString()
+                    val newDescription: String = inputDescription.text.toString().trim()
 
-                    if (newCredit == 0.toDouble() && newDebit == 0.toDouble()) {
-                        Toast.makeText(
-                            context,
-                            "Please enter valid debit or credit amount",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    val transactions = Transactions().apply {
-                        balance = newBalance
-                        credit = newCredit
-                        debit = newDebit
-                        date = inputDate.text.toString()
-                        description = inputDescription.text.toString().trim()
-                    }
-                    myDatabaseHelper.insertTransactions(transactions)
-                    Toast.makeText(context, "Transaction added successfully", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    var userInputBalance: Double
-                    var userInputCredit: Double
-                    var userInputDebit: Double
-                    val userInputDate: String = inputDate.text.toString()
-                    val userInputDescription: String = inputDescription.text.toString().trim()
-                    val transactions = Transactions().apply {
+                    val addNewTransaction = Transactions().apply {
                         id = iD
-                        if (initialBalance.text.toString().trim().toDouble() > 0) {
-                            userInputBalance = initialBalance.text.toString().trim().toDouble()
-                            balance = userInputBalance
+
+                        balance = if (newInitialBalance > 0) {
+                            newInitialBalance
                         } else {
-                            balance = 0.toDouble()
+                            0.toDouble()
                         }
-                        if (creditAmount.text.toString().trim().toDouble() > 0) {
-                            userInputCredit = creditAmount.text.toString().trim().toDouble()
-                            credit = userInputCredit
+
+                        credit = if (newCredit > 0) {
+                            newCredit
                         } else {
-                            credit = 0.toDouble()
+                            0.toDouble()
                         }
-                        if (creditAmount.text.toString().trim().toDouble() > 0) {
-                            userInputDebit = debitAmount.text.toString().trim().toDouble()
-                            debit = userInputDebit
+
+                        debit = if (newDebit > 0) {
+                            newDebit
                         } else {
-                            debit = 0.toDouble()
+                            0.toDouble()
                         }
-                        if (userInputDate.isNotEmpty()) {
-                            date = userInputDate
+
+                        if (newDate.isNotEmpty()) {
+                            date = newDate
                         } else {
                             Toast.makeText(context, "Please pick a date", Toast.LENGTH_SHORT).show()
                         }
-                        if (userInputDescription.isNotEmpty()) {
-                            description = userInputDescription
+
+                        if (newDescription.isNotEmpty()) {
+                            description = newDescription
                         } else {
                             Toast.makeText(context, "Please enter description", Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
-                    myDatabaseHelper.insertTransactions(transactions)
+                    myDatabaseHelper.insertTransactions(addNewTransaction)
                     Toast.makeText(this, "Transaction added successfully", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    var updatedBalance: Double = previousBalance
+                    val updatedCredit: Double = creditAmount.text.toString().trim().toDouble()
+                    val updatedDebit: Double = debitAmount.text.toString().trim().toDouble()
+
+                    val updateTransactions = Transactions().apply {
+                        if (updatedCredit > 0) {
+                            credit = updatedCredit
+                            updatedBalance += updatedCredit
+                        } else {
+                            0.toDouble()
+                        }
+
+                        if (updatedDebit > 0) {
+                            debit = updatedDebit
+                            updatedBalance -= updatedDebit
+                        } else {
+                            0.toDouble()
+                        }
+
+                        if (updatedCredit == 0.toDouble() && updatedDebit == 0.toDouble()) {
+                            Toast.makeText(
+                                context,
+                                "Please enter valid debit or credit amount",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        balance = updatedBalance
+                        date = inputDate.text.toString()
+                        description = inputDescription.text.toString().trim()
+                    }
+
+                    myDatabaseHelper.updateTransactions(iD, updateTransactions)
+                    Toast.makeText(context, "Transaction update successfully", Toast.LENGTH_SHORT)
                         .show()
                 }
             } catch (e: Exception) {
@@ -163,7 +164,7 @@ class AddTransactions : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            addTransaction(this, customerId)
+            addTransaction(this, customerId, customerPreviousBalance)
         }
     }
 }
