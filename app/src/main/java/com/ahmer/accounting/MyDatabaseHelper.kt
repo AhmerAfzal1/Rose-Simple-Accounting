@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.ahmer.accounting.Constants.Companion.DATABASE_NAME
 import com.ahmer.accounting.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.model.CustomerProfile
 import com.ahmer.accounting.model.Transactions
@@ -15,7 +16,6 @@ class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME: String = "SimpleAccounting"
         private const val DATABASE_VERSION: Int = 1
         private const val ID: String = "ID"
 
