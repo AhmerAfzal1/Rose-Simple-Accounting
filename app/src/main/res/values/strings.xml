@@ -29,4 +29,7 @@
     <string name="date">Date</string>
     <string name="pick_date">Pick Date</string>
     <string name="enter_description">Enter Description</string>
+    <string name="balance">Balance</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="get_customers_balance">Get Customers Updated Balance</string>
 </resources>

@@ -64,7 +64,18 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:text="Add Transaction"
+                android:text="@string/add_transaction"
+                android:textAllCaps="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/getTransaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addTransaction"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/get_customers_balance"
                 android:textAllCaps="false" />
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

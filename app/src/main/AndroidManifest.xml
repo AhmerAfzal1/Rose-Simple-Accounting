@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
+
         <activity
             android:name=".AddCustomerData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
@@ -19,6 +20,9 @@
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
             android:name=".AddTransactions"
+            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
+        <activity
+            android:name=".GetTransactionReport"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
