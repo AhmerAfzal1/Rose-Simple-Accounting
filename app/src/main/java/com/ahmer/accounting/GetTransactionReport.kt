@@ -54,15 +54,15 @@ class TransactionsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return customerProfileList.size
+        return transactionsList.size
     }
 
 }
 
 class TransactionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val linearLayoutTransactionReport =
-        itemView.findViewById<LinearLayout>(R.id.linearLayoutTransactionReport)
+    val linearLayoutTransactionReport: LinearLayout =
+        itemView.findViewById(R.id.linearLayoutTransactionReport)
 
     fun bindView(customerProfile: CustomerProfile, transactions: Transactions) {
         val tvId = itemView.findViewById<TextView>(R.id.tvGetCustomerID)

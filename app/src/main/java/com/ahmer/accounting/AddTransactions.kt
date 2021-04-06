@@ -67,7 +67,7 @@ class AddTransactions : AppCompatActivity() {
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 customerId = customerProfileFromDatabase[position].id
                 customerPreviousBalance = myDatabaseHelper.getPreviousBalance(customerId)
-                if (customerPreviousBalance > 0) {
+                if (customerPreviousBalance != 0.toDouble()) {
                     initialBalance.setText(customerPreviousBalance.toString())
                     initialBalance.isEnabled = false
                     initialBalance.isClickable = false
@@ -76,9 +76,14 @@ class AddTransactions : AppCompatActivity() {
 
         fun addTransaction(context: Context, iD: Int, previousBalance: Double) {
             Log.v(LOG_TAG, "Previous Balance: $previousBalance")
+            val transactionsList = myDatabaseHelper.getTransactions()
+            var transactionsId: Int = 0
+            for (transaction in transactionsList) {
+                transactionsId = transaction.id
+            }
             try {
-                if (previousBalance <= 0) {
-                    val newInitialBalance: Double = initialBalance.text.toString().trim().toDouble()
+                if (transactionsId != iD) {
+                    var newInitialBalance: Double = initialBalance.text.toString().trim().toDouble()
                     val newCredit: Double = creditAmount.text.toString().trim().toDouble()
                     val newDebit: Double = debitAmount.text.toString().trim().toDouble()
                     val newDate: String = inputDate.text.toString()
@@ -87,23 +92,21 @@ class AddTransactions : AppCompatActivity() {
                     val addNewTransaction = Transactions().apply {
                         id = iD
 
-                        balance = if (newInitialBalance > 0) {
-                            newInitialBalance
+                        if (newCredit > 0) {
+                            credit = newCredit
+                            newInitialBalance += newCredit
                         } else {
                             0.toDouble()
                         }
 
-                        credit = if (newCredit > 0) {
-                            newCredit
+                        if (newDebit > 0) {
+                            debit = newDebit
+                            newInitialBalance -= newDebit
                         } else {
                             0.toDouble()
                         }
 
-                        debit = if (newDebit > 0) {
-                            newDebit
-                        } else {
-                            0.toDouble()
-                        }
+                        balance = newInitialBalance
 
                         if (newDate.isNotEmpty()) {
                             date = newDate

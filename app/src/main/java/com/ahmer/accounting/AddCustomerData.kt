@@ -69,6 +69,8 @@ class AddCustomerData : AppCompatActivity() {
                         "Record successfully saved!",
                         Toast.LENGTH_LONG
                     ).show()
+                    Thread.sleep(300)
+                    finish()
                 }
             }
             true
