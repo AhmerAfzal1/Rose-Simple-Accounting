@@ -16,7 +16,7 @@ class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_VERSION: Int = 2
+        private const val DATABASE_VERSION: Int = 3
         private const val ID: String = "ID"
 
         private const val CUSTOMER_TABLE_NAME: String = "Customers"
@@ -69,7 +69,7 @@ class MyDatabaseHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
+        if (oldVersion < 3) {
             db?.execSQL("ALTER TABLE $CUSTOMER_TABLE_NAME ADD COLUMN $CUSTOMER_EMAIL TEXT")
         }
     }
