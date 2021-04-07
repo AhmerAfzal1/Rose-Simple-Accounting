@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/linearLayoutCustomerID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
 
         <LinearLayout
+            android:id="@+id/linearLayoutCustomerID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/border_get_customer_container"
@@ -36,6 +37,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutCustomerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -60,6 +62,22 @@
                 android:text="@string/customer_name"
                 android:textColor="@android:color/black" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableTint="@color/black" />
+        </RelativeLayout>
     </LinearLayout>
 
     <View

@@ -11,6 +11,7 @@
     <string name="phone">Phone</string>
     <string name="comments">Comments</string>
     <string name="title_toolbar_add_customer">Add Customer Data</string>
+    <string name="title_toolbar_edit_customer">Edit Customer Data</string>
     <string name="save">Save</string>
     <string name="customer_id">ID:</string>
     <string name="customer_name">Name:</string>
@@ -31,4 +32,6 @@
     <string name="balance">Balance</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="get_customers_balance">Get Customers Updated Balance</string>
+    <string name="email_address">Email Address</string>
+    <string name="email">Email:</string>
 </resources>

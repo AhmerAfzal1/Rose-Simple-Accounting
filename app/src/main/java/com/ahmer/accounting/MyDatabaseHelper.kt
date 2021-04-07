@@ -16,7 +16,7 @@ class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_VERSION: Int = 1
+        private const val DATABASE_VERSION: Int = 2
         private const val ID: String = "ID"
 
         private const val CUSTOMER_TABLE_NAME: String = "Customers"
@@ -27,6 +27,7 @@ class MyDatabaseHelper(context: Context) :
         private const val CUSTOMER_PHONE1: String = "Phone1"
         private const val CUSTOMER_PHONE2: String = "Phone2"
         private const val CUSTOMER_PHONE3: String = "Phone3"
+        private const val CUSTOMER_EMAIL: String = "Email"
         private const val CUSTOMER_COMMENTS: String = "Comments"
 
         private const val TRANSACTIONS_TABLE_NAME: String = "Transactions"
@@ -68,25 +69,58 @@ class MyDatabaseHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db?.execSQL("DROP TABLE IF EXISTS $CUSTOMER_TABLE_NAME")
-        db?.execSQL("DROP TABLE IF EXISTS $TRANSACTIONS_TABLE_NAME")
-        onCreate(db)
+        if (oldVersion < 2) {
+            db?.execSQL("ALTER TABLE $CUSTOMER_TABLE_NAME ADD COLUMN $CUSTOMER_EMAIL TEXT")
+        }
     }
 
     fun insertCustomerProfileData(customerProfile: CustomerProfile) {
-        val dataValues = ContentValues().apply {
-            put(CUSTOMER_NAME, customerProfile.name)
-            put(CUSTOMER_GENDER, customerProfile.gender)
-            put(CUSTOMER_ADDRESS, customerProfile.address)
-            put(CUSTOMER_CITY, customerProfile.city)
-            put(CUSTOMER_PHONE1, customerProfile.phone1)
-            put(CUSTOMER_PHONE2, customerProfile.phone2)
-            put(CUSTOMER_PHONE3, customerProfile.phone3)
-            put(CUSTOMER_COMMENTS, customerProfile.comment)
-        }
         val writeDatabase: SQLiteDatabase = this.writableDatabase
-        writeDatabase.insert(CUSTOMER_TABLE_NAME, null, dataValues)
-        writeDatabase.close()
+        try {
+            val dataValues = ContentValues().apply {
+                put(CUSTOMER_NAME, customerProfile.name)
+                put(CUSTOMER_GENDER, customerProfile.gender)
+                put(CUSTOMER_ADDRESS, customerProfile.address)
+                put(CUSTOMER_CITY, customerProfile.city)
+                put(CUSTOMER_PHONE1, customerProfile.phone1)
+                put(CUSTOMER_PHONE2, customerProfile.phone2)
+                put(CUSTOMER_PHONE3, customerProfile.phone3)
+                put(CUSTOMER_EMAIL, customerProfile.email)
+                put(CUSTOMER_COMMENTS, customerProfile.comment)
+            }
+            writeDatabase.insert(CUSTOMER_TABLE_NAME, null, dataValues)
+        } catch (e: Exception) {
+            e.message.toString()
+        } finally {
+            writeDatabase.close()
+        }
+    }
+
+    fun updateCustomerProfileData(customerProfile: CustomerProfile, id: Int) {
+        val updateWriteDatabase = this.writableDatabase
+        try {
+            val dataValues = ContentValues().apply {
+                put(CUSTOMER_NAME, customerProfile.name)
+                put(CUSTOMER_GENDER, customerProfile.gender)
+                put(CUSTOMER_ADDRESS, customerProfile.address)
+                put(CUSTOMER_CITY, customerProfile.city)
+                put(CUSTOMER_PHONE1, customerProfile.phone1)
+                put(CUSTOMER_PHONE2, customerProfile.phone2)
+                put(CUSTOMER_PHONE3, customerProfile.phone3)
+                put(CUSTOMER_EMAIL, customerProfile.email)
+                put(CUSTOMER_COMMENTS, customerProfile.comment)
+            }
+            updateWriteDatabase.update(
+                CUSTOMER_TABLE_NAME,
+                dataValues,
+                "$ID = ?",
+                arrayOf(id.toString())
+            )
+        } catch (e: Exception) {
+            e.message.toString()
+        } finally {
+            updateWriteDatabase.close()
+        }
     }
 
     fun getCustomerProfileData(): ArrayList<CustomerProfile> {
@@ -101,6 +135,7 @@ class MyDatabaseHelper(context: Context) :
             CUSTOMER_PHONE1,
             CUSTOMER_PHONE2,
             CUSTOMER_PHONE3,
+            CUSTOMER_EMAIL,
             CUSTOMER_COMMENTS
         )
         try {
@@ -132,27 +167,31 @@ class MyDatabaseHelper(context: Context) :
                         cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2))
                     customerProfile.phone3 =
                         cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3))
+                    customerProfile.email =
+                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_EMAIL))
                     customerProfile.comment =
                         cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS))
                     customersList.add(customerProfile)
                     val stringBuilder = StringBuilder()
-                    stringBuilder.append("ID: ")
+                    stringBuilder.append("GetCustomerProfileData ID: ")
                         .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-                    stringBuilder.append("\nName: ")
+                    stringBuilder.append("\nGetCustomerProfileData Name: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_NAME)))
-                    stringBuilder.append("\nGender: ")
+                    stringBuilder.append("\nGetCustomerProfileData Gender: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_GENDER)))
-                    stringBuilder.append("\nAddress: ")
+                    stringBuilder.append("\nGetCustomerProfileData Address: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_ADDRESS)))
-                    stringBuilder.append("\nCity: ")
+                    stringBuilder.append("\nGetCustomerProfileData City: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_CITY)))
-                    stringBuilder.append("\nPhone1: ")
+                    stringBuilder.append("\nGetCustomerProfileData Phone1: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE1)))
-                    stringBuilder.append("\nPhone2: ")
+                    stringBuilder.append("\nGetCustomerProfileData Phone2: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2)))
-                    stringBuilder.append("\nPhone3: ")
+                    stringBuilder.append("\nGetCustomerProfileData Phone3: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3)))
-                    stringBuilder.append("\nComments: ")
+                    stringBuilder.append("\nGetCustomerProfileData Email: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_EMAIL)))
+                    stringBuilder.append("\nGetCustomerProfileData Comments: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS)))
                     Log.v(LOG_TAG, stringBuilder.toString())
                 }
@@ -170,18 +209,22 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun insertTransactions(transactions: Transactions) {
-        val contentValues = ContentValues().apply {
-            put(ID, transactions.id)
-            put(DATE, transactions.date)
-            put(DESCRIPTION, transactions.description)
-            put(CREDIT, transactions.credit)
-            put(DEBIT, transactions.debit)
-            put(BALANCE, transactions.balance)
-        }
-
         val writeDatabase = this.writableDatabase
-        writeDatabase.insert(TRANSACTIONS_TABLE_NAME, null, contentValues)
-        writeDatabase.close()
+        try {
+            val contentValues = ContentValues().apply {
+                put(ID, transactions.id)
+                put(DATE, transactions.date)
+                put(DESCRIPTION, transactions.description)
+                put(CREDIT, transactions.credit)
+                put(DEBIT, transactions.debit)
+                put(BALANCE, transactions.balance)
+            }
+            writeDatabase.insert(TRANSACTIONS_TABLE_NAME, null, contentValues)
+        } catch (e: Exception) {
+            e.message.toString()
+        } finally {
+            writeDatabase.close()
+        }
     }
 
     fun getTransactions(): ArrayList<Transactions> {
@@ -210,17 +253,17 @@ class MyDatabaseHelper(context: Context) :
                     }
                     transactions.add(transaction)
                     val stringBuilder = StringBuilder()
-                    stringBuilder.append("ID: ")
+                    stringBuilder.append("GetTransactions ID: ")
                         .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-                    stringBuilder.append("\nDate: ")
+                    stringBuilder.append("\nGetTransactions Date: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DATE)))
-                    stringBuilder.append("\nDescription: ")
+                    stringBuilder.append("\nGetTransactions Description: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION)))
-                    stringBuilder.append("\nCredit: ")
+                    stringBuilder.append("\nGetTransactions Credit: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CREDIT)))
-                    stringBuilder.append("\nDebit: ")
+                    stringBuilder.append("\nGetTransactions Debit: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DEBIT)))
-                    stringBuilder.append("\nBalance: ")
+                    stringBuilder.append("\nGetTransactions Balance: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(BALANCE)))
                     Log.v(LOG_TAG, stringBuilder.toString())
                 }

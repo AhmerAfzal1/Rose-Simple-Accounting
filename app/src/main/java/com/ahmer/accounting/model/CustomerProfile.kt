@@ -18,6 +18,8 @@ class CustomerProfile {
 
     var phone3: String = ""
 
+    var email: String = ""
+
     var comment: String = ""
 
     override fun toString(): String {

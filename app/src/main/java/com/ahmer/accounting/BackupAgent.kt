@@ -6,7 +6,6 @@ import com.ahmer.accounting.Constants.Companion.DATABASE_NAME
 import java.io.File
 import java.io.IOException
 
-
 class BackupAgent : BackupAgentHelper() {
 
     override fun onCreate() {
@@ -15,7 +14,6 @@ class BackupAgent : BackupAgentHelper() {
         addHelper(DATABASE_NAME, database)
         val backupManager = BackupManager(this)
         backupManager.dataChanged();
-
     }
 
     override fun getFilesDir(): File {

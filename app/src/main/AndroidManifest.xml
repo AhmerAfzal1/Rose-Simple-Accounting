@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.ahmer.accounting"
     android:versionCode="1"
     android:versionName="1.00">
@@ -26,6 +25,9 @@
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
             android:name=".GetTransactionReport"
+            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
+        <activity
+            android:name=".EditCustomerData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
