@@ -13,18 +13,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 
 class EditCustomerData : AppCompatActivity() {
-
-    private lateinit var customerName: TextInputLayout
-    private lateinit var customerGender: RadioGroup
-    private lateinit var customerAddress: TextInputLayout
-    private lateinit var customerCity: TextInputLayout
-    private lateinit var customerPhone1: TextInputLayout
-    private lateinit var customerPhone2: TextInputLayout
-    private lateinit var customerPhone3: TextInputLayout
-    private lateinit var customerEmail: TextInputLayout
-    private lateinit var customerComments: TextInputLayout
-    private val myDatabaseHelper = MyDatabaseHelper(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_customer_data)
@@ -35,15 +23,15 @@ class EditCustomerData : AppCompatActivity() {
             finish()
         }
 
-        customerName = findViewById(R.id.inputLayoutName)
-        customerGender = findViewById(R.id.rgGender)
-        customerAddress = findViewById(R.id.inputLayoutAddress)
-        customerCity = findViewById(R.id.inputLayoutCity)
-        customerPhone1 = findViewById(R.id.inputLayoutPhone1)
-        customerPhone2 = findViewById(R.id.inputLayoutPhone2)
-        customerPhone3 = findViewById(R.id.inputLayoutPhone3)
-        customerEmail = findViewById(R.id.inputLayoutEmail)
-        customerComments = findViewById(R.id.inputLayoutComments)
+        val customerName = findViewById<TextInputLayout>(R.id.inputLayoutName)
+        val customerGender = findViewById<RadioGroup>(R.id.rgGender)
+        val customerAddress = findViewById<TextInputLayout>(R.id.inputLayoutAddress)
+        val customerCity = findViewById<TextInputLayout>(R.id.inputLayoutCity)
+        val customerPhone1 = findViewById<TextInputLayout>(R.id.inputLayoutPhone1)
+        val customerPhone2 = findViewById<TextInputLayout>(R.id.inputLayoutPhone2)
+        val customerPhone3 = findViewById<TextInputLayout>(R.id.inputLayoutPhone3)
+        val customerEmail = findViewById<TextInputLayout>(R.id.inputLayoutEmail)
+        val customerComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
         var typeGender = ""
         customerGender.setOnCheckedChangeListener { _, checkedId ->
             val rbGender = findViewById<RadioButton>(checkedId)
@@ -97,6 +85,7 @@ class EditCustomerData : AppCompatActivity() {
                             this.comment = customerComments.editText?.text.toString().trim()
                         }
 
+                        val myDatabaseHelper = MyDatabaseHelper(this)
                         myDatabaseHelper.updateCustomerProfileData(customerProfile, id)
 
                         Log.v(LOG_TAG, "Updated Record")
