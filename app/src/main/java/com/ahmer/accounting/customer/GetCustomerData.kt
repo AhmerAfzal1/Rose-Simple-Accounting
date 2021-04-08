@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.customer
 
 import android.app.Dialog
 import android.content.Context
@@ -17,15 +17,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.R
+import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.CustomerProfile
 import com.google.android.material.appbar.MaterialToolbar
 
 class GetCustomerData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.get_customer_data)
+        setContentView(R.layout.all_records)
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.title = resources.getString(R.string.title_all_customer_record)
         toolbar.setOnClickListener {
             finish()
         }
@@ -44,7 +47,7 @@ class CustomerDataAdapter(
 ) : RecyclerView.Adapter<CustomerDataHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerDataHolder {
         val inflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.get_customer_data_container, parent, false)
+            .inflate(R.layout.customer_data_container, parent, false)
         return CustomerDataHolder(inflater)
     }
 
@@ -57,6 +60,9 @@ class CustomerDataAdapter(
             showDialogMoreInfo(position)
         }
         holder.layoutEditProfile.setOnClickListener {
+            showDialogMoreInfo(position)
+        }
+        holder.tvEditButton.setOnClickListener {
             val intent = Intent(context, EditCustomerData::class.java).apply {
                 putExtra("mID", customersList[position].id)
                 putExtra("mName", customersList[position].name)
@@ -87,7 +93,7 @@ class CustomerDataAdapter(
         try {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setContentView(R.layout.get_customer_data_dialog)
+            dialog.setContentView(R.layout.customer_data_dialog)
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.window?.setLayout(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -139,6 +145,7 @@ class CustomerDataHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val layoutCustomerID: LinearLayout = itemView.findViewById(R.id.linearLayoutCustomerID)
     val layoutCustomerName: LinearLayout = itemView.findViewById(R.id.linearLayoutCustomerName)
     val layoutEditProfile: RelativeLayout = itemView.findViewById(R.id.relativeLayoutEditProfile)
+    val tvEditButton: TextView = itemView.findViewById(R.id.tvBtnEdit)
 
     fun bindItems(customerProfile: CustomerProfile) {
         val customerID = itemView.findViewById<TextView>(R.id.tvGetCustomerID)

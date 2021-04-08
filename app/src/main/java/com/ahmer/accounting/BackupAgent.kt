@@ -2,7 +2,9 @@ package com.ahmer.accounting
 
 import android.app.backup.*
 import android.os.ParcelFileDescriptor
-import com.ahmer.accounting.Constants.Companion.DATABASE_NAME
+import android.util.Log
+import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
+import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import java.io.File
 import java.io.IOException
 
@@ -13,11 +15,14 @@ class BackupAgent : BackupAgentHelper() {
         val database = FileBackupHelper(this, file.name)
         addHelper(DATABASE_NAME, database)
         val backupManager = BackupManager(this)
-        backupManager.dataChanged();
+        backupManager.dataChanged()
     }
 
     override fun getFilesDir(): File {
-        return getDatabasePath(DATABASE_NAME).parentFile!!
+        val file: File = getDatabasePath(DATABASE_NAME).parentFile!!
+        Log.v(LOG_TAG, file.toString())
+        return file
+
     }
 
     @Throws(IOException::class)

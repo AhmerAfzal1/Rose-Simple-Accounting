@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.transactions
 
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ahmer.accounting.R
+import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.CustomerProfile
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,15 +20,16 @@ import com.google.android.material.appbar.MaterialToolbar
 class GetTransactionReport : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.get_transaction_report)
+        setContentView(R.layout.all_records)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.title = resources.getString(R.string.title_all_transaction_record)
         toolbar.setOnClickListener {
             finish()
         }
 
         val myDatabaseHelper = MyDatabaseHelper(this)
-        val transactionsRecord = findViewById<RecyclerView>(R.id.rvGetAllTransactions)
+        val transactionsRecord = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         transactionsRecord.layoutManager = LinearLayoutManager(this)
         val customerProfile = myDatabaseHelper.getCustomerProfileData()
         val transactions = myDatabaseHelper.getTransactions()
@@ -42,7 +45,7 @@ class TransactionsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.get_transaction_container, parent, false)
+            .inflate(R.layout.transaction_container, parent, false)
         return TransactionsViewHolder(layoutInflater)
     }
 

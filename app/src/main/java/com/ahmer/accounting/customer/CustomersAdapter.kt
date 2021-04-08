@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.customer
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import com.ahmer.accounting.R
 import com.ahmer.accounting.model.CustomerProfile
 
 class CustomersAdapter(context: Context, arrayList: ArrayList<CustomerProfile>) :
@@ -34,7 +35,7 @@ class CustomersAdapter(context: Context, arrayList: ArrayList<CustomerProfile>) 
 
         if (viewConvert == null) {
             viewConvert = LayoutInflater.from(mContext)
-                .inflate(R.layout.get_customer_data_spinner, parent, false)
+                .inflate(R.layout.customer_data_spinner, parent, false)
         }
 
         val tvId = viewConvert?.findViewById<TextView>(R.id.tvId)

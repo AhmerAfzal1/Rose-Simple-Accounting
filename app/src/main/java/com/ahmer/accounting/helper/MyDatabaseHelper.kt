@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.helper
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.ahmer.accounting.Constants.Companion.DATABASE_NAME
-import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
+import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.model.CustomerProfile
 import com.ahmer.accounting.model.Transactions
 

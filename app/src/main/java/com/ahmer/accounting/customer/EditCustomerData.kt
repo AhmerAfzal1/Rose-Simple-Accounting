@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.customer
 
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
@@ -7,7 +7,9 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.ahmer.accounting.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.R
+import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.CustomerProfile
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout

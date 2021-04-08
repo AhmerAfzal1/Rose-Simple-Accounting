@@ -34,4 +34,6 @@
     <string name="get_customers_balance">Get Customers Updated Balance</string>
     <string name="email_address">Email Address</string>
     <string name="email">Email:</string>
+    <string name="title_all_customer_record">All Customers Record</string>
+    <string name="title_all_transaction_record">All Transactions Record</string>
 </resources>
