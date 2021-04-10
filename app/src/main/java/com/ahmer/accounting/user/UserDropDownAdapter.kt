@@ -1,4 +1,4 @@
-package com.ahmer.accounting.customer
+package com.ahmer.accounting.user
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,19 +9,19 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import com.ahmer.accounting.R
-import com.ahmer.accounting.model.CustomerProfile
+import com.ahmer.accounting.model.UserProfile
 
-class CustomersAdapter(context: Context, arrayList: ArrayList<CustomerProfile>) :
+class UserDropDownAdapter(context: Context, arrayList: ArrayList<UserProfile>) :
     BaseAdapter(), Filterable {
 
     private val mContext = context
-    private var mArrayList: ArrayList<CustomerProfile> = arrayList
+    private var mArrayList: ArrayList<UserProfile> = arrayList
 
     override fun getCount(): Int {
         return mArrayList.size
     }
 
-    override fun getItem(position: Int): CustomerProfile {
+    override fun getItem(position: Int): UserProfile {
         return mArrayList[position]
     }
 
@@ -35,7 +35,7 @@ class CustomersAdapter(context: Context, arrayList: ArrayList<CustomerProfile>) 
 
         if (viewConvert == null) {
             viewConvert = LayoutInflater.from(mContext)
-                .inflate(R.layout.customer_data_spinner, parent, false)
+                .inflate(R.layout.user_profile_data_dropdown, parent, false)
         }
 
         val tvId = viewConvert?.findViewById<TextView>(R.id.tvId)

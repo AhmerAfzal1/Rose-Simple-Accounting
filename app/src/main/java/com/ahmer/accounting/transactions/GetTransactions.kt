@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
+import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyDatabaseHelper
-import com.ahmer.accounting.model.CustomerProfile
 import com.ahmer.accounting.model.Transactions
+import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 
 class GetTransactionReport : AppCompatActivity() {
@@ -31,28 +31,31 @@ class GetTransactionReport : AppCompatActivity() {
         val myDatabaseHelper = MyDatabaseHelper(this)
         val transactionsRecord = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         transactionsRecord.layoutManager = LinearLayoutManager(this)
-        val customerProfile = myDatabaseHelper.getCustomerProfileData()
+        val getUserProfileData = myDatabaseHelper.getUserProfileData()
         val transactions = myDatabaseHelper.getTransactions()
-        transactionsRecord.adapter = TransactionsAdapter(this, customerProfile, transactions)
+        transactionsRecord.adapter = TransactionsAdapter(this, getUserProfileData, transactions)
     }
 }
 
 class TransactionsAdapter(
     private val context: Context,
-    private val customerProfileList: ArrayList<CustomerProfile>,
+    private val userProfileList: ArrayList<UserProfile>,
     private val transactionsList: ArrayList<Transactions>
 ) : RecyclerView.Adapter<TransactionsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.transaction_container, parent, false)
+            .inflate(R.layout.transactions_container, parent, false)
         return TransactionsViewHolder(layoutInflater)
     }
 
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
-        holder.bindView(customerProfileList[position], transactionsList[position])
+        holder.bindView(userProfileList[position], transactionsList[position])
         holder.linearLayoutTransactionReport.setOnClickListener {
-            Toast.makeText(context, "More details are not yet applied", Toast.LENGTH_LONG).show()
+            HelperFunctions.makeToast(
+                context,
+                context.getString(R.string.toast_no_more_details_available)
+            )
         }
     }
 
@@ -67,12 +70,12 @@ class TransactionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     val linearLayoutTransactionReport: LinearLayout =
         itemView.findViewById(R.id.linearLayoutTransactionReport)
 
-    fun bindView(customerProfile: CustomerProfile, transactions: Transactions) {
-        val tvId = itemView.findViewById<TextView>(R.id.tvGetCustomerID)
-        val tvName = itemView.findViewById<TextView>(R.id.tvGetCustomerName)
+    fun bindView(userProfile: UserProfile, transactions: Transactions) {
+        val tvId = itemView.findViewById<TextView>(R.id.tvGetUserID)
+        val tvName = itemView.findViewById<TextView>(R.id.tvGetUserName)
         val tvBalance = itemView.findViewById<TextView>(R.id.tvGetBalance)
-        tvId.text = customerProfile.id.toString()
-        tvName.text = customerProfile.name
+        tvId.text = userProfile.id.toString()
+        tvName.text = userProfile.name
         tvBalance.text = transactions.balance.toString()
     }
 }

@@ -1,6 +1,6 @@
 package com.ahmer.accounting.model
 
-class CustomerProfile {
+class UserProfile {
 
     var id: Int = 0
 
@@ -16,11 +16,13 @@ class CustomerProfile {
 
     var phone2: String = ""
 
-    var phone3: String = ""
-
     var email: String = ""
 
     var comment: String = ""
+
+    var created: String = ""
+
+    var modified: String = ""
 
     override fun toString(): String {
         return "[$id] $name"

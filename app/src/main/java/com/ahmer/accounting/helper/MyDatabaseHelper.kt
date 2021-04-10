@@ -9,26 +9,27 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
-import com.ahmer.accounting.model.CustomerProfile
 import com.ahmer.accounting.model.Transactions
+import com.ahmer.accounting.model.UserProfile
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_VERSION: Int = 3
+        private const val DATABASE_VERSION: Int = 1
         private const val ID: String = "ID"
+        private const val MODIFIED_DATETIME: String = "LastModified"
 
-        private const val CUSTOMER_TABLE_NAME: String = "Customers"
-        private const val CUSTOMER_NAME: String = "Name"
-        private const val CUSTOMER_GENDER: String = "Gender"
-        private const val CUSTOMER_ADDRESS: String = "Address"
-        private const val CUSTOMER_CITY: String = "City"
-        private const val CUSTOMER_PHONE1: String = "Phone1"
-        private const val CUSTOMER_PHONE2: String = "Phone2"
-        private const val CUSTOMER_PHONE3: String = "Phone3"
-        private const val CUSTOMER_EMAIL: String = "Email"
-        private const val CUSTOMER_COMMENTS: String = "Comments"
+        private const val USER_TABLE_NAME: String = "Customers"
+        private const val USER_NAME: String = "Name"
+        private const val USER_GENDER: String = "Gender"
+        private const val USER_ADDRESS: String = "Address"
+        private const val USER_CITY: String = "City"
+        private const val USER_PHONE1: String = "Phone1"
+        private const val USER_PHONE2: String = "Phone2"
+        private const val USER_EMAIL: String = "Email"
+        private const val USER_COMMENTS: String = "Comments"
+        private const val USER_CREATED_DATETIME: String = "Created"
 
         private const val TRANSACTIONS_TABLE_NAME: String = "Transactions"
         private const val DATE: String = "Date"
@@ -36,32 +37,74 @@ class MyDatabaseHelper(context: Context) :
         private const val CREDIT: String = "Credit"
         private const val DEBIT: String = "Debit"
         private const val BALANCE: String = "Balance"
+
+        fun dataValuesUserProfile(
+            userProfile: UserProfile,
+            isCreated: Boolean = true
+        ): ContentValues {
+            return ContentValues().apply {
+                put(USER_NAME, userProfile.name)
+                put(USER_GENDER, userProfile.gender)
+                put(USER_ADDRESS, userProfile.address)
+                put(USER_CITY, userProfile.city)
+                put(USER_PHONE1, userProfile.phone1)
+                put(USER_PHONE2, userProfile.phone2)
+                put(USER_EMAIL, userProfile.email)
+                put(USER_COMMENTS, userProfile.comment)
+                if (isCreated) {
+                    put(USER_CREATED_DATETIME, userProfile.created)
+                } else {
+                    put(MODIFIED_DATETIME, userProfile.modified)
+                }
+            }
+        }
+
+        fun dataValuesTransactions(
+            transactions: Transactions,
+            isModified: Boolean = false
+        ): ContentValues {
+            return ContentValues().apply {
+                put(DATE, transactions.date)
+                put(DESCRIPTION, transactions.description)
+                put(CREDIT, transactions.credit)
+                put(DEBIT, transactions.debit)
+                put(BALANCE, transactions.balance)
+                if (isModified) {
+                    put(ID, transactions.id)
+                    put(MODIFIED_DATETIME, transactions.modified)
+                }
+            }
+        }
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         try {
-            val createCustomersTable = "CREATE TABLE IF NOT EXISTS $CUSTOMER_TABLE_NAME (" +
+            val createUserProfileTable = "CREATE TABLE IF NOT EXISTS $USER_TABLE_NAME (" +
                     "$ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, " +
-                    "$CUSTOMER_NAME TEXT NOT NULL, " +
-                    "$CUSTOMER_GENDER VARCHAR(7) NOT NULL, " +
-                    "$CUSTOMER_ADDRESS TEXT, " +
-                    "$CUSTOMER_CITY TEXT, " +
-                    "$CUSTOMER_PHONE1 TEXT, " +
-                    "$CUSTOMER_PHONE2 TEXT, " +
-                    "$CUSTOMER_PHONE3 TEXT, " +
-                    "$CUSTOMER_COMMENTS TEXT, " +
-                    "CHECK($CUSTOMER_GENDER IN ('Male', 'Female', 'Unknown'))" +
-                    ")"
+                    "$USER_NAME TEXT NOT NULL, " +
+                    "$USER_GENDER VARCHAR(7) NOT NULL, " +
+                    "$USER_ADDRESS TEXT, " +
+                    "$USER_CITY TEXT, " +
+                    "$USER_PHONE1 TEXT, " +
+                    "$USER_PHONE2 TEXT, " +
+                    "$USER_EMAIL TEXT, " +
+                    "$USER_COMMENTS TEXT, " +
+                    "$USER_CREATED_DATETIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
+                    "$MODIFIED_DATETIME TIMESTAMP DEFAULT \"\", " +
+                    "CHECK($USER_GENDER IN ('Male', 'Female', 'Unknown'))" +
+                    ");"
             val createTransactionsTable = "CREATE TABLE IF NOT EXISTS $TRANSACTIONS_TABLE_NAME (" +
                     "$ID INTEGER PRIMARY KEY UNIQUE NOT NULL, " +
                     "$DATE DATE DEFAULT CURRENT_DATE NOT NULL, " +
                     "$DESCRIPTION TEXT NOT NULL, " +
                     "$CREDIT REAL, " +
                     "$DEBIT REAL, " +
-                    "$BALANCE REAL" +
-                    ")"
-            Log.v(LOG_TAG, "$createCustomersTable \n $createTransactionsTable")
-            db?.execSQL(createCustomersTable)
+                    "$BALANCE REAL, " +
+                    "$MODIFIED_DATETIME TIMESTAMP DEFAULT \"\", " +
+                    "FOREIGN KEY ($ID) REFERENCES $USER_TABLE_NAME($ID)" +
+                    ");"
+            Log.v(LOG_TAG, "$createUserProfileTable \n $createTransactionsTable")
+            db?.execSQL(createUserProfileTable)
             db?.execSQL(createTransactionsTable)
         } catch (e: SQLiteException) {
             Log.v(LOG_TAG, e.printStackTrace().toString())
@@ -69,79 +112,66 @@ class MyDatabaseHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 3) {
-            db?.execSQL("ALTER TABLE $CUSTOMER_TABLE_NAME ADD COLUMN $CUSTOMER_EMAIL TEXT")
-        }
+        db?.execSQL("DROP TABLE IF EXISTS $USER_TABLE_NAME;")
+        db?.execSQL("DROP TABLE IF EXISTS $TRANSACTIONS_TABLE_NAME;")
+        onCreate(db)
     }
 
-    fun insertCustomerProfileData(customerProfile: CustomerProfile) {
+    fun insertUserProfileData(userProfile: UserProfile): Boolean {
         val writeDatabase: SQLiteDatabase = this.writableDatabase
         try {
-            val dataValues = ContentValues().apply {
-                put(CUSTOMER_NAME, customerProfile.name)
-                put(CUSTOMER_GENDER, customerProfile.gender)
-                put(CUSTOMER_ADDRESS, customerProfile.address)
-                put(CUSTOMER_CITY, customerProfile.city)
-                put(CUSTOMER_PHONE1, customerProfile.phone1)
-                put(CUSTOMER_PHONE2, customerProfile.phone2)
-                put(CUSTOMER_PHONE3, customerProfile.phone3)
-                put(CUSTOMER_EMAIL, customerProfile.email)
-                put(CUSTOMER_COMMENTS, customerProfile.comment)
-            }
-            writeDatabase.insert(CUSTOMER_TABLE_NAME, null, dataValues)
+            writeDatabase.insert(
+                USER_TABLE_NAME,
+                null,
+                dataValuesUserProfile(userProfile, true)
+            )
+            return true
         } catch (e: Exception) {
             e.message.toString()
         } finally {
             writeDatabase.close()
         }
+        return false
     }
 
-    fun updateCustomerProfileData(customerProfile: CustomerProfile, id: Int) {
+    fun updateUserProfileData(userProfile: UserProfile, id: Int): Boolean {
         val updateWriteDatabase = this.writableDatabase
         try {
-            val dataValues = ContentValues().apply {
-                put(CUSTOMER_NAME, customerProfile.name)
-                put(CUSTOMER_GENDER, customerProfile.gender)
-                put(CUSTOMER_ADDRESS, customerProfile.address)
-                put(CUSTOMER_CITY, customerProfile.city)
-                put(CUSTOMER_PHONE1, customerProfile.phone1)
-                put(CUSTOMER_PHONE2, customerProfile.phone2)
-                put(CUSTOMER_PHONE3, customerProfile.phone3)
-                put(CUSTOMER_EMAIL, customerProfile.email)
-                put(CUSTOMER_COMMENTS, customerProfile.comment)
-            }
             updateWriteDatabase.update(
-                CUSTOMER_TABLE_NAME,
-                dataValues,
+                USER_TABLE_NAME,
+                dataValuesUserProfile(userProfile, false),
                 "$ID = ?",
                 arrayOf(id.toString())
             )
+            return true
         } catch (e: Exception) {
             e.message.toString()
         } finally {
             updateWriteDatabase.close()
         }
+        return false
     }
 
-    fun getCustomerProfileData(): ArrayList<CustomerProfile> {
+    fun getUserProfileData(): ArrayList<UserProfile> {
         val readDatabase: SQLiteDatabase = this.readableDatabase
-        val customersList = ArrayList<CustomerProfile>()
+        val userProfileList = ArrayList<UserProfile>()
         val queryContent = arrayOf(
             ID,
-            CUSTOMER_NAME,
-            CUSTOMER_GENDER,
-            CUSTOMER_ADDRESS,
-            CUSTOMER_CITY,
-            CUSTOMER_PHONE1,
-            CUSTOMER_PHONE2,
-            CUSTOMER_PHONE3,
-            CUSTOMER_EMAIL,
-            CUSTOMER_COMMENTS
+            USER_NAME,
+            USER_GENDER,
+            USER_ADDRESS,
+            USER_CITY,
+            USER_PHONE1,
+            USER_PHONE2,
+            USER_EMAIL,
+            USER_COMMENTS,
+            USER_CREATED_DATETIME,
+            MODIFIED_DATETIME
         )
         try {
             val cursor: Cursor =
                 readDatabase.query(
-                    CUSTOMER_TABLE_NAME,
+                    USER_TABLE_NAME,
                     queryContent,
                     null,
                     null,
@@ -151,48 +181,52 @@ class MyDatabaseHelper(context: Context) :
                 )
             try {
                 while (cursor.moveToNext()) {
-                    val customerProfile = CustomerProfile()
-                    customerProfile.id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
-                    customerProfile.name =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_NAME))
-                    customerProfile.gender =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_GENDER))
-                    customerProfile.address =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_ADDRESS))
-                    customerProfile.city =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_CITY))
-                    customerProfile.phone1 =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE1))
-                    customerProfile.phone2 =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2))
-                    customerProfile.phone3 =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3))
-                    customerProfile.email =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_EMAIL))
-                    customerProfile.comment =
-                        cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS))
-                    customersList.add(customerProfile)
+                    val userProfile = UserProfile()
+                    userProfile.id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                    userProfile.name =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_NAME))
+                    userProfile.gender =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_GENDER))
+                    userProfile.address =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_ADDRESS))
+                    userProfile.city =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_CITY))
+                    userProfile.phone1 =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_PHONE1))
+                    userProfile.phone2 =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_PHONE2))
+                    userProfile.email =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_EMAIL))
+                    userProfile.comment =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_COMMENTS))
+                    userProfile.created =
+                        cursor.getString(cursor.getColumnIndexOrThrow(USER_CREATED_DATETIME))
+                    userProfile.modified =
+                        cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME))
+                    userProfileList.add(userProfile)
                     val stringBuilder = StringBuilder()
-                    stringBuilder.append("GetCustomerProfileData ID: ")
+                    stringBuilder.append("GetUserProfileData $ID: ")
                         .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-                    stringBuilder.append("\nGetCustomerProfileData Name: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_NAME)))
-                    stringBuilder.append("\nGetCustomerProfileData Gender: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_GENDER)))
-                    stringBuilder.append("\nGetCustomerProfileData Address: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_ADDRESS)))
-                    stringBuilder.append("\nGetCustomerProfileData City: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_CITY)))
-                    stringBuilder.append("\nGetCustomerProfileData Phone1: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE1)))
-                    stringBuilder.append("\nGetCustomerProfileData Phone2: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE2)))
-                    stringBuilder.append("\nGetCustomerProfileData Phone3: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_PHONE3)))
-                    stringBuilder.append("\nGetCustomerProfileData Email: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_EMAIL)))
-                    stringBuilder.append("\nGetCustomerProfileData Comments: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CUSTOMER_COMMENTS)))
+                    stringBuilder.append("\nGetUserProfileData $USER_NAME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_NAME)))
+                    stringBuilder.append("\nGetUserProfileData $USER_GENDER: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_GENDER)))
+                    stringBuilder.append("\nGetUserProfileData $USER_ADDRESS: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_ADDRESS)))
+                    stringBuilder.append("\nGetUserProfileData $USER_CITY: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_CITY)))
+                    stringBuilder.append("\nGetUserProfileData $USER_PHONE1: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_PHONE1)))
+                    stringBuilder.append("\nGetUserProfileData $USER_PHONE2: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_PHONE2)))
+                    stringBuilder.append("\nGetUserProfileData $USER_EMAIL: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_EMAIL)))
+                    stringBuilder.append("\nGetUserProfileData $USER_COMMENTS: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_COMMENTS)))
+                    stringBuilder.append("\nGetUserProfileData $USER_CREATED_DATETIME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_CREATED_DATETIME)))
+                    stringBuilder.append("\nGetUserProfileData $MODIFIED_DATETIME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
                     Log.v(LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
@@ -205,32 +239,30 @@ class MyDatabaseHelper(context: Context) :
             Log.v(LOG_TAG, e.printStackTrace().toString())
         }
 
-        return customersList
+        return userProfileList
     }
 
-    fun insertTransactions(transactions: Transactions) {
+    fun insertTransactions(transactions: Transactions): Boolean {
         val writeDatabase = this.writableDatabase
         try {
-            val contentValues = ContentValues().apply {
-                put(ID, transactions.id)
-                put(DATE, transactions.date)
-                put(DESCRIPTION, transactions.description)
-                put(CREDIT, transactions.credit)
-                put(DEBIT, transactions.debit)
-                put(BALANCE, transactions.balance)
-            }
-            writeDatabase.insert(TRANSACTIONS_TABLE_NAME, null, contentValues)
+            writeDatabase.insert(
+                TRANSACTIONS_TABLE_NAME,
+                null,
+                dataValuesTransactions(transactions, false)
+            )
+            return true
         } catch (e: Exception) {
             e.message.toString()
         } finally {
             writeDatabase.close()
         }
+        return false
     }
 
     fun getTransactions(): ArrayList<Transactions> {
         val transactions = ArrayList<Transactions>()
         val getFromDatabase = this.readableDatabase
-        val columnsArray = arrayOf(ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE)
+        val columnsArray = arrayOf(ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE, MODIFIED_DATETIME)
         try {
             val cursor: Cursor = getFromDatabase.query(
                 TRANSACTIONS_TABLE_NAME,
@@ -250,21 +282,24 @@ class MyDatabaseHelper(context: Context) :
                         credit = cursor.getDouble(cursor.getColumnIndexOrThrow(CREDIT))
                         debit = cursor.getDouble(cursor.getColumnIndexOrThrow(DEBIT))
                         balance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
+                        modified = cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME))
                     }
                     transactions.add(transaction)
                     val stringBuilder = StringBuilder()
-                    stringBuilder.append("GetTransactions ID: ")
+                    stringBuilder.append("GetTransactions $ID: ")
                         .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-                    stringBuilder.append("\nGetTransactions Date: ")
+                    stringBuilder.append("\nGetTransactions $DATE: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DATE)))
-                    stringBuilder.append("\nGetTransactions Description: ")
+                    stringBuilder.append("\nGetTransactions $DESCRIPTION: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION)))
-                    stringBuilder.append("\nGetTransactions Credit: ")
+                    stringBuilder.append("\nGetTransactions $CREDIT: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CREDIT)))
-                    stringBuilder.append("\nGetTransactions Debit: ")
+                    stringBuilder.append("\nGetTransactions $DEBIT: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DEBIT)))
-                    stringBuilder.append("\nGetTransactions Balance: ")
+                    stringBuilder.append("\nGetTransactions $BALANCE: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(BALANCE)))
+                    stringBuilder.append("\nGetTransactions $MODIFIED_DATETIME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
                     Log.v(LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
@@ -279,34 +314,29 @@ class MyDatabaseHelper(context: Context) :
         return transactions
     }
 
-    fun updateTransactions(id: Int, transactions: Transactions) {
+    fun updateTransactions(id: Int, transactions: Transactions): Boolean {
         val updateTransactions = this.writableDatabase
-        val contentValues = ContentValues().apply {
-            put(DATE, transactions.date)
-            put(DESCRIPTION, transactions.description)
-            put(CREDIT, transactions.credit)
-            put(DEBIT, transactions.debit)
-            put(BALANCE, transactions.balance)
-        }
         try {
             updateTransactions.update(
                 TRANSACTIONS_TABLE_NAME,
-                contentValues,
+                dataValuesTransactions(transactions, true),
                 "$ID = ?",
                 arrayOf(id.toString())
             )
+            return true
         } catch (e: Exception) {
             Log.v(LOG_TAG, e.message.toString())
         } finally {
             updateTransactions.close()
         }
+        return false
     }
 
     fun getPreviousBalance(id: Int): Double {
         var previousBalance: Double = 0.toDouble()
         val getBalanceFromDatabase = this.readableDatabase
-        val customerID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $ID = $id"
-        val cursor: Cursor = getBalanceFromDatabase.rawQuery(customerID, null)
+        val userID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $ID = $id;"
+        val cursor: Cursor = getBalanceFromDatabase.rawQuery(userID, null)
         try {
             if (cursor.moveToFirst()) {
                 do {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.AddCustomerData">
+    tools:context=".user.AddUserProfileData">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -18,7 +18,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:menu="@menu/save"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/title_toolbar_add_customer"
+        app:title="@string/title_toolbar_add_user"
         app:titleMarginStart="0dp" />
 
     <ScrollView
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:shadowColor="@color/purple_500"
-                    android:text="@string/male" />
+                    android:text="@string/gender_male" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/rbFemale"
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="@string/female" />
+                    android:text="@string/gender_female" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/rbUnknown"
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="@string/unknown" />
+                    android:text="@string/gender_unknown" />
             </RadioGroup>
 
             <LinearLayout
@@ -172,30 +172,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutPhone3"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/inputLayoutPhone2"
-                android:padding="1dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/phone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@android:color/black" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayoutEmail"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/inputLayoutPhone3"
+                android:layout_below="@id/inputLayoutPhone2"
                 android:padding="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -219,6 +200,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     android:padding="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText

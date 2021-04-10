@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/linearLayoutTransactionReport"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
 
         <LinearLayout
+            android:id="@+id/linearLayoutUserID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/border_get_customer_container"
+            android:background="@drawable/border_for_container"
             android:gravity="start|center"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -21,25 +22,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/customer_id"
+                android:text="@string/user_id"
                 android:textColor="@color/teal_700"
                 android:textIsSelectable="true"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvGetCustomerID"
+                android:id="@+id/tvGetUserID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/customer_id"
+                android:text="@string/user_id"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:background="@drawable/border_get_customer_container"
+            android:background="@drawable/border_for_container"
             android:gravity="start|center"
             android:orientation="horizontal"
             android:padding="5dp">
@@ -47,45 +49,36 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/customer_name"
+                android:text="@string/user_name"
                 android:textColor="@color/teal_700"
                 android:textIsSelectable="true"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvGetCustomerName"
+                android:id="@+id/tvGetUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/customer_name"
+                android:text="@string/user_name"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/relativeLayoutEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/border_get_customer_container"
-            android:gravity="start|center"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/balance"
-                android:textColor="@color/teal_700"
-                android:textIsSelectable="true"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvGetBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/customer_name"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
+                android:id="@+id/tvBtnEdit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                app:drawableEndCompat="@drawable/ic_edit"
+                app:drawableTint="@color/black" />
+        </RelativeLayout>
     </LinearLayout>
 
     <View

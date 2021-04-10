@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.GetCustomerData">
+    tools:context=".user.GetUserData">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -17,7 +17,7 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/title_all_customer_record"
+        app:title="@string/title_all_user_record"
         app:titleMarginStart="0dp" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -15,10 +15,10 @@
         android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
 
         <activity
-            android:name=".customer.AddCustomerData"
+            android:name=".user.AddUserProfileData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
-            android:name=".customer.GetCustomerData"
+            android:name=".user.GetUserData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
             android:name=".transactions.AddTransactions"
@@ -27,7 +27,7 @@
             android:name=".transactions.GetTransactionReport"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
-            android:name=".customer.EditCustomerData"
+            android:name=".user.EditUserProfileData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>

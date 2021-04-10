@@ -36,31 +36,31 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/addCustomerProfile"
+                android:id="@+id/addUserProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/add_new_customer"
+                android:text="@string/add_new_user"
                 android:textAllCaps="false" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/getCustomerRecord"
+                android:id="@+id/getUserRecord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/addCustomerProfile"
+                android:layout_below="@+id/addUserProfile"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/all_customer_record"
+                android:text="@string/all_user_record"
                 android:textAllCaps="false" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addTransaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/getCustomerRecord"
+                android:layout_below="@+id/getUserRecord"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
@@ -75,7 +75,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/get_customers_balance"
+                android:text="@string/get_users_balance"
                 android:textAllCaps="false" />
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,17 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp">
 
+                <TextView
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/user_information"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
                 <TableRow
                     android:layout_marginTop="2dp"
                     android:weightSum="1">
@@ -28,16 +39,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerID"
+                        android:id="@+id/dialogUserID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -48,16 +59,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_name"
+                        android:text="@string/user_name"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerName"
+                        android:id="@+id/dialogUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -68,16 +79,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_gender"
+                        android:text="@string/user_gender"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerGender"
+                        android:id="@+id/dialogUserGender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -88,16 +99,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_address"
+                        android:text="@string/user_address"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerAddress"
+                        android:id="@+id/dialogUserAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -108,16 +119,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_city"
+                        android:text="@string/user_city"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerCity"
+                        android:id="@+id/dialogUserCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -128,16 +139,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_phone1"
+                        android:text="@string/user_phone1"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerPhone1"
+                        android:id="@+id/dialogUserPhone1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -148,36 +159,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_phone2"
+                        android:text="@string/user_phone2"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerPhone2"
+                        android:id="@+id/dialogUserPhone2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
-                        android:textColor="@android:color/black" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginTop="2dp"
-                    android:weightSum="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/customer_phone3"
-                        android:textColor="@color/teal_700" />
-
-                    <TextView
-                        android:id="@+id/dialogCustomerPhone3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -192,12 +183,12 @@
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerEmail"
+                        android:id="@+id/dialogUserEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 
@@ -208,16 +199,56 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_comments"
+                        android:text="@string/user_comments"
                         android:textColor="@color/teal_700" />
 
                     <TextView
-                        android:id="@+id/dialogCustomerComments"
+                        android:id="@+id/dialogUserComments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:text="@string/customer_id"
+                        android:text="@string/user_id"
+                        android:textColor="@android:color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="2dp"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_created_on"
+                        android:textColor="@color/teal_700" />
+
+                    <TextView
+                        android:id="@+id/dialogUserCreated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/user_id"
+                        android:textColor="@android:color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="2dp"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_modified"
+                        android:textColor="@color/teal_700" />
+
+                    <TextView
+                        android:id="@+id/dialogUserModified"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/user_id"
                         android:textColor="@android:color/black" />
                 </TableRow>
 

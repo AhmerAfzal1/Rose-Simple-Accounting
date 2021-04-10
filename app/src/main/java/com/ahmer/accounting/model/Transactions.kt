@@ -13,4 +13,6 @@ class Transactions {
     var description: String = ""
 
     var balance: Double = 0.toDouble()
+
+    var modified: String = ""
 }

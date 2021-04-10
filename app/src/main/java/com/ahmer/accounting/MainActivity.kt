@@ -5,11 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.ahmer.accounting.customer.AddCustomerData
-import com.ahmer.accounting.customer.GetCustomerData
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.transactions.AddTransactions
 import com.ahmer.accounting.transactions.GetTransactionReport
+import com.ahmer.accounting.user.AddUserProfileData
+import com.ahmer.accounting.user.GetUserData
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
@@ -17,13 +17,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val addRecord = findViewById<MaterialButton>(R.id.addCustomerProfile)
-        val getRecord = findViewById<MaterialButton>(R.id.getCustomerRecord)
+        val addRecord = findViewById<MaterialButton>(R.id.addUserProfile)
+        val getRecord = findViewById<MaterialButton>(R.id.getUserRecord)
         val addTransaction = findViewById<MaterialButton>(R.id.addTransaction)
         val getTransaction = findViewById<MaterialButton>(R.id.getTransaction)
 
         addRecord.setOnClickListener {
-            val intent = Intent(this, AddCustomerData::class.java).apply {
+            val intent = Intent(this, AddUserProfileData::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         getRecord.setOnClickListener {
-            val intent = Intent(this, GetCustomerData::class.java).apply {
+            val intent = Intent(this, GetUserData::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
