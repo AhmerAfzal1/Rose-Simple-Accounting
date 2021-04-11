@@ -13,7 +13,7 @@ class BackupAgent : BackupAgentHelper() {
     override fun onCreate() {
         val file = getDatabasePath(DATABASE_NAME)
         val database = FileBackupHelper(this, file.name)
-        addHelper(DATABASE_NAME, database)
+        addHelper("SimpleAccounting", database)
         val backupManager = BackupManager(this)
         backupManager.dataChanged()
     }

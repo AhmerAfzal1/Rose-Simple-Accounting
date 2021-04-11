@@ -18,6 +18,7 @@ class MyDatabaseHelper(context: Context) :
     companion object {
         private const val DATABASE_VERSION: Int = 1
         private const val ID: String = "ID"
+        private const val CREATED_DATETIME: String = "Created"
         private const val MODIFIED_DATETIME: String = "LastModified"
 
         private const val USER_TABLE_NAME: String = "Customers"
@@ -29,15 +30,14 @@ class MyDatabaseHelper(context: Context) :
         private const val USER_PHONE2: String = "Phone2"
         private const val USER_EMAIL: String = "Email"
         private const val USER_COMMENTS: String = "Comments"
-        private const val USER_CREATED_DATETIME: String = "Created"
 
         private const val TRANSACTIONS_TABLE_NAME: String = "Transactions"
+        private const val USER_ID: String = "UserID"
         private const val DATE: String = "Date"
         private const val DESCRIPTION: String = "Description"
         private const val CREDIT: String = "Credit"
         private const val DEBIT: String = "Debit"
         private const val BALANCE: String = "Balance"
-
         fun dataValuesUserProfile(
             userProfile: UserProfile,
             isCreated: Boolean = true
@@ -52,7 +52,7 @@ class MyDatabaseHelper(context: Context) :
                 put(USER_EMAIL, userProfile.email)
                 put(USER_COMMENTS, userProfile.comment)
                 if (isCreated) {
-                    put(USER_CREATED_DATETIME, userProfile.created)
+                    put(CREATED_DATETIME, userProfile.created)
                 } else {
                     put(MODIFIED_DATETIME, userProfile.modified)
                 }
@@ -64,17 +64,24 @@ class MyDatabaseHelper(context: Context) :
             isModified: Boolean = false
         ): ContentValues {
             return ContentValues().apply {
+                put(USER_ID, transactions.userId)
                 put(DATE, transactions.date)
                 put(DESCRIPTION, transactions.description)
                 put(CREDIT, transactions.credit)
                 put(DEBIT, transactions.debit)
                 put(BALANCE, transactions.balance)
                 if (isModified) {
-                    put(ID, transactions.id)
                     put(MODIFIED_DATETIME, transactions.modified)
+                } else {
+                    put(CREATED_DATETIME, transactions.created)
                 }
             }
         }
+    }
+
+    override fun onConfigure(db: SQLiteDatabase?) {
+        super.onConfigure(db)
+        db?.setForeignKeyConstraintsEnabled(true)
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -89,23 +96,28 @@ class MyDatabaseHelper(context: Context) :
                     "$USER_PHONE2 TEXT, " +
                     "$USER_EMAIL TEXT, " +
                     "$USER_COMMENTS TEXT, " +
-                    "$USER_CREATED_DATETIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
+                    "$CREATED_DATETIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "$MODIFIED_DATETIME TIMESTAMP DEFAULT \"\", " +
                     "CHECK($USER_GENDER IN ('Male', 'Female', 'Unknown'))" +
                     ");"
             val createTransactionsTable = "CREATE TABLE IF NOT EXISTS $TRANSACTIONS_TABLE_NAME (" +
-                    "$ID INTEGER PRIMARY KEY UNIQUE NOT NULL, " +
+                    "$ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, " +
+                    "$USER_ID INTEGER, " +
                     "$DATE DATE DEFAULT CURRENT_DATE NOT NULL, " +
                     "$DESCRIPTION TEXT NOT NULL, " +
                     "$CREDIT REAL, " +
                     "$DEBIT REAL, " +
                     "$BALANCE REAL, " +
+                    "$CREATED_DATETIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "$MODIFIED_DATETIME TIMESTAMP DEFAULT \"\", " +
-                    "FOREIGN KEY ($ID) REFERENCES $USER_TABLE_NAME($ID)" +
+                    "FOREIGN KEY ($USER_ID) REFERENCES $USER_TABLE_NAME($ID)" +
                     ");"
-            Log.v(LOG_TAG, "$createUserProfileTable \n $createTransactionsTable")
+            db?.execSQL("PRAGMA foreign_keys = ON;")
             db?.execSQL(createUserProfileTable)
+            Log.v(LOG_TAG, createUserProfileTable)
+            Thread.sleep(200)
             db?.execSQL(createTransactionsTable)
+            Log.v(LOG_TAG, createTransactionsTable)
         } catch (e: SQLiteException) {
             Log.v(LOG_TAG, e.printStackTrace().toString())
         }
@@ -165,7 +177,7 @@ class MyDatabaseHelper(context: Context) :
             USER_PHONE2,
             USER_EMAIL,
             USER_COMMENTS,
-            USER_CREATED_DATETIME,
+            CREATED_DATETIME,
             MODIFIED_DATETIME
         )
         try {
@@ -200,7 +212,7 @@ class MyDatabaseHelper(context: Context) :
                     userProfile.comment =
                         cursor.getString(cursor.getColumnIndexOrThrow(USER_COMMENTS))
                     userProfile.created =
-                        cursor.getString(cursor.getColumnIndexOrThrow(USER_CREATED_DATETIME))
+                        cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME))
                     userProfile.modified =
                         cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME))
                     userProfileList.add(userProfile)
@@ -223,8 +235,8 @@ class MyDatabaseHelper(context: Context) :
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_EMAIL)))
                     stringBuilder.append("\nGetUserProfileData $USER_COMMENTS: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_COMMENTS)))
-                    stringBuilder.append("\nGetUserProfileData $USER_CREATED_DATETIME: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(USER_CREATED_DATETIME)))
+                    stringBuilder.append("\nGetUserProfileData $CREATED_DATETIME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME)))
                     stringBuilder.append("\nGetUserProfileData $MODIFIED_DATETIME: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
                     Log.v(LOG_TAG, stringBuilder.toString())
@@ -262,7 +274,16 @@ class MyDatabaseHelper(context: Context) :
     fun getTransactions(): ArrayList<Transactions> {
         val transactions = ArrayList<Transactions>()
         val getFromDatabase = this.readableDatabase
-        val columnsArray = arrayOf(ID, DATE, DESCRIPTION, CREDIT, DEBIT, BALANCE, MODIFIED_DATETIME)
+        val columnsArray = arrayOf(
+            USER_ID,
+            DATE,
+            DESCRIPTION,
+            CREDIT,
+            DEBIT,
+            BALANCE,
+            CREATED_DATETIME,
+            MODIFIED_DATETIME
+        )
         try {
             val cursor: Cursor = getFromDatabase.query(
                 TRANSACTIONS_TABLE_NAME,
@@ -276,18 +297,19 @@ class MyDatabaseHelper(context: Context) :
             try {
                 while (cursor.moveToNext()) {
                     val transaction = Transactions().apply {
-                        id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                        userId = cursor.getInt(cursor.getColumnIndexOrThrow(USER_ID))
                         date = cursor.getString(cursor.getColumnIndexOrThrow(DATE))
                         description = cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION))
                         credit = cursor.getDouble(cursor.getColumnIndexOrThrow(CREDIT))
                         debit = cursor.getDouble(cursor.getColumnIndexOrThrow(DEBIT))
                         balance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
+                        created = cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME))
                         modified = cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME))
                     }
                     transactions.add(transaction)
                     val stringBuilder = StringBuilder()
-                    stringBuilder.append("GetTransactions $ID: ")
-                        .append(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
+                    stringBuilder.append("GetTransactions $USER_ID: ")
+                        .append(cursor.getInt(cursor.getColumnIndexOrThrow(USER_ID)))
                     stringBuilder.append("\nGetTransactions $DATE: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DATE)))
                     stringBuilder.append("\nGetTransactions $DESCRIPTION: ")
@@ -298,6 +320,8 @@ class MyDatabaseHelper(context: Context) :
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(DEBIT)))
                     stringBuilder.append("\nGetTransactions $BALANCE: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(BALANCE)))
+                    stringBuilder.append("\nGetTransactions $CREATED_DATETIME: ")
+                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME)))
                     stringBuilder.append("\nGetTransactions $MODIFIED_DATETIME: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
                     Log.v(LOG_TAG, stringBuilder.toString())
@@ -335,13 +359,15 @@ class MyDatabaseHelper(context: Context) :
     fun getPreviousBalance(id: Int): Double {
         var previousBalance: Double = 0.toDouble()
         val getBalanceFromDatabase = this.readableDatabase
-        val userID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $ID = $id;"
+        val userID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $USER_ID = $id;"
         val cursor: Cursor = getBalanceFromDatabase.rawQuery(userID, null)
         try {
-            if (cursor.moveToFirst()) {
-                do {
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                if (cursor.count > 0) {
                     previousBalance = cursor.getDouble(cursor.getColumnIndexOrThrow(BALANCE))
-                } while (cursor.moveToNext())
+                    cursor.moveToNext()
+                }
             }
         } catch (e: Exception) {
             Log.v(LOG_TAG, e.message.toString())
