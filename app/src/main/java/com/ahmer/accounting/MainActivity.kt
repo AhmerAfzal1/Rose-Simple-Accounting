@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.transactions.AddTransactions
-import com.ahmer.accounting.transactions.GetTransactionReport
+import com.ahmer.accounting.transactions.UserIdTransactions
 import com.ahmer.accounting.user.AddUserProfileData
 import com.ahmer.accounting.user.GetUserData
 import com.google.android.material.button.MaterialButton
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         getTransaction.setOnClickListener {
-            val intent = Intent(this, GetTransactionReport::class.java).apply {
+            val intent = Intent(this, UserIdTransactions::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P

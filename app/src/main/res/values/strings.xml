@@ -5,7 +5,7 @@
     <string name="add_transaction">Add Transaction</string>
     <string name="address">Address</string>
     <string name="all_user_record">All Users Record from Database</string>
-    <string name="balance">Balance</string>
+    <string name="balance">Last Balance:</string>
     <string name="city">City</string>
     <string name="comments">Comments</string>
     <string name="credit_amount">Credit Amount</string>
@@ -18,7 +18,7 @@
     <string name="gender_female">Female</string>
     <string name="gender_male">Male</string>
     <string name="gender_unknown">Unknown</string>
-    <string name="get_users_balance">Get Users Updated Balance</string>
+    <string name="get_users_balance">Get Full Statement</string>
     <string name="last_modified">Last Modified:</string>
     <string name="name">Name</string>
     <string name="must_enter_balance_credit_or_debit">Please enter a value in Initial Balance, Credit or Debit</string>
@@ -50,4 +50,8 @@
     <string name="user_name">Name:</string>
     <string name="user_phone1">Phone1:</string>
     <string name="user_phone2">Phone2:</string>
+    <string name="description">Description</string>
+    <string name="debit">Debit</string>
+    <string name="credit">Credit</string>
+    <string name="balances">Balance</string>
 </resources>

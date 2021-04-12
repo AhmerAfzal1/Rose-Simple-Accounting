@@ -17,7 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar
 class GetTransactionReport : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.all_records)
+        setContentView(R.layout.transactions_rv)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = resources.getString(R.string.title_all_transaction_record)
@@ -25,35 +25,28 @@ class GetTransactionReport : AppCompatActivity() {
             finish()
         }
 
-        val myDatabaseHelper = MyDatabaseHelper(this)
+        val mUserId = intent.getIntExtra("mUserID", -1)
         val transactionsRecord = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         transactionsRecord.layoutManager = LinearLayoutManager(this)
-        //val getUserProfileData = myDatabaseHelper.getUserProfileData()
-        val transactions = myDatabaseHelper.getTransactions()
-        transactionsRecord.adapter = TransactionsAdapter(this, transactions)
+        transactionsRecord.adapter = GetTransactionsStatementAdapter(this, mUserId)
     }
 }
 
-class TransactionsAdapter(
-    private val context: Context,
-//    private val userProfileList: ArrayList<UserProfile>,
-    private val transactionsList: ArrayList<Transactions>
-) : RecyclerView.Adapter<TransactionsViewHolder>() {
+class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
+    RecyclerView.Adapter<TransactionsViewHolder>() {
+
+    private val mContext = context
+    private val myDatabaseHelper = MyDatabaseHelper(mContext)
+    private val transactionsList = myDatabaseHelper.getTransactionsByUserId(mUserId)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.transactions_container, parent, false)
+            .inflate(R.layout.transactions_statement_container, parent, false)
         return TransactionsViewHolder(layoutInflater)
     }
 
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         holder.bindView(transactionsList[position])
-        /*holder.linearLayoutTransactionReport.setOnClickListener {
-            HelperFunctions.makeToast(
-                context,
-                context.getString(R.string.toast_no_more_details_available)
-            )
-        }*/
     }
 
     override fun getItemCount(): Int {
@@ -64,23 +57,14 @@ class TransactionsAdapter(
 
 class TransactionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    /*val linearLayoutTransactionReport: LinearLayout =
-        itemView.findViewById(R.id.linearLayoutTransactionReport)*/
-
     fun bindView(transactions: Transactions) {
         val tvDesc = itemView.findViewById<TextView>(R.id.tvDescription)
         val tvDeb = itemView.findViewById<TextView>(R.id.tvDebit)
         val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
         val tvBal = itemView.findViewById<TextView>(R.id.tvBalance)
-        tvDesc.text = (transactions.userId.toString() + " - " + transactions.description)
+        tvDesc.text = transactions.description
         tvDeb.text = transactions.debit.toString()
         tvCre.text = transactions.credit.toString()
         tvBal.text = transactions.balance.toString()
-        /*val tvId = itemView.findViewById<TextView>(R.id.tvGetUserID)
-        val tvName = itemView.findViewById<TextView>(R.id.tvGetUserName)
-        val tvBalance = itemView.findViewById<TextView>(R.id.tvGetBalance)
-        tvId.text = userProfile.id.toString()
-        tvName.text = userProfile.name
-        tvBalance.text = transactions.balance.toString()*/
     }
 }

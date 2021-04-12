@@ -38,6 +38,7 @@ class MyDatabaseHelper(context: Context) :
         private const val CREDIT: String = "Credit"
         private const val DEBIT: String = "Debit"
         private const val BALANCE: String = "Balance"
+
         fun dataValuesUserProfile(
             userProfile: UserProfile,
             isCreated: Boolean = true
@@ -119,7 +120,7 @@ class MyDatabaseHelper(context: Context) :
             db?.execSQL(createTransactionsTable)
             Log.v(LOG_TAG, createTransactionsTable)
         } catch (e: SQLiteException) {
-            Log.v(LOG_TAG, e.printStackTrace().toString())
+            Log.e(LOG_TAG, e.message, e)
         }
     }
 
@@ -139,7 +140,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            e.message.toString()
+            Log.e(LOG_TAG, e.message, e)
         } finally {
             writeDatabase.close()
         }
@@ -157,7 +158,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            e.message.toString()
+            Log.e(LOG_TAG, e.message, e)
         } finally {
             updateWriteDatabase.close()
         }
@@ -242,7 +243,7 @@ class MyDatabaseHelper(context: Context) :
                     Log.v(LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
-                Log.v(LOG_TAG, e.printStackTrace().toString())
+                Log.e(LOG_TAG, e.message, e)
             } finally {
                 cursor.close()
                 readDatabase.close()
@@ -264,17 +265,18 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            e.message.toString()
+            Log.e(LOG_TAG, e.message, e)
         } finally {
             writeDatabase.close()
         }
         return false
     }
 
-    fun getTransactions(): ArrayList<Transactions> {
+    fun getTransactionsByUserId(mUserId: Int): ArrayList<Transactions> {
         val transactions = ArrayList<Transactions>()
         val getFromDatabase = this.readableDatabase
-        val columnsArray = arrayOf(
+        val projections = arrayOf(
+            ID,
             USER_ID,
             DATE,
             DESCRIPTION,
@@ -287,9 +289,9 @@ class MyDatabaseHelper(context: Context) :
         try {
             val cursor: Cursor = getFromDatabase.query(
                 TRANSACTIONS_TABLE_NAME,
-                columnsArray,
-                null,
-                null,
+                projections,
+                "$USER_ID = ?",
+                arrayOf(mUserId.toString()),
                 null,
                 null,
                 null
@@ -307,27 +309,9 @@ class MyDatabaseHelper(context: Context) :
                         modified = cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME))
                     }
                     transactions.add(transaction)
-                    val stringBuilder = StringBuilder()
-                    stringBuilder.append("GetTransactions $USER_ID: ")
-                        .append(cursor.getInt(cursor.getColumnIndexOrThrow(USER_ID)))
-                    stringBuilder.append("\nGetTransactions $DATE: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DATE)))
-                    stringBuilder.append("\nGetTransactions $DESCRIPTION: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DESCRIPTION)))
-                    stringBuilder.append("\nGetTransactions $CREDIT: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CREDIT)))
-                    stringBuilder.append("\nGetTransactions $DEBIT: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(DEBIT)))
-                    stringBuilder.append("\nGetTransactions $BALANCE: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(BALANCE)))
-                    stringBuilder.append("\nGetTransactions $CREATED_DATETIME: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME)))
-                    stringBuilder.append("\nGetTransactions $MODIFIED_DATETIME: ")
-                        .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
-                    Log.v(LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
-                Log.v(LOG_TAG, e.printStackTrace().toString())
+                Log.e(LOG_TAG, e.message, e)
             } finally {
                 cursor.close()
                 getFromDatabase.close()
@@ -349,14 +333,14 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.message.toString())
+            Log.e(LOG_TAG, e.message, e)
         } finally {
             updateTransactions.close()
         }
         return false
     }
 
-    fun getPreviousBalance(id: Int): Double {
+    fun getPreviousBalanceByUserId(id: Int): Double {
         var previousBalance: Double = 0.toDouble()
         val getBalanceFromDatabase = this.readableDatabase
         val userID = "SELECT * FROM $TRANSACTIONS_TABLE_NAME WHERE $USER_ID = $id;"
@@ -370,7 +354,7 @@ class MyDatabaseHelper(context: Context) :
                 }
             }
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.message.toString())
+            Log.e(LOG_TAG, e.message, e)
         } finally {
             cursor.close()
             getBalanceFromDatabase.close()

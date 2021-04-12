@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "151874539834",
+    "project_id": "rose-simple-accounting",
+    "storage_bucket": "rose-simple-accounting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151874539834:android:c3f9a806be4d6560c68003",
+        "android_client_info": {
+          "package_name": "com.ahmer.accounting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151874539834-55oids286jbtg4p0nnt8oc3aqn9r74mh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ahmer.accounting",
+            "certificate_hash": "966628907cc4811721dcc704b46b0d4bf96610fa"
+          }
+        },
+        {
+          "client_id": "151874539834-j4vaaip88q8d6u34rrvi33ju6vojuiia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKW2nWfezsnk28AY1dph_dh9zVxnYo3NA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151874539834-j4vaaip88q8d6u34rrvi33ju6vojuiia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-0672688958454166~8048857080"
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -77,7 +77,7 @@ class UserDataAdapter(
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
-                    Intent.FLAG_ACTIVITY_NEW_TASK
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
             }
             context.startActivity(intent)
