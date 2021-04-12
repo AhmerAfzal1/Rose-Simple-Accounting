@@ -12,7 +12,7 @@ import com.ahmer.accounting.R
 import com.ahmer.accounting.model.UserProfile
 
 class UserDropDownAdapter(context: Context, arrayList: ArrayList<UserProfile>) :
-    BaseAdapter(), Filterable {
+        BaseAdapter(), Filterable {
 
     private val mContext = context
     private var mArrayList: ArrayList<UserProfile> = arrayList
@@ -35,7 +35,7 @@ class UserDropDownAdapter(context: Context, arrayList: ArrayList<UserProfile>) :
 
         if (viewConvert == null) {
             viewConvert = LayoutInflater.from(mContext)
-                .inflate(R.layout.user_profile_data_dropdown, parent, false)
+                    .inflate(R.layout.user_profile_data_dropdown, parent, false)
         }
 
         val tvId = viewConvert?.findViewById<TextView>(R.id.tvId)

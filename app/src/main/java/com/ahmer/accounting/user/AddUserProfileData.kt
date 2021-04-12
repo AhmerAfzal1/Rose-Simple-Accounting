@@ -63,7 +63,7 @@ class AddUserProfileData : AppCompatActivity() {
                         else -> {
                             val myDatabaseHelper = MyDatabaseHelper(this)
                             isSuccessfullyAdded =
-                                myDatabaseHelper.insertUserProfileData(userProfile)
+                                    myDatabaseHelper.insertUserProfileData(userProfile)
 
                             Log.v(LOG_TAG, "Data Saved")
                             Log.v(LOG_TAG, "Name: ${userProfile.name}")

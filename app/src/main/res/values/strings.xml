@@ -45,7 +45,7 @@
     <string name="user_comments">Comments:</string>
     <string name="user_created_on">User Created:</string>
     <string name="user_gender">Gender:</string>
-    <string name="user_id">ID:</string>
+    <string name="_id">ID:</string>
     <string name="user_information">User Information</string>
     <string name="user_name">Name:</string>
     <string name="user_phone1">Phone1:</string>
@@ -54,4 +54,5 @@
     <string name="debit">Debit</string>
     <string name="credit">Credit</string>
     <string name="balances">Balance</string>
+    <string name="user_id">User ID:</string>
 </resources>

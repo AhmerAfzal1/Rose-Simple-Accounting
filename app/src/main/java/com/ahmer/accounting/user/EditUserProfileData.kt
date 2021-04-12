@@ -94,7 +94,7 @@ class EditUserProfileData : AppCompatActivity() {
                         else -> {
                             val myDatabaseHelper = MyDatabaseHelper(this)
                             isSuccessfullyUpdated =
-                                myDatabaseHelper.updateUserProfileData(userProfile, id)
+                                    myDatabaseHelper.updateUserProfileData(userProfile, id)
                             Log.v(LOG_TAG, "Updated Record")
                             Log.v(LOG_TAG, "Name: ${userProfile.name}")
                             Log.v(LOG_TAG, "Gender: ${userProfile.gender}")
