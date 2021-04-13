@@ -11,10 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
@@ -37,7 +38,7 @@ class GetUserData : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         val adapter = UserDataAdapter(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
     }
 }
@@ -50,7 +51,7 @@ class UserDataAdapter(context: Context) : RecyclerView.Adapter<UserDataHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserDataHolder {
         val inflater = LayoutInflater.from(parent.context)
-                .inflate(R.layout.user_profile_data_container, parent, false)
+            .inflate(R.layout.user_profile_data_container, parent, false)
         return UserDataHolder(inflater)
     }
 
@@ -72,7 +73,7 @@ class UserDataAdapter(context: Context) : RecyclerView.Adapter<UserDataHolder>()
                 putExtra("mComments", mUserProfileList[position].comment)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
@@ -92,8 +93,8 @@ class UserDataAdapter(context: Context) : RecyclerView.Adapter<UserDataHolder>()
             dialog.setContentView(R.layout.user_profile_data_dialog)
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.window?.setLayout(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
             )
             dialog.setCancelable(false)
             val getID = dialog.findViewById<TextView>(R.id.dialogUserID)
@@ -142,7 +143,7 @@ class UserDataAdapter(context: Context) : RecyclerView.Adapter<UserDataHolder>()
 class UserDataHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     val cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
-    val tvEditButton: TextView = itemView.findViewById(R.id.tvBtnEdit)
+    val tvEditButton: ImageView = itemView.findViewById(R.id.tvBtnEdit)
 
     fun bindItems(userProfile: UserProfile) {
         val userID = itemView.findViewById<TextView>(R.id.tvGetUserID)

@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Rose Simple Accounting</string>
 
-    <string name="add_new_user">Add New User in Database</string>
+    <string name="add_new_user">Add New User</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="address">Address</string>
-    <string name="all_user_record">All Users Record from Database</string>
-    <string name="balance">Last Balance:</string>
+    <string name="all_user_record">All Users</string>
+    <string name="balance">Prev Bal:</string>
     <string name="city">City</string>
     <string name="comments">Comments</string>
     <string name="credit_amount">Credit Amount</string>
@@ -18,7 +18,7 @@
     <string name="gender_female">Female</string>
     <string name="gender_male">Male</string>
     <string name="gender_unknown">Unknown</string>
-    <string name="get_users_balance">Get Full Statement</string>
+    <string name="get_user_statement">User Statement</string>
     <string name="last_modified">Last Modified:</string>
     <string name="name">Name</string>
     <string name="must_enter_balance_credit_or_debit">Please enter a value in Initial Balance, Credit or Debit</string>

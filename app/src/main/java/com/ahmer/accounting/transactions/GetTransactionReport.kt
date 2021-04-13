@@ -44,7 +44,7 @@ class GetTransactionReport : AppCompatActivity() {
 }
 
 class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
-        RecyclerView.Adapter<TransactionsViewHolder>() {
+    RecyclerView.Adapter<TransactionsViewHolder>() {
 
     private val mContext = context
     private val myDatabaseHelper = MyDatabaseHelper(mContext)
@@ -52,7 +52,7 @@ class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-                .inflate(R.layout.transactions_statement_container, parent, false)
+            .inflate(R.layout.transactions_statement_container, parent, false)
         return TransactionsViewHolder(layoutInflater)
     }
 

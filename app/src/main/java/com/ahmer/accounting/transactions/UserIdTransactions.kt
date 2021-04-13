@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
@@ -32,7 +32,7 @@ class UserIdTransactions : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.rvGetAllRecords)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = TransactionsAdapter(this)
     }
 }
@@ -45,7 +45,7 @@ class TransactionsAdapter(context: Context) : RecyclerView.Adapter<TransViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransViewHolder {
         val layoutInflater = LayoutInflater.from(mContext)
-                .inflate(R.layout.transactions_user_id_container, parent, false)
+            .inflate(R.layout.transactions_user_id_container, parent, false)
         return TransViewHolder(layoutInflater)
     }
 
@@ -74,7 +74,7 @@ class TransactionsAdapter(context: Context) : RecyclerView.Adapter<TransViewHold
 
 class TransViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val cardView: MaterialCardView = itemView.findViewById(R.id.cardViewMain)
+    val cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
 
     fun bindItems(userProfile: UserProfile, mUserLastBalance: Double) {
         val userID: TextView = itemView.findViewById(R.id.tvGetUserID)

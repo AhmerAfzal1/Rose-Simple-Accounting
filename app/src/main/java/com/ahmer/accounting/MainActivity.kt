@@ -11,7 +11,7 @@ import com.ahmer.accounting.transactions.UserIdTransactions
 import com.ahmer.accounting.user.AddUserProfileData
 import com.ahmer.accounting.user.GetUserData
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,16 +21,16 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.app_name)
 
-        val addRecord = findViewById<MaterialButton>(R.id.addUserProfile)
-        val getRecord = findViewById<MaterialButton>(R.id.getUserRecord)
-        val addTransaction = findViewById<MaterialButton>(R.id.addTransaction)
-        val getTransaction = findViewById<MaterialButton>(R.id.getTransaction)
+        val addNewUser = findViewById<MaterialCardView>(R.id.cardViewAddUser)
+        val getAllUsers = findViewById<MaterialCardView>(R.id.cardViewAllUsers)
+        val addTransactions = findViewById<MaterialCardView>(R.id.cardViewAddTransactions)
+        val getStatements = findViewById<MaterialCardView>(R.id.cardViewStatement)
 
-        addRecord.setOnClickListener {
+        addNewUser.setOnClickListener {
             val intent = Intent(this, AddUserProfileData::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
@@ -39,11 +39,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        getRecord.setOnClickListener {
+        getAllUsers.setOnClickListener {
             val intent = Intent(this, GetUserData::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        addTransaction.setOnClickListener {
+        addTransactions.setOnClickListener {
             val intent = Intent(this, AddTransactions::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
@@ -63,11 +63,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        getTransaction.setOnClickListener {
+        getStatements.setOnClickListener {
             val intent = Intent(this, UserIdTransactions::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 ) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }

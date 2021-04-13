@@ -1,122 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="10dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardViewMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:layout_marginTop="5dp"
-        app:cardBackgroundColor="@color/purple_500"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp">
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp">
+        <TableRow android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/tv01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:text="@string/user_id"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/primaryColor"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvGetUserID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tv01"
                 android:text="@string/user_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/tvPeriod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tvGetUserID"
-                android:text="●"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tv02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tvPeriod"
                 android:text="@string/user_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/primaryColor"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvGetUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tv02"
                 android:text="@string/user_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/tvPeriod1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tvGetUserName"
-                android:text="●"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tv03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tvPeriod1"
                 android:text="@string/balance"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/primaryColor"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvGetBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginStart="3dp"
-                android:layout_toEndOf="@id/tv03"
                 android:text="@string/user_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/white" />
-        </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <View
-        style="@style/Theme.RoseSimpleAccounting.DividerStyle"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp" />
-</LinearLayout>
+                android:textColor="@color/black" />
+        </TableRow>
+    </TableLayout>
+</com.google.android.material.card.MaterialCardView>

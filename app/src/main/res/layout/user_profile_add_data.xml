@@ -68,7 +68,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:shadowColor="@color/purple_500"
                     android:text="@string/gender_male" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton

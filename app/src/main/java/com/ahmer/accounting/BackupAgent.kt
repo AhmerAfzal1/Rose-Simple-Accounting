@@ -27,18 +27,18 @@ class BackupAgent : BackupAgentHelper() {
 
     @Throws(IOException::class)
     override fun onBackup(
-            oldState: ParcelFileDescriptor?,
-            data: BackupDataOutput?,
-            newState: ParcelFileDescriptor?
+        oldState: ParcelFileDescriptor?,
+        data: BackupDataOutput?,
+        newState: ParcelFileDescriptor?
     ) {
         super.onBackup(oldState, data, newState)
     }
 
     @Throws(IOException::class)
     override fun onRestore(
-            data: BackupDataInput?,
-            appVersionCode: Int,
-            newState: ParcelFileDescriptor?
+        data: BackupDataInput?,
+        appVersionCode: Int,
+        newState: ParcelFileDescriptor?
     ) {
         super.onRestore(data, appVersionCode, newState)
     }
