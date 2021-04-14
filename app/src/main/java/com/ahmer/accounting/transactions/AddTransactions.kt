@@ -17,6 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,6 +25,7 @@ class AddTransactions : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.transactions_add)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         val materialToolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         materialToolbar.setOnClickListener {

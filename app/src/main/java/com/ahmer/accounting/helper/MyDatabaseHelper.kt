@@ -11,6 +11,7 @@ import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -86,6 +87,7 @@ class MyDatabaseHelper(context: Context) :
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         try {
             val createUserProfileTable = "CREATE TABLE IF NOT EXISTS $USER_TABLE_NAME (" +
                     "$ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, " +
@@ -121,6 +123,7 @@ class MyDatabaseHelper(context: Context) :
             Log.v(LOG_TAG, createTransactionsTable)
         } catch (e: SQLiteException) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
@@ -141,6 +144,7 @@ class MyDatabaseHelper(context: Context) :
             return true
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             writeDatabase.close()
         }
@@ -159,6 +163,7 @@ class MyDatabaseHelper(context: Context) :
             return true
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             updateWriteDatabase.close()
         }
@@ -244,12 +249,14 @@ class MyDatabaseHelper(context: Context) :
                 }
             } catch (e: Exception) {
                 Log.e(LOG_TAG, e.message, e)
+                FirebaseCrashlytics.getInstance().recordException(e)
             } finally {
                 cursor.close()
                 readDatabase.close()
             }
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.printStackTrace().toString())
+            Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
 
         return userProfileList
@@ -266,6 +273,7 @@ class MyDatabaseHelper(context: Context) :
             return true
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             writeDatabase.close()
         }
@@ -312,12 +320,14 @@ class MyDatabaseHelper(context: Context) :
                 }
             } catch (e: Exception) {
                 Log.e(LOG_TAG, e.message, e)
+                FirebaseCrashlytics.getInstance().recordException(e)
             } finally {
                 cursor.close()
                 getFromDatabase.close()
             }
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.printStackTrace().toString())
+            Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
         return transactions
     }
@@ -334,6 +344,7 @@ class MyDatabaseHelper(context: Context) :
             return true
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             updateTransactions.close()
         }
@@ -355,6 +366,7 @@ class MyDatabaseHelper(context: Context) :
             }
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             cursor.close()
             getBalanceFromDatabase.close()

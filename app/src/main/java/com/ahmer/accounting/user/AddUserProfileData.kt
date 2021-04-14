@@ -12,11 +12,13 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class AddUserProfileData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_profile_add_data)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.setOnClickListener {

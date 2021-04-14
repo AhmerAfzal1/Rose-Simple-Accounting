@@ -23,11 +23,13 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class GetUserData : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.all_records)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = resources.getString(R.string.title_all_user_record)
@@ -135,7 +137,8 @@ class UserDataAdapter(context: Context) : RecyclerView.Adapter<UserDataHolder>()
             }
             dialog.show()
         } catch (e: Exception) {
-            Log.v(LOG_TAG, e.printStackTrace().toString())
+            Log.e(LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 }

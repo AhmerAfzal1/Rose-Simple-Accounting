@@ -15,11 +15,13 @@ import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class GetTransactionReport : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.transactions_rv)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = resources.getString(R.string.title_all_transaction_record)

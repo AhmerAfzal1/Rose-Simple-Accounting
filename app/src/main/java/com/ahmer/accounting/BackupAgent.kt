@@ -5,12 +5,14 @@ import android.os.ParcelFileDescriptor
 import android.util.Log
 import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
 import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.File
 import java.io.IOException
 
 class BackupAgent : BackupAgentHelper() {
 
     override fun onCreate() {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         val file = getDatabasePath(DATABASE_NAME)
         val database = FileBackupHelper(this, file.name)
         addHelper("SimpleAccounting", database)

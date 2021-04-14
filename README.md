@@ -4,6 +4,10 @@ A simple accounting task perform and keep all transactions in database using Kot
 This project is under progress...
 
 
+## App-Ads.txt
+
+`https://rose-simple-accounting.web.app`
+
 ## License
 
 ```
