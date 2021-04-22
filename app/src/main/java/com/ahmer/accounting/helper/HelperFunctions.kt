@@ -13,11 +13,10 @@ class HelperFunctions : AppCompatActivity() {
     companion object {
 
         fun getDateTime(): String {
-            val dateTimePattern = "dd MMM yyyy hh:mm:ss aa"
-            val dateTimeFormat: DateFormat = SimpleDateFormat(dateTimePattern, Locale.UK)
+            val dateFormat: DateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
             val dateTime = Calendar.getInstance().time
-            Log.v(Constants.LOG_TAG, dateTimeFormat.format(dateTime))
-            return dateTimeFormat.format(dateTime)
+            Log.v(Constants.LOG_TAG, dateFormat.format(dateTime))
+            return dateFormat.format(dateTime)
         }
 
         fun makeToast(context: Context, msg: String) {

@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +20,11 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,9 +42,12 @@ class UserTransactionsReport : AppCompatActivity() {
 
         val mUserId = intent.getIntExtra("mPosUserID", -1)
         val mUserName = intent.getStringExtra("mPosUserName")
-        val mUserDebit = intent.getDoubleExtra("mPosUserDebit", 0.toDouble())
-        val mUserCredit = intent.getDoubleExtra("mPosUserCredit", 0.toDouble())
         Log.v(Constants.LOG_TAG, "ID: $mUserId, Name: $mUserName")
+
+        val myDatabaseHelper = MyDatabaseHelper(this)
+        val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
+        val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
+        val mUserBalance = myDatabaseHelper.getSumForColumns(mUserId, "Balance")
 
         val tvUserId = findViewById<TextView>(R.id.tvUserId)
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
@@ -59,12 +61,11 @@ class UserTransactionsReport : AppCompatActivity() {
         tvUserName.text = mUserName
         tvTotalDeb.text = mUserDebit.toString()
         tvTotalCre.text = mUserCredit.toString()
-        val totalBalance = mUserCredit - mUserDebit
-        tvTotalBal.text = totalBalance.toString()
+        tvTotalBal.text = mUserBalance.toString()
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = GetTransactionsStatementAdapter(this, mUserId)
+        recyclerView.adapter = GetTransactionsStatementAdapter(this, myDatabaseHelper, mUserId)
 
         fabAddTransaction.setOnClickListener {
             showAddTransactionDialog(it.context, mUserId)
@@ -81,7 +82,7 @@ class UserTransactionsReport : AppCompatActivity() {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
             )
-            dialog.setCancelable(false)
+            dialog.setCancelable(true)
             val myDatabaseHelper = MyDatabaseHelper(context)
             val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
             val radioGroupButton = dialog.findViewById<RadioGroup>(R.id.rgCreditDebit)
@@ -96,7 +97,7 @@ class UserTransactionsReport : AppCompatActivity() {
                 Log.v(Constants.LOG_TAG, "TypeAmount2: ${radio.text}")
             }
 
-            val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.UK)
+            val simpleDateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
             val currentDate = Calendar.getInstance()
             inputDate.setText(simpleDateFormat.format(currentDate.time))
             inputDate.setOnClickListener {
@@ -174,12 +175,14 @@ class UserTransactionsReport : AppCompatActivity() {
     }
 }
 
-class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
-    RecyclerView.Adapter<TransactionsViewHolder>() {
+class GetTransactionsStatementAdapter(
+    context: Context,
+    databaseHelper: MyDatabaseHelper,
+    mUserId: Int
+) : RecyclerView.Adapter<TransactionsViewHolder>() {
 
     private val mContext = context
-    private val myDatabaseHelper = MyDatabaseHelper(mContext)
-    private val mTransactionsList = myDatabaseHelper.getTransactionsByUserId(mUserId)
+    private val mTransactionsList = databaseHelper.getTransactionsByUserId(mUserId)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -189,21 +192,65 @@ class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
 
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         holder.bindView(mTransactionsList[position])
+        Log.v(Constants.LOG_TAG, "Balance: ${mTransactionsList[position].balance}")
+        holder.cvTransactionEntry.setOnClickListener {
+            showTransInfoDialog(mContext, mTransactionsList[position])
+        }
     }
 
     override fun getItemCount(): Int {
         return mTransactionsList.size
     }
+
+    private fun showTransInfoDialog(context: Context, transactions: Transactions) {
+        try {
+            val dialog = Dialog(context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.transactions_info_dialog)
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window?.setLayout(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+            dialog.setCancelable(false)
+            val tvTransId = dialog.findViewById<TextView>(R.id.dialogTransID)
+            val tvTransCreated = dialog.findViewById<TextView>(R.id.dialogTransCreated)
+            val tvTransModified = dialog.findViewById<TextView>(R.id.dialogTransModified)
+            val btnOk = dialog.findViewById<Button>(R.id.btnOk)
+            tvTransId.text = ""
+            tvTransCreated.text = transactions.created
+            tvTransModified.text = transactions.modified
+            btnOk.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
 }
 
 class TransactionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    val cvTransactionEntry: MaterialCardView = itemView.findViewById(R.id.cvTransactionEntry)
 
     fun bindView(transactions: Transactions) {
         val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
         val tvDesc = itemView.findViewById<TextView>(R.id.tvDescription)
         val tvDeb = itemView.findViewById<TextView>(R.id.tvDebit)
         val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
-        tvDate.text = transactions.date
+
+        try {
+            val sdf = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
+            val date: Date = sdf.parse(transactions.date)
+            val simpleDateFormat = SimpleDateFormat("dd-MM-yy", Locale.UK)
+            tvDate.text = simpleDateFormat.format(date)
+        } catch (pe: ParseException) {
+            Log.e(Constants.LOG_TAG, pe.message, pe)
+            FirebaseCrashlytics.getInstance().recordException(pe)
+        }
+
         tvDesc.text = transactions.description
         if (transactions.debit == 0.toDouble()) {
             tvDeb.text = ""

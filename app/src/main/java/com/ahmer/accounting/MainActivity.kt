@@ -104,16 +104,11 @@ class GetAllUsersAdapter(context: Context) : RecyclerView.Adapter<UsersViewHolde
     }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-        // Position + 1 due to position start from 0
-        val mUserCredit = mMyDatabaseHelper.getSumForColumns(position + 1, true)
-        val mUserDebit = mMyDatabaseHelper.getSumForColumns(position + 1, false)
         holder.bindItems(mUserProfileList[position])
         holder.cvMain.setOnClickListener {
             val intent = Intent(mContext, UserTransactionsReport::class.java).apply {
                 putExtra("mPosUserID", mUserProfileList[position].id)
                 putExtra("mPosUserName", mUserProfileList[position].name)
-                putExtra("mPosUserDebit", mUserDebit)
-                putExtra("mPosUserCredit", mUserCredit)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P

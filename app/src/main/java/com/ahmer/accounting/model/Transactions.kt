@@ -4,13 +4,13 @@ class Transactions {
 
     var userId: Int = 0
 
-    var credit: Double = 0.toDouble()
-
     var date: String = ""
 
-    var debit: Double = 0.toDouble()
-
     var description: String = ""
+
+    var credit: Double = 0.toDouble()
+
+    var debit: Double = 0.toDouble()
 
     var balance: Double = 0.toDouble()
 

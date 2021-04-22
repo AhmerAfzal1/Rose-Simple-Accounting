@@ -371,12 +371,19 @@ class MyDatabaseHelper(context: Context) :
         return previousBalance
     }
 
-    fun getSumForColumns(id: Int, isCreditSum: Boolean = true): Double {
+    fun getSumForColumns(id: Int, nameColumn: String): Double {
         var sum: Double = 0.toDouble()
-        val sumForColumn: String = if (isCreditSum) {
-            CREDIT
-        } else {
-            DEBIT
+        var sumForColumn = ""
+        when (nameColumn) {
+            "Credit" -> {
+                sumForColumn = CREDIT
+            }
+            "Debit" -> {
+                sumForColumn = DEBIT
+            }
+            "Balance" -> {
+                sumForColumn = BALANCE
+            }
         }
         val getSumFromDatabase = this.readableDatabase
         val userID =
