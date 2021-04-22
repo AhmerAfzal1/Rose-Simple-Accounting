@@ -13,10 +13,31 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="top|start"
+                android:hint="@string/date"
+                android:inputType="date"
+                android:lines="1"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:id="@+id/layoutAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputLayoutDate"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="2">
@@ -53,14 +74,14 @@
                 android:orientation="horizontal"
                 android:padding="2dp">
 
-                <RadioButton
+                <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/rbCredit"
                     style="@style/Widget.App.RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/credit_plus" />
 
-                <RadioButton
+                <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/rbDebit"
                     style="@style/Widget.App.RadioButton"
                     android:layout_width="wrap_content"
@@ -70,32 +91,11 @@
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutAmount"
-            android:layout_marginTop="5dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="top|start"
-                android:hint="@string/date"
-                android:inputType="date"
-                android:lines="1"
-                android:textColor="@android:color/black" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutDescription"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textInputLayoutDate"
+            android:layout_below="@id/layoutAmount"
             android:layout_marginTop="5dp">
 
             <com.google.android.material.textfield.TextInputEditText

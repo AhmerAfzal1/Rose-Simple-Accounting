@@ -75,7 +75,7 @@ class UserTransactionsReport : AppCompatActivity() {
         try {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setContentView(R.layout.dialog_add_transactions)
+            dialog.setContentView(R.layout.transactions_add_dialog)
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.window?.setLayout(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -183,7 +183,7 @@ class GetTransactionsStatementAdapter(context: Context, mUserId: Int) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.transactions_statement_container, parent, false)
+            .inflate(R.layout.transactions_add_container, parent, false)
         return TransactionsViewHolder(layoutInflater)
     }
 
