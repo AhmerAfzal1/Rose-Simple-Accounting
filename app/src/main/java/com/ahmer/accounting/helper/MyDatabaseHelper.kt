@@ -261,20 +261,20 @@ class MyDatabaseHelper(context: Context) :
 
     fun insertTransactions(transactions: Transactions): Boolean {
         val writeDatabase = this.writableDatabase
+        var result: Long = 0.toLong()
         try {
-            writeDatabase.insert(
+            result = writeDatabase.insert(
                 TRANSACTIONS_TABLE_NAME,
                 null,
                 dataValuesTransactions(transactions, false)
             )
-            return true
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             writeDatabase.close()
         }
-        return false
+        return result != (-1).toLong() // If -1 return it means not successfully inserted
     }
 
     fun getTransactionsByUserId(mUserId: Int): ArrayList<Transactions> {
