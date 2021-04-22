@@ -17,7 +17,6 @@
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:menu="@menu/save"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:title="@string/title_toolbar_add_user"
         app:titleMarginStart="0dp" />
@@ -191,6 +190,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayoutComments"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_below="@id/inputLayoutEmail">
@@ -200,7 +200,6 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:padding="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -216,6 +215,19 @@
                         android:textColor="@android:color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveUserData"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayoutComments"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:text="@string/save"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

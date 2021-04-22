@@ -3,8 +3,7 @@ package com.ahmer.accounting
 import android.app.backup.*
 import android.os.ParcelFileDescriptor
 import android.util.Log
-import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
-import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.helper.Constants
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.File
 import java.io.IOException
@@ -13,7 +12,7 @@ class BackupAgent : BackupAgentHelper() {
 
     override fun onCreate() {
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        val file = getDatabasePath(DATABASE_NAME)
+        val file = getDatabasePath(Constants.DATABASE_NAME)
         val database = FileBackupHelper(this, file.name)
         addHelper("SimpleAccounting", database)
         val backupManager = BackupManager(this)
@@ -21,8 +20,8 @@ class BackupAgent : BackupAgentHelper() {
     }
 
     override fun getFilesDir(): File {
-        val file: File = getDatabasePath(DATABASE_NAME).parentFile!!
-        Log.v(LOG_TAG, file.toString())
+        val file: File = getDatabasePath(Constants.DATABASE_NAME).parentFile!!
+        Log.v(Constants.LOG_TAG, file.toString())
         return file
 
     }

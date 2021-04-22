@@ -10,57 +10,81 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="10dp">
 
-    <TableLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
 
-        <TableRow android:layout_marginTop="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_id"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/primaryColor"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvGetUserID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="@string/user_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/black" />
-        </TableRow>
-
-        <TableRow android:layout_marginTop="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/primaryColor"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvGetUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="@string/user_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/black" />
-        </TableRow>
-
-        <ImageView
-            android:id="@+id/tvBtnEdit"
+        <LinearLayout
+            android:id="@+id/linearLayoutButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/ic_edit"
-            app:tint="@color/primaryColor" />
-    </TableLayout>
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivBtnInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_information"
+                app:tint="@color/primaryColor" />
+
+            <ImageView
+                android:id="@+id/ivBtnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_edit"
+                app:tint="@color/primaryColor" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutButtons">
+
+            <TableRow android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_id"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/primaryColor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvGetUserID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/user_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/primaryColor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvGetUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/user_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/black" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

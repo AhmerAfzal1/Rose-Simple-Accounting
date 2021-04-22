@@ -6,11 +6,12 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
-import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
+import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
@@ -34,6 +35,7 @@ class EditUserProfileData : AppCompatActivity() {
         val userPhone2 = findViewById<TextInputLayout>(R.id.inputLayoutPhone2)
         val userEmail = findViewById<TextInputLayout>(R.id.inputLayoutEmail)
         val userComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
+        val btnSave = findViewById<MaterialButton>(R.id.btnSaveUserData)
         var typeGender = ""
         userGender.setOnCheckedChangeListener { _, checkedId ->
             val rbGender = findViewById<RadioButton>(checkedId)
@@ -69,56 +71,49 @@ class EditUserProfileData : AppCompatActivity() {
         userEmail.editText?.setText(email.toString())
         userComments.editText?.setText(comment.toString())
 
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_btn_save -> {
-                    var isSuccessfullyUpdated = false
+        btnSave.setOnClickListener {
+            var isSuccessfullyUpdated = false
+            val userProfile = UserProfile().apply {
+                this.name = userName.editText?.text.toString().trim()
+                this.gender = typeGender
+                this.address = userAddress.editText?.text.toString().trim()
+                this.city = userCity.editText?.text.toString().trim()
+                this.phone1 = userPhone1.editText?.text.toString().trim()
+                this.phone2 = userPhone2.editText?.text.toString().trim()
+                this.email = userEmail.editText?.text.toString().trim()
+                this.comment = userComments.editText?.text.toString().trim()
+                this.modified = HelperFunctions.getDateTime()
+            }
 
-                    val userProfile = UserProfile().apply {
-                        this.name = userName.editText?.text.toString().trim()
-                        this.gender = typeGender
-                        this.address = userAddress.editText?.text.toString().trim()
-                        this.city = userCity.editText?.text.toString().trim()
-                        this.phone1 = userPhone1.editText?.text.toString().trim()
-                        this.phone2 = userPhone2.editText?.text.toString().trim()
-                        this.email = userEmail.editText?.text.toString().trim()
-                        this.comment = userComments.editText?.text.toString().trim()
-                        this.modified = HelperFunctions.getDateTime()
-                    }
-
-                    when {
-                        userProfile.name.trim().isEmpty() -> {
-                            HelperFunctions.makeToast(this, getString(R.string.toast_enter_name))
-                        }
-                        userProfile.gender.trim().isEmpty() -> {
-                            HelperFunctions.makeToast(this, getString(R.string.toast_select_gender))
-                        }
-                        else -> {
-                            val myDatabaseHelper = MyDatabaseHelper(this)
-                            isSuccessfullyUpdated =
-                                myDatabaseHelper.updateUserProfileData(userProfile, id)
-                            Log.v(LOG_TAG, "Updated Record")
-                            Log.v(LOG_TAG, "Name: ${userProfile.name}")
-                            Log.v(LOG_TAG, "Gender: ${userProfile.gender}")
-                            Log.v(LOG_TAG, "Address: ${userProfile.address}")
-                            Log.v(LOG_TAG, "City: ${userProfile.city}")
-                            Log.v(LOG_TAG, "Phone1: ${userProfile.phone1}")
-                            Log.v(LOG_TAG, "Phone2: ${userProfile.phone2}")
-                            Log.v(LOG_TAG, "Email: ${userProfile.email}")
-                            Log.v(LOG_TAG, "Comments: ${userProfile.comment}")
-                            Log.v(LOG_TAG, "Created: ${userProfile.created}")
-                            Log.v(LOG_TAG, "Modified: ${userProfile.modified}")
-                        }
-                    }
-
-                    if (isSuccessfullyUpdated) {
-                        HelperFunctions.makeToast(this, getString(R.string.toast_record_updated))
-                        Thread.sleep(200)
-                        finish()
-                    }
+            when {
+                userProfile.name.trim().isEmpty() -> {
+                    HelperFunctions.makeToast(it.context, getString(R.string.toast_enter_name))
+                }
+                userProfile.gender.trim().isEmpty() -> {
+                    HelperFunctions.makeToast(it.context, getString(R.string.toast_select_gender))
+                }
+                else -> {
+                    val myDatabaseHelper = MyDatabaseHelper(it.context)
+                    isSuccessfullyUpdated = myDatabaseHelper.updateUserProfileData(userProfile, id)
+                    Log.v(Constants.LOG_TAG, "Updated Record")
+                    Log.v(Constants.LOG_TAG, "Name: ${userProfile.name}")
+                    Log.v(Constants.LOG_TAG, "Gender: ${userProfile.gender}")
+                    Log.v(Constants.LOG_TAG, "Address: ${userProfile.address}")
+                    Log.v(Constants.LOG_TAG, "City: ${userProfile.city}")
+                    Log.v(Constants.LOG_TAG, "Phone1: ${userProfile.phone1}")
+                    Log.v(Constants.LOG_TAG, "Phone2: ${userProfile.phone2}")
+                    Log.v(Constants.LOG_TAG, "Email: ${userProfile.email}")
+                    Log.v(Constants.LOG_TAG, "Comments: ${userProfile.comment}")
+                    Log.v(Constants.LOG_TAG, "Created: ${userProfile.created}")
+                    Log.v(Constants.LOG_TAG, "Modified: ${userProfile.modified}")
                 }
             }
-            true
+
+            if (isSuccessfullyUpdated) {
+                HelperFunctions.makeToast(it.context, getString(R.string.toast_record_updated))
+                Thread.sleep(200)
+                finish()
+            }
         }
     }
 }

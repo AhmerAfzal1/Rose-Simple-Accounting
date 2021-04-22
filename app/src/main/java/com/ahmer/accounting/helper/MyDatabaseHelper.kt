@@ -7,14 +7,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.ahmer.accounting.helper.Constants.Companion.DATABASE_NAME
-import com.ahmer.accounting.helper.Constants.Companion.LOG_TAG
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MyDatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    SQLiteOpenHelper(context, Constants.DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_VERSION: Int = 1
@@ -32,7 +30,7 @@ class MyDatabaseHelper(context: Context) :
         private const val USER_EMAIL: String = "Email"
         private const val USER_COMMENTS: String = "Comments"
 
-        private const val TRANSACTIONS_TABLE_NAME: String = "Transactions"
+        const val TRANSACTIONS_TABLE_NAME: String = "Transactions"
         private const val USER_ID: String = "UserID"
         private const val DATE: String = "Date"
         private const val DESCRIPTION: String = "Description"
@@ -117,12 +115,11 @@ class MyDatabaseHelper(context: Context) :
                     ");"
             db?.execSQL("PRAGMA foreign_keys = ON;")
             db?.execSQL(createUserProfileTable)
-            Log.v(LOG_TAG, createUserProfileTable)
-            Thread.sleep(200)
+            Log.v(Constants.LOG_TAG, createUserProfileTable)
             db?.execSQL(createTransactionsTable)
-            Log.v(LOG_TAG, createTransactionsTable)
+            Log.v(Constants.LOG_TAG, createTransactionsTable)
         } catch (e: SQLiteException) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
@@ -143,7 +140,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             writeDatabase.close()
@@ -162,7 +159,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             updateWriteDatabase.close()
@@ -245,17 +242,17 @@ class MyDatabaseHelper(context: Context) :
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(CREATED_DATETIME)))
                     stringBuilder.append("\nGetUserProfileData $MODIFIED_DATETIME: ")
                         .append(cursor.getString(cursor.getColumnIndexOrThrow(MODIFIED_DATETIME)))
-                    Log.v(LOG_TAG, stringBuilder.toString())
+                    Log.v(Constants.LOG_TAG, stringBuilder.toString())
                 }
             } catch (e: Exception) {
-                Log.e(LOG_TAG, e.message, e)
+                Log.e(Constants.LOG_TAG, e.message, e)
                 FirebaseCrashlytics.getInstance().recordException(e)
             } finally {
                 cursor.close()
                 readDatabase.close()
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
 
@@ -272,7 +269,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             writeDatabase.close()
@@ -319,14 +316,14 @@ class MyDatabaseHelper(context: Context) :
                     transactions.add(transaction)
                 }
             } catch (e: Exception) {
-                Log.e(LOG_TAG, e.message, e)
+                Log.e(Constants.LOG_TAG, e.message, e)
                 FirebaseCrashlytics.getInstance().recordException(e)
             } finally {
                 cursor.close()
                 getFromDatabase.close()
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
         return transactions
@@ -343,7 +340,7 @@ class MyDatabaseHelper(context: Context) :
             )
             return true
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             updateTransactions.close()
@@ -365,12 +362,37 @@ class MyDatabaseHelper(context: Context) :
                 }
             }
         } catch (e: Exception) {
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             cursor.close()
             getBalanceFromDatabase.close()
         }
         return previousBalance
+    }
+
+    fun getSumForColumns(id: Int, isCreditSum: Boolean = true): Double {
+        var sum: Double = 0.toDouble()
+        val sumForColumn: String = if (isCreditSum) {
+            CREDIT
+        } else {
+            DEBIT
+        }
+        val getSumFromDatabase = this.readableDatabase
+        val userID =
+            "SELECT SUM ($sumForColumn) AS TOTAL FROM $TRANSACTIONS_TABLE_NAME WHERE $USER_ID = $id ;"
+        val cursor: Cursor = getSumFromDatabase.rawQuery(userID, null)
+        try {
+            if (cursor.moveToFirst()) {
+                sum = cursor.getDouble(cursor.getColumnIndexOrThrow("TOTAL"))
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        } finally {
+            cursor.close()
+            getSumFromDatabase.close()
+        }
+        return sum
     }
 }
