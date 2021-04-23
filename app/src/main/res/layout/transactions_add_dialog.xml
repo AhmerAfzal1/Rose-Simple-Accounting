@@ -106,7 +106,7 @@
                 android:focusableInTouchMode="true"
                 android:gravity="top|start"
                 android:hint="@string/enter_description"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapWords"
                 android:lines="2"
                 android:maxLines="3"
                 android:textColor="@android:color/black" />

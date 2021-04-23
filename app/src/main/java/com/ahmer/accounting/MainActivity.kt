@@ -43,8 +43,14 @@ class MainActivity : AppCompatActivity() {
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
         val fabBgView = findViewById<View>(R.id.fabBgView)
         val rvMain = findViewById<RecyclerView>(R.id.rvMain)
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.isSmoothScrollbarEnabled = true
+        linearLayoutManager.isAutoMeasureEnabled
+        rvMain.recycledViewPool.clear()
         rvMain.setHasFixedSize(true)
-        rvMain.layoutManager = LinearLayoutManager(this)
+        rvMain.isNestedScrollingEnabled = false
+        rvMain.layoutManager = linearLayoutManager
         rvMain.adapter = GetAllUsersAdapter(this)
 
         fun showFab() {

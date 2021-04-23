@@ -63,8 +63,13 @@ class UserTransactionsReport : AppCompatActivity() {
         tvTotalCre.text = mUserCredit.toString()
         tvTotalBal.text = mUserBalance.toString()
 
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.isSmoothScrollbarEnabled = true
+        linearLayoutManager.isAutoMeasureEnabled
+        recyclerView.recycledViewPool.clear()
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.isNestedScrollingEnabled = false
+        recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = GetTransactionsStatementAdapter(this, myDatabaseHelper, mUserId)
 
         fabAddTransaction.setOnClickListener {
