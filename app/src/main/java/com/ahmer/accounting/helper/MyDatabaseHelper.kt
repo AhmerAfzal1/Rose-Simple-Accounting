@@ -127,7 +127,7 @@ class MyDatabaseHelper(context: Context) :
             database.endTransaction()
             database.close()
         }
-        //mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
+        mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
         return result != (-1).toLong() // If -1 return it means not successfully inserted
     }
 
@@ -202,7 +202,7 @@ class MyDatabaseHelper(context: Context) :
             database.endTransaction()
             database.close()
         }
-        //mContext.contentResolver.notifyChange(Constants.TranColumn.TRANSACTION_TABLE_URI, null)
+        mContext.contentResolver.notifyChange(Constants.TranColumn.TRANSACTION_TABLE_URI, null)
         return result != (-1).toLong() // If -1 return it means not successfully inserted
     }
 

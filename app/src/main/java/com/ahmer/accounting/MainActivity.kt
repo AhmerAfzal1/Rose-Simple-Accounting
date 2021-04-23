@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.adapter.GetAllUsersAdapter
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
 import com.google.android.material.appbar.MaterialToolbar
@@ -21,6 +22,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+
+    private lateinit var myDatabaseHelper: MyDatabaseHelper
+    private lateinit var mAdapter: GetAllUsersAdapter
+    private lateinit var mRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,17 +39,18 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
         val fabBgView = findViewById<View>(R.id.fabBgView)
-        val rvMain = findViewById<RecyclerView>(R.id.rvMain)
-        val myDatabaseHelper = MyDatabaseHelper(this)
+        mRecyclerView = findViewById(R.id.rvMain)
+        myDatabaseHelper = MyDatabaseHelper(applicationContext)
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.isSmoothScrollbarEnabled = true
         linearLayoutManager.isAutoMeasureEnabled
-        rvMain.recycledViewPool.clear()
-        rvMain.setHasFixedSize(true)
-        rvMain.isNestedScrollingEnabled = false
-        rvMain.layoutManager = linearLayoutManager
-        rvMain.adapter = GetAllUsersAdapter(this, myDatabaseHelper.getAllUserProfileData())
+        mRecyclerView.recycledViewPool.clear()
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.isNestedScrollingEnabled = false
+        mRecyclerView.layoutManager = linearLayoutManager
+
+        LoaderManager.getInstance(this).initLoader(1, null, this)
 
         fun showFab() {
             isFabOpened = true
@@ -89,14 +96,23 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        TODO("Not yet implemented")
+        return object : MyCursorLoader(applicationContext) {
+            private val mObserver = ForceLoadContentObserver()
+            override fun loadInBackground(): Cursor {
+                val mCursor = myDatabaseHelper.getAllUserProfileData()
+                mCursor.registerContentObserver(mObserver)
+                mCursor.setNotificationUri(contentResolver, Constants.UserColumn.USER_TABLE_URI)
+                return mCursor
+            }
+        }
     }
 
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-        TODO("Not yet implemented")
+    override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
+        mAdapter = GetAllUsersAdapter(this, cursor!!)
+        mRecyclerView.adapter = mAdapter
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        TODO("Not yet implemented")
+        // Keep empty
     }
 }
