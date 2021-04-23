@@ -206,9 +206,8 @@ class MyDatabaseHelper(context: Context) :
         return result != (-1).toLong() // If -1 return it means not successfully inserted
     }
 
-    fun getTransactionsByUserId(mUserId: Int): ArrayList<Transactions> {
-        val transactions = ArrayList<Transactions>()
-        val getFromDatabase: SQLiteDatabase = this.readableDatabase
+    fun getAllTransactionsByUserId(mUserId: Int): Cursor {
+        val database: SQLiteDatabase = this.readableDatabase
         val projections = arrayOf(
             BaseColumns._ID,
             Constants.TranColumn.USER_ID,
@@ -220,50 +219,23 @@ class MyDatabaseHelper(context: Context) :
             Constants.TranColumn.CREATED_ON,
             Constants.TranColumn.LAST_MODIFIED
         )
+        val cursor: Cursor = database.query(
+            Constants.TranColumn.TABLE_NAME,
+            projections,
+            "${Constants.TranColumn.USER_ID} = ?",
+            arrayOf(mUserId.toString()),
+            null,
+            null,
+            null
+        )
         try {
-            val cursor: Cursor = getFromDatabase.query(
-                Constants.TranColumn.TABLE_NAME,
-                projections,
-                "${Constants.TranColumn.USER_ID} = ?",
-                arrayOf(mUserId.toString()),
-                null,
-                null,
-                null
-            )
-            try {
-                while (cursor.moveToNext()) {
-                    val transaction = Transactions().apply {
-                        userId =
-                            cursor.getInt(cursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
-                        date =
-                            cursor.getString(cursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
-                        description =
-                            cursor.getString(cursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
-                        credit =
-                            cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
-                        debit =
-                            cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
-                        balance =
-                            cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
-                        created =
-                            cursor.getString(cursor.getColumnIndexOrThrow(Constants.TranColumn.CREATED_ON))
-                        modified =
-                            cursor.getString(cursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED))
-                    }
-                    transactions.add(transaction)
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.LOG_TAG, e.message, e)
-                FirebaseCrashlytics.getInstance().recordException(e)
-            } finally {
-                cursor.close()
-                getFromDatabase.close()
-            }
+            cursor.moveToNext()
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
-        return transactions
+
+        return cursor
     }
 
     fun updateTransactions(id: Int, transactions: Transactions): Boolean {

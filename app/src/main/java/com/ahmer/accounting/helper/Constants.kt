@@ -8,10 +8,10 @@ class Constants {
     companion object {
         const val LOG_TAG: String = "SimpleAccounting"
         const val DATABASE_NAME: String = "SimpleAccounting.db"
-        const val DATABASE_SCHEME = "content"
         const val DATABASE_VERSION: Int = 1
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss aa"
         const val PACKAGE_NAME = "com.ahmer.accounting"
+        const val SCHEME = "content"
     }
 
     class UserColumn : BaseColumns {
@@ -28,7 +28,7 @@ class Constants {
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
 
-            val USER_TABLE_URI: Uri = Uri.Builder().scheme(DATABASE_SCHEME)
+            val USER_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
                 .authority(PACKAGE_NAME)
                 .appendPath(TABLE_NAME)
                 .build()
@@ -47,7 +47,7 @@ class Constants {
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
 
-            val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(DATABASE_SCHEME)
+            val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
                 .authority(PACKAGE_NAME)
                 .appendPath(TABLE_NAME)
                 .build()
