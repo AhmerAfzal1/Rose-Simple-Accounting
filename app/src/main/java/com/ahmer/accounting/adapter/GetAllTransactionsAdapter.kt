@@ -108,9 +108,9 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
 
             try {
-                val sdf = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
+                val sdf = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
                 val date: Date = sdf.parse(transactions.date)
-                val simpleDateFormat = SimpleDateFormat("dd-MM-yy", Locale.UK)
+                val simpleDateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
                 tvDate.text = simpleDateFormat.format(date)
             } catch (pe: ParseException) {
                 Log.e(Constants.LOG_TAG, pe.message, pe)

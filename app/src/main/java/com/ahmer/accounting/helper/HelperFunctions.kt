@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,7 +12,7 @@ class HelperFunctions : AppCompatActivity() {
     companion object {
 
         fun getDateTime(): String {
-            val dateFormat: DateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
+            val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
             val dateTime = Calendar.getInstance().time
             Log.v(Constants.LOG_TAG, dateFormat.format(dateTime))
             return dateFormat.format(dateTime)

@@ -108,13 +108,13 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 Log.v(Constants.LOG_TAG, "TypeAmount: $typeAmount")
             }
 
-            val simpleDateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
+            val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
             val currentDate = Calendar.getInstance()
-            inputDate.setText(simpleDateFormat.format(currentDate.time))
+            inputDate.setText(dateFormat.format(currentDate.time))
             inputDate.setOnClickListener {
                 val listener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                     currentDate.set(year, month, dayOfMonth)
-                    inputDate.setText(simpleDateFormat.format(currentDate.time))
+                    inputDate.setText(dateFormat.format(currentDate.time))
                 }
                 val datePicker = DatePickerDialog(
                     context,
