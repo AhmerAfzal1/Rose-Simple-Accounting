@@ -4,6 +4,8 @@ class Transactions {
 
     var userId: Int = 0
 
+    var transId: Long = 0
+
     var date: String = ""
 
     var description: String = ""

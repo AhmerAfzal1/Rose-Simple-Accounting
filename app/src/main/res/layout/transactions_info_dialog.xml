@@ -1,114 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Theme.RoseSimpleAccounting.CardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Theme.RoseSimpleAccounting.CardView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp">
+        android:layout_height="match_parent">
 
-        <ScrollView
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
 
-            <TableLayout
-                android:layout_width="match_parent"
+            <TextView
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/transaction_information"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/primaryDarkColor"
+                android:textStyle="bold" />
+
+            <TableRow
+                android:layout_marginTop="2dp"
+                android:weightSum="1">
 
                 <TextView
-                    style="@style/Widget.MaterialComponents.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/transaction_information"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/primaryDarkColor"
+                    android:text="@string/transaction_id"
+                    android:textColor="@color/primaryColor" />
+
+                <TextView
+                    android:id="@+id/dialogTransID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/_id"
+                    android:textColor="@android:color/black" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="2dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trans_created"
+                    android:textColor="@color/primaryColor" />
+
+                <TextView
+                    android:id="@+id/dialogTransCreated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/_id"
+                    android:textColor="@android:color/black" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="2dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/last_modified"
+                    android:textColor="@color/primaryColor" />
+
+                <TextView
+                    android:id="@+id/dialogTransModified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/_id"
+                    android:textColor="@android:color/black" />
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="end">
+
+                <Button
+                    android:id="@+id/btnOk"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:textAllCaps="true"
                     android:textStyle="bold" />
-
-                <TableRow
-                    android:layout_marginTop="2dp"
-                    android:weightSum="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/transaction_id"
-                        android:textColor="@color/primaryColor" />
-
-                    <TextView
-                        android:id="@+id/dialogTransID"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/_id"
-                        android:textColor="@android:color/black" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginTop="2dp"
-                    android:weightSum="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/trans_created"
-                        android:textColor="@color/primaryColor" />
-
-                    <TextView
-                        android:id="@+id/dialogTransCreated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/_id"
-                        android:textColor="@android:color/black" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginTop="2dp"
-                    android:weightSum="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/last_modified"
-                        android:textColor="@color/primaryColor" />
-
-                    <TextView
-                        android:id="@+id/dialogTransModified"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/_id"
-                        android:textColor="@android:color/black" />
-                </TableRow>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="end">
-
-                    <Button
-                        android:id="@+id/btnOk"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@android:string/ok"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </TableLayout>
-        </ScrollView>
-    </com.google.android.material.card.MaterialCardView>
-</RelativeLayout>
+            </LinearLayout>
+        </TableLayout>
+    </ScrollView>
+</com.google.android.material.card.MaterialCardView>

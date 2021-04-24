@@ -3,6 +3,7 @@ package com.ahmer.accounting.adapter
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         mCursor.moveToPosition(position)
         val transaction = Transactions().apply {
+            transId = mCursor.getLong(mCursor.getColumnIndexOrThrow(BaseColumns._ID))
             userId =
                 mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
             date =
@@ -82,7 +84,7 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             val tvTransCreated = dialog.findViewById<TextView>(R.id.dialogTransCreated)
             val tvTransModified = dialog.findViewById<TextView>(R.id.dialogTransModified)
             val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-            tvTransId.text = ""
+            tvTransId.text = transactions.transId.toString()
             tvTransCreated.text = transactions.created
             tvTransModified.text = transactions.modified
             btnOk.setOnClickListener {
