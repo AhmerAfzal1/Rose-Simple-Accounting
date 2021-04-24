@@ -18,8 +18,10 @@ import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 
 class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
@@ -108,11 +110,26 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
 
             try {
-                val sdf = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
-                val date: Date = sdf.parse(transactions.date)
-                val simpleDateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
-                tvDate.text = simpleDateFormat.format(date)
-            } catch (pe: ParseException) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    val inputFormatter = DateTimeFormatterBuilder().parseCaseInsensitive()
+                        .append(
+                            DateTimeFormatter.ofPattern(
+                                Constants.DATE_TIME_PATTERN,
+                                Locale.getDefault()
+                            )
+                        )
+                        .toFormatter()
+                    val parsed = LocalDateTime.parse(transactions.date, inputFormatter)
+                    val outputFormatter =
+                        DateTimeFormatter.ofPattern(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                    tvDate.text = outputFormatter.format(parsed)
+                } else {
+                    val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
+                    val date: Date = sdfOld.parse(transactions.date)
+                    val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                    tvDate.text = sdfNew.format(date)
+                }
+            } catch (pe: Exception) {
                 Log.e(Constants.LOG_TAG, pe.message, pe)
                 FirebaseCrashlytics.getInstance().recordException(pe)
             }

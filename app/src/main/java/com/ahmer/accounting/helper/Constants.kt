@@ -9,7 +9,8 @@ class Constants {
         const val LOG_TAG: String = "SimpleAccounting"
         const val DATABASE_NAME: String = "SimpleAccounting.db"
         const val DATABASE_VERSION: Int = 1
-        const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss aa"
+        const val DATE_SHORT_PATTERN = "dd-MM-yy"
+        const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
         const val PACKAGE_NAME = "com.ahmer.accounting"
         const val SCHEME = "content"
     }
