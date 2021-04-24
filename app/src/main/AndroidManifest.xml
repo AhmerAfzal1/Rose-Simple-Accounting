@@ -46,7 +46,7 @@
 
         <provider
             android:name=".helper.MyDatabaseContentProvider"
-            android:authorities="com.ahmer.accounting"
+            android:authorities="${applicationId}"
             android:exported="false" />
     </application>
 

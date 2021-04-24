@@ -2,16 +2,17 @@ package com.ahmer.accounting.helper
 
 import android.net.Uri
 import android.provider.BaseColumns
+import com.ahmer.accounting.BuildConfig
 
 class Constants {
 
     companion object {
         const val LOG_TAG: String = "SimpleAccounting"
+        const val APPLICATION_ID = BuildConfig.APPLICATION_ID
         const val DATABASE_NAME: String = "SimpleAccounting.db"
         const val DATABASE_VERSION: Int = 1
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
-        const val PACKAGE_NAME = "com.ahmer.accounting"
         const val SCHEME = "content"
     }
 
@@ -30,7 +31,7 @@ class Constants {
             const val LAST_MODIFIED: String = "LastModified"
 
             val USER_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
-                .authority(PACKAGE_NAME)
+                .authority(APPLICATION_ID)
                 .appendPath(TABLE_NAME)
                 .build()
         }
@@ -49,7 +50,7 @@ class Constants {
             const val LAST_MODIFIED: String = "LastModified"
 
             val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
-                .authority(PACKAGE_NAME)
+                .authority(APPLICATION_ID)
                 .appendPath(TABLE_NAME)
                 .build()
         }

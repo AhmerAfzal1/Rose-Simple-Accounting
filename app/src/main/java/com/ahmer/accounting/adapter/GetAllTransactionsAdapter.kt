@@ -121,11 +121,14 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
                         .toFormatter()
                     val parsed = LocalDateTime.parse(transactions.date, inputFormatter)
                     val outputFormatter =
-                        DateTimeFormatter.ofPattern(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                        DateTimeFormatter.ofPattern(
+                            Constants.DATE_SHORT_PATTERN,
+                            Locale.getDefault()
+                        )
                     tvDate.text = outputFormatter.format(parsed)
                 } else {
                     val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
-                    val date: Date = sdfOld.parse(transactions.date)
+                    val date: Date = sdfOld.parse(transactions.date)!!
                     val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
                     tvDate.text = sdfNew.format(date)
                 }
