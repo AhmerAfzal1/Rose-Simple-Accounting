@@ -12,7 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
     </style>
 
     <style name="Theme.RoseSimpleAccounting.NoActionBar" parent="Theme.RoseSimpleAccounting">
@@ -28,13 +27,20 @@
         <item name="colorControlNormal">@android:color/white</item>
     </style>
 
-    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.RadioButton</item>
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
-    <style name="ThemeOverlay.App.RadioButton" parent="">
-        <item name="colorOnSurface">@color/primaryDarkColor</item>
-        <item name="colorSecondary">@color/primaryColor</item>
+    <style name="ThemeOverlay.App.Card" parent="">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+    </style>
+
+    <style name="Theme.RoseSimpleAccounting.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
 
 </resources>

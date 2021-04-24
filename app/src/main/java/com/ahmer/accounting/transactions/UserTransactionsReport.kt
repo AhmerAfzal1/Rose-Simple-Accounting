@@ -7,8 +7,6 @@ import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +23,7 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -96,16 +95,17 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             dialog.setCancelable(true)
             val myDatabaseHelper = MyDatabaseHelper(context)
             val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
-            val radioGroupButton = dialog.findViewById<RadioGroup>(R.id.rgCreditDebit)
+            val toggleGroup =
+                dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
             val inputDate = dialog.findViewById<TextInputEditText>(R.id.inputDate)
             val inputDescription = dialog.findViewById<TextInputEditText>(R.id.inputDescription)
             val addTransactions = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
 
             var typeAmount = ""
-            radioGroupButton.setOnCheckedChangeListener { group, checkedId ->
-                val radio = dialog.findViewById<RadioButton>(checkedId)
-                typeAmount = radio.text.toString()
-                Log.v(Constants.LOG_TAG, "TypeAmount: ${radio.text}")
+            toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                val checkedButton = dialog.findViewById<MaterialButton>(checkedId)
+                typeAmount = checkedButton.text.toString()
+                Log.v(Constants.LOG_TAG, "TypeAmount: $typeAmount")
             }
 
             val simpleDateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.UK)
@@ -201,7 +201,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-        mAdapter = GetAllTransactionsAdapter(applicationContext, cursor!!)
+        mAdapter = GetAllTransactionsAdapter(this, cursor!!)
         mRecyclerView.adapter = mAdapter
 
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")

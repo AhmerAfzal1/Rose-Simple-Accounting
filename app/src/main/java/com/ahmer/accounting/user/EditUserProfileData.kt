@@ -2,8 +2,6 @@ package com.ahmer.accounting.user
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -12,6 +10,7 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
@@ -28,7 +27,7 @@ class EditUserProfileData : AppCompatActivity() {
         }
 
         val userName = findViewById<TextInputLayout>(R.id.inputLayoutName)
-        val userGender = findViewById<RadioGroup>(R.id.rgGender)
+        val toggleGroupGender = findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupGender)
         val userAddress = findViewById<TextInputLayout>(R.id.inputLayoutAddress)
         val userCity = findViewById<TextInputLayout>(R.id.inputLayoutCity)
         val userPhone1 = findViewById<TextInputLayout>(R.id.inputLayoutPhone1)
@@ -36,10 +35,11 @@ class EditUserProfileData : AppCompatActivity() {
         val userEmail = findViewById<TextInputLayout>(R.id.inputLayoutEmail)
         val userComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
         val btnSave = findViewById<MaterialButton>(R.id.btnSaveUserData)
+
         var typeGender = ""
-        userGender.setOnCheckedChangeListener { _, checkedId ->
-            val rbGender = findViewById<RadioButton>(checkedId)
-            typeGender = rbGender.text.toString()
+        toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            val checkedButton = findViewById<MaterialButton>(checkedId)
+            typeGender = checkedButton.text.toString()
         }
 
         val id = intent.getIntExtra("mID", -1)
@@ -55,13 +55,13 @@ class EditUserProfileData : AppCompatActivity() {
         userName.editText?.setText(name.toString())
         when (gender) {
             "Male" -> {
-                userGender.check(R.id.rbMale)
+                toggleGroupGender.check(R.id.btnMale)
             }
             "Female" -> {
-                userGender.check(R.id.rbFemale)
+                toggleGroupGender.check(R.id.btnFemale)
             }
             else -> {
-                userGender.check(R.id.rbUnknown)
+                toggleGroupGender.check(R.id.btnUnknown)
             }
         }
         userAddress.editText?.setText(address.toString())

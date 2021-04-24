@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-        mAdapter = GetAllUsersAdapter(applicationContext, cursor!!)
+        mAdapter = GetAllUsersAdapter(this, cursor!!)
         mRecyclerView.adapter = mAdapter
     }
 
