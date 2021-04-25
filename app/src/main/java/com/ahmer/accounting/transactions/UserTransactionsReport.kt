@@ -219,9 +219,9 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
         val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
         val mUserBalance = myDatabaseHelper.getSumForColumns(mUserId, "Balance")
-        mTvTotalDeb.text = mUserDebit.toString()
-        mTvTotalCre.text = mUserCredit.toString()
-        mTvTotalBal.text = mUserBalance.toString()
+        mTvTotalDeb.text = HelperFunctions.getRoundedValue(mUserDebit).toString()
+        mTvTotalCre.text = HelperFunctions.getRoundedValue(mUserCredit).toString()
+        mTvTotalBal.text = HelperFunctions.getRoundedValue(mUserBalance).toString()
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
