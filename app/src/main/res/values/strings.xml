@@ -48,6 +48,7 @@
     <string name="_id">ID:</string>
     <string name="user_information">User Information</string>
     <string name="user_name">Name:</string>
+    <string name="user_phone">Phone:</string>
     <string name="user_phone1">Phone1:</string>
     <string name="user_phone2">Phone2:</string>
     <string name="description">Description</string>

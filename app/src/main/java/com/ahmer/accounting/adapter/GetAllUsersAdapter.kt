@@ -91,6 +91,7 @@ class GetAllUsersAdapter(context: Context, cursor: Cursor) :
             val intent = Intent(mContext, UserTransactionsReport::class.java).apply {
                 putExtra("mPosUserID", userProfile.id)
                 putExtra("mPosUserName", userProfile.name)
+                putExtra("mPosUserPhone", userProfile.phone1)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
@@ -99,7 +100,6 @@ class GetAllUsersAdapter(context: Context, cursor: Cursor) :
                 }
             }
             mContext.startActivity(intent)
-
         }
         holder.ivInfoButton.setOnClickListener {
             showDialogMoreInfo(userProfile)
@@ -195,9 +195,7 @@ class GetAllUsersAdapter(context: Context, cursor: Cursor) :
         val ivInfoButton: ImageView = itemView.findViewById(R.id.ivBtnInfo)
 
         fun bindItems(userProfile: UserProfile) {
-            val mUserId = itemView.findViewById<TextView>(R.id.tvGetUserID)
             val mUserName = itemView.findViewById<TextView>(R.id.tvGetUserName)
-            mUserId.text = userProfile.id.toString()
             mUserName.text = userProfile.name
         }
     }

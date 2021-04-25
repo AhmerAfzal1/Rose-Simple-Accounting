@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         }
 
         fabAddNewUser.setOnClickListener {
-            val intent = Intent(this, AddUserProfileData::class.java).apply {
+            val intent = Intent(it.context, AddUserProfileData::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P

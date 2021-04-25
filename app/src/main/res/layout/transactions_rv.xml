@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBgLayout">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -45,13 +46,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_id"
+                        android:text="@string/user_name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvUserId"
+                        android:id="@+id/tvUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -65,13 +66,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_name"
+                        android:text="@string/user_phone"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvUserName"
+                        android:id="@+id/tvUserPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -138,7 +139,7 @@
         android:id="@+id/rvGetAllRecords"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/cvSubTotal"
+        android:layout_above="@id/layoutSubTotal"
         android:layout_below="@+id/headingLayout"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
@@ -160,99 +161,128 @@
         app:srcCompat="@drawable/ic_rupee"
         app:tint="@color/white" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvSubTotal"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutSubTotal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:baselineAligned="false"
         android:gravity="bottom"
-        app:cardBackgroundColor="@color/primaryDarkColor"
-        app:cardCornerRadius="0dp">
+        android:padding="5dp"
+        android:weightSum="3">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:paddingStart="5dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="10dp"
-            android:weightSum="3">
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/colorRedLight"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp">
 
-            <RelativeLayout
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/tv2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/debit"
+                    android:gravity="center"
+                    android:text="@string/debit_minus"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorRedDark"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvTotalDebit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv2"
                     android:layout_marginTop="5dp"
+                    android:gravity="center"
                     android:text="@string/debit"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
+                    android:textColor="@color/colorRedDark" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <RelativeLayout
-                android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/colorGreenLight"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/tv3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/credit"
+                    android:gravity="center"
+                    android:text="@string/credit_plus"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorGreenDark"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvTotalCredit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv3"
                     android:layout_marginTop="5dp"
+                    android:gravity="center"
                     android:text="@string/credit"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
+                    android:textColor="@color/colorGreenDark" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <RelativeLayout
-                android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvTotalBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/tv4"
+                    android:id="@+id/tvTotalBalanceHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/balances"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white"
+                    android:textColor="@color/primaryDarkColor"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvTotalBalance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv4"
                     android:layout_marginTop="5dp"
+                    android:gravity="center"
                     android:text="@string/balances"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:textColor="@color/primaryDarkColor" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 </RelativeLayout>

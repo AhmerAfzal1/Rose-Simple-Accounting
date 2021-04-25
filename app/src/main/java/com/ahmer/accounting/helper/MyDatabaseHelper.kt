@@ -132,22 +132,26 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun updateUserProfileData(userProfile: UserProfile, id: Int): Boolean {
-        val updateWriteDatabase: SQLiteDatabase = this.writableDatabase
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        var result = 0
         try {
-            updateWriteDatabase.update(
+            result = database.update(
                 Constants.UserColumn.TABLE_NAME,
                 contentValuesUser(userProfile, false),
                 "${BaseColumns._ID} = ?",
                 arrayOf(id.toString())
             )
-            return true
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
-            updateWriteDatabase.close()
+            database.setTransactionSuccessful()
+            database.endTransaction()
+            database.close()
         }
-        return false
+        mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
+        return result != 0
     }
 
     fun getAllUserProfileData(): Cursor {

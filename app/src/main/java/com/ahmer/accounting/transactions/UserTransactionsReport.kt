@@ -11,6 +11,7 @@ import android.view.Window
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -38,6 +40,8 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mTvTotalDeb: TextView
     private lateinit var mTvTotalCre: TextView
+    private lateinit var mCvTotalBal: MaterialCardView
+    private lateinit var mTvTotalBalHeading: TextView
     private lateinit var mTvTotalBal: TextView
     private var mUserId: Int = 0
 
@@ -54,18 +58,21 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
         mUserId = intent.getIntExtra("mPosUserID", -1)
         val mUserName = intent.getStringExtra("mPosUserName")
+        val mUserPhone = intent.getStringExtra("mPosUserPhone")
 
         myDatabaseHelper = MyDatabaseHelper(this)
 
-        val tvUserId = findViewById<TextView>(R.id.tvUserId)
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
+        val tvUserPhone = findViewById<TextView>(R.id.tvUserPhone)
         val fabAddTransaction = findViewById<FloatingActionButton>(R.id.fabAddTransaction)
         mTvTotalDeb = findViewById(R.id.tvTotalDebit)
         mTvTotalCre = findViewById(R.id.tvTotalCredit)
+        mCvTotalBal = findViewById(R.id.cvTotalBalance)
+        mTvTotalBalHeading = findViewById(R.id.tvTotalBalanceHeading)
         mTvTotalBal = findViewById(R.id.tvTotalBalance)
         mRecyclerView = findViewById(R.id.rvGetAllRecords)
 
-        tvUserId.text = mUserId.toString()
+        tvUserPhone.text = mUserPhone
         tvUserName.text = mUserName
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -213,15 +220,26 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
+        val context: Context = applicationContext
         mAdapter = GetAllTransactionsAdapter(this, cursor!!)
         mRecyclerView.adapter = mAdapter
 
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
         val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
         val mUserBalance = myDatabaseHelper.getSumForColumns(mUserId, "Balance")
+        val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
+        if (mTotalBalance > 0) {
+            mCvTotalBal.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreenLight))
+            mTvTotalBalHeading.setTextColor(ContextCompat.getColor(context, R.color.colorGreenDark))
+            mTvTotalBal.setTextColor(ContextCompat.getColor(context, R.color.colorGreenDark))
+        } else {
+            mCvTotalBal.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRedLight))
+            mTvTotalBalHeading.setTextColor(ContextCompat.getColor(context, R.color.colorRedDark))
+            mTvTotalBal.setTextColor(ContextCompat.getColor(context, R.color.colorRedDark))
+        }
         mTvTotalDeb.text = HelperFunctions.getRoundedValue(mUserDebit).toString()
         mTvTotalCre.text = HelperFunctions.getRoundedValue(mUserCredit).toString()
-        mTvTotalBal.text = HelperFunctions.getRoundedValue(mUserBalance).toString()
+        mTvTotalBal.text = mTotalBalance.toString()
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

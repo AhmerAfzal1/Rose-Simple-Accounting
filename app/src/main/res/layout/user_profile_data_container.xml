@@ -41,50 +41,15 @@
                 app:tint="@color/primaryColor" />
         </LinearLayout>
 
-        <TableLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvGetUserName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutButtons">
-
-            <TableRow android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_id"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/primaryColor"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvGetUserID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/user_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black" />
-            </TableRow>
-
-            <TableRow android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/primaryColor"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvGetUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/user_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black" />
-            </TableRow>
-        </TableLayout>
+            android:layout_below="@id/linearLayoutButtons"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/user_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
