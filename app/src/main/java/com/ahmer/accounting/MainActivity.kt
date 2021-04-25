@@ -46,9 +46,20 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         linearLayoutManager.isSmoothScrollbarEnabled = true
         linearLayoutManager.isAutoMeasureEnabled
         mRecyclerView.recycledViewPool.clear()
+        mRecyclerView.clearOnScrollListeners()
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = linearLayoutManager
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && fabMain.visibility == View.VISIBLE) {
+                    fabMain.hide()
+                } else if (dy < 0 && fabMain.visibility != View.VISIBLE) {
+                    fabMain.show()
+                }
+            }
+        })
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
 

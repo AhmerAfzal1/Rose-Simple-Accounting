@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -71,9 +72,20 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         linearLayoutManager.isSmoothScrollbarEnabled = true
         linearLayoutManager.isAutoMeasureEnabled
         mRecyclerView.recycledViewPool.clear()
+        mRecyclerView.clearOnScrollListeners()
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = linearLayoutManager
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && fabAddTransaction.visibility == View.VISIBLE) {
+                    fabAddTransaction.hide()
+                } else if (dy < 0 && fabAddTransaction.visibility != View.VISIBLE) {
+                    fabAddTransaction.show()
+                }
+            }
+        })
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
 
