@@ -3,6 +3,7 @@
 
     <string name="add_new_user">Add User</string>
     <string name="add_transaction">Add Transaction</string>
+    <string name="update_transaction">Update Transaction</string>
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="comments">Comments</string>
@@ -22,13 +23,12 @@
     <string name="title_all_user_record">All Users Record</string>
     <string name="title_toolbar_add_user">Add User Data</string>
     <string name="title_toolbar_edit_user">Edit User Data</string>
-    <string name="toast_enter_name">Please enter full name</string><![CDATA[
-    >
-    ]]>
+    <string name="toast_enter_name">Please enter full name</string>
     <string name="toast_record_saved">Record successfully saved!</string>
     <string name="toast_record_updated">Record successfully updated!</string>
     <string name="toast_select_gender">Please select a gender type</string>
     <string name="transaction_added_successfully">Transaction added successfully</string>
+    <string name="transaction_updated_successfully">Transaction updated successfully</string>
     <string name="user_address">Address:</string>
     <string name="user_city">City:</string>
     <string name="user_comments">Comments:</string>

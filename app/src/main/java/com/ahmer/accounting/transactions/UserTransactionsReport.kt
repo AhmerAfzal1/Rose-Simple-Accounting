@@ -103,7 +103,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
             )
-            dialog.setCancelable(true)
+            dialog.setCancelable(false)
             val myDatabaseHelper = MyDatabaseHelper(context)
             val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
             val toggleGroup =
@@ -111,6 +111,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             val inputDate = dialog.findViewById<TextInputEditText>(R.id.inputDate)
             val inputDescription = dialog.findViewById<TextInputEditText>(R.id.inputDescription)
             val addTransactions = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
+            val cancelTransactions = dialog.findViewById<MaterialButton>(R.id.btnCancelTransaction)
 
             var typeAmount = ""
             toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -188,6 +189,9 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                     Thread.sleep(200)
                     dialog.dismiss()
                 }
+            }
+            cancelTransactions.setOnClickListener {
+                dialog.dismiss()
             }
             dialog.show()
         } catch (e: Exception) {

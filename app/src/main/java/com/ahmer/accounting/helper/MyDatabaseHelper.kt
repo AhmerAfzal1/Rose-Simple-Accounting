@@ -17,10 +17,7 @@ class MyDatabaseHelper(context: Context) :
 
     private val mContext = context
 
-    private fun contentValuesUser(
-        userProfile: UserProfile,
-        isCreated: Boolean = true
-    ): ContentValues {
+    private fun cvUser(userProfile: UserProfile, isCreated: Boolean = true): ContentValues {
         return ContentValues().apply {
             put(Constants.UserColumn.NAME, userProfile.name)
             put(Constants.UserColumn.GENDER, userProfile.gender)
@@ -38,24 +35,20 @@ class MyDatabaseHelper(context: Context) :
         }
     }
 
-    private fun contentValuesTransaction(
-        transactions: Transactions,
-        isModified: Boolean = false
-    ): ContentValues {
+    private fun cvTransaction(trans: Transactions, isModified: Boolean = false): ContentValues {
         return ContentValues().apply {
-            put(Constants.TranColumn.USER_ID, transactions.userId)
-            put(Constants.TranColumn.DATE, transactions.date)
-            put(Constants.TranColumn.DESCRIPTION, transactions.description)
-            put(Constants.TranColumn.CREDIT, transactions.credit)
-            put(Constants.TranColumn.DEBIT, transactions.debit)
-            put(Constants.TranColumn.BALANCE, transactions.balance)
+            put(Constants.TranColumn.USER_ID, trans.userId)
+            put(Constants.TranColumn.DATE, trans.date)
+            put(Constants.TranColumn.DESCRIPTION, trans.description)
+            put(Constants.TranColumn.CREDIT, trans.credit)
+            put(Constants.TranColumn.DEBIT, trans.debit)
+            put(Constants.TranColumn.BALANCE, trans.balance)
             if (isModified) {
-                put(Constants.TranColumn.LAST_MODIFIED, transactions.modified)
+                put(Constants.TranColumn.LAST_MODIFIED, trans.modified)
             } else {
-                put(Constants.TranColumn.CREATED_ON, transactions.created)
+                put(Constants.TranColumn.CREATED_ON, trans.created)
             }
         }
-
     }
 
     override fun onConfigure(db: SQLiteDatabase?) {
@@ -117,7 +110,7 @@ class MyDatabaseHelper(context: Context) :
             result = database.insert(
                 Constants.UserColumn.TABLE_NAME,
                 null,
-                contentValuesUser(userProfile, true)
+                cvUser(userProfile, true)
             )
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
@@ -138,7 +131,7 @@ class MyDatabaseHelper(context: Context) :
         try {
             result = database.update(
                 Constants.UserColumn.TABLE_NAME,
-                contentValuesUser(userProfile, false),
+                cvUser(userProfile, false),
                 "${BaseColumns._ID} = ?",
                 arrayOf(id.toString())
             )
@@ -151,7 +144,7 @@ class MyDatabaseHelper(context: Context) :
             database.close()
         }
         mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
-        return result != 0
+        return result != 0 // If 0 return it means not successfully updated
     }
 
     fun getAllUserProfileData(): Cursor {
@@ -184,7 +177,6 @@ class MyDatabaseHelper(context: Context) :
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
-
         return cursor
     }
 
@@ -196,7 +188,7 @@ class MyDatabaseHelper(context: Context) :
             result = database.insert(
                 Constants.TranColumn.TABLE_NAME,
                 null,
-                contentValuesTransaction(transactions, false)
+                cvTransaction(transactions, false)
             )
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
@@ -208,6 +200,29 @@ class MyDatabaseHelper(context: Context) :
         }
         mContext.contentResolver.notifyChange(Constants.TranColumn.TRANSACTION_TABLE_URI, null)
         return result != (-1).toLong() // If -1 return it means not successfully inserted
+    }
+
+    fun updateTransactions(id: Long, transactions: Transactions): Boolean {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        var result = 0
+        try {
+            result = database.update(
+                Constants.TranColumn.TABLE_NAME,
+                cvTransaction(transactions, true),
+                "${BaseColumns._ID} = ?",
+                arrayOf(id.toString())
+            )
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        } finally {
+            database.setTransactionSuccessful()
+            database.endTransaction()
+            database.close()
+        }
+        mContext.contentResolver.notifyChange(Constants.TranColumn.TRANSACTION_TABLE_URI, null)
+        return result != 0 // If 0 return it means not successfully updated
     }
 
     fun getAllTransactionsByUserId(mUserId: Int): Cursor {
@@ -240,25 +255,6 @@ class MyDatabaseHelper(context: Context) :
         }
 
         return cursor
-    }
-
-    fun updateTransactions(id: Int, transactions: Transactions): Boolean {
-        val updateTransactions: SQLiteDatabase = this.writableDatabase
-        try {
-            updateTransactions.update(
-                Constants.TranColumn.TABLE_NAME,
-                contentValuesTransaction(transactions, true),
-                "${BaseColumns._ID} = ?",
-                arrayOf(id.toString())
-            )
-            return true
-        } catch (e: Exception) {
-            Log.e(Constants.LOG_TAG, e.message, e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-        } finally {
-            updateTransactions.close()
-        }
-        return false
     }
 
     fun getPreviousBalanceByUserId(id: Int): Double {

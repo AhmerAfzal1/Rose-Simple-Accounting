@@ -15,8 +15,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.HelperFunctions
+import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.Transactions
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -60,6 +65,7 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
         holder.bindView(transaction)
         holder.cvTransactionEntry.setOnClickListener {
             showTransInfoDialog(mContext, transaction)
+            //showEditTransDialog(mContext, transaction)
         }
     }
 
@@ -90,6 +96,101 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             tvTransCreated.text = transactions.created
             tvTransModified.text = transactions.modified
             btnOk.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
+
+    private fun showTransEditDialog(context: Context, trans: Transactions) {
+        try {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.transactions_add_dialog)
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window?.setLayout(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+            dialog.setCancelable(false)
+            var isSuccessfullyUpdated = false
+            val inputDate = dialog.findViewById<TextInputEditText>(R.id.inputDate)
+            val toggle = dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
+            val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
+            val inputDescription = dialog.findViewById<TextInputEditText>(R.id.inputDescription)
+            val addTransaction = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
+            val cancelTransaction = dialog.findViewById<MaterialButton>(R.id.btnCancelTransaction)
+
+            val typeAmount: String = if (trans.credit == 0.toDouble()) {
+                context.getString(R.string.debit_minus)
+            } else {
+                context.getString(R.string.credit_plus)
+            }
+            if (typeAmount == context.getString(R.string.debit_minus)) {
+                toggle.check(R.id.toggleBtnDebit)
+                inputAmount.setText(trans.debit.toString())
+            } else {
+                toggle.check(R.id.toggleBtnCredit)
+                inputAmount.setText(trans.credit.toString())
+            }
+            inputDate.setText(HelperFunctions.getDateTime())
+            inputDescription.setText(trans.description)
+            addTransaction.text = context.getString(R.string.update_transaction)
+            addTransaction.setOnClickListener {
+                val myDatabaseHelper = MyDatabaseHelper(context)
+                val newAmount: Double = inputAmount.text.toString().trim().toDouble()
+                when {
+                    newAmount == 0.toDouble() -> {
+                        HelperFunctions.makeToast(
+                            context,
+                            context.getString(R.string.enter_the_amount)
+                        )
+                    }
+                    typeAmount.isEmpty() -> {
+                        HelperFunctions.makeToast(
+                            context,
+                            context.getString(R.string.select_type_amount)
+                        )
+                    }
+                    inputDescription.toString().trim().isEmpty() -> {
+                        HelperFunctions.makeToast(
+                            context,
+                            context.getString(R.string.enter_transaction_description)
+                        )
+                    }
+                    else -> {
+                        val transContentValues = Transactions().apply {
+                            userId = trans.userId
+                            credit = 0.toDouble()
+                            debit = 0.toDouble()
+                            if (typeAmount == context.getString(R.string.credit_plus)) {
+                                credit = newAmount
+                                balance += newAmount
+                            }
+                            if (typeAmount == context.getString(R.string.debit_minus)) {
+                                debit = newAmount
+                                balance -= newAmount
+                            }
+                            date = inputDate.text.toString()
+                            description = inputDescription.text.toString()
+                            modified = HelperFunctions.getDateTime()
+                        }
+                        isSuccessfullyUpdated =
+                            myDatabaseHelper.updateTransactions(trans.transId, transContentValues)
+                    }
+                }
+                if (isSuccessfullyUpdated) {
+                    HelperFunctions.makeToast(
+                        context,
+                        context.getString(R.string.transaction_updated_successfully)
+                    )
+                    Thread.sleep(200)
+                    dialog.dismiss()
+                }
+            }
+            cancelTransaction.setOnClickListener {
                 dialog.dismiss()
             }
             dialog.show()
