@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.model.UserProfile
 import com.ahmer.accounting.transactions.UserTransactionsReport
 import com.ahmer.accounting.user.EditUserProfileData
@@ -124,6 +125,9 @@ class GetAllUsersAdapter(context: Context, cursor: Cursor) :
             }
             mContext.startActivity(intent)
         }
+        holder.ivDeleteButton.setOnClickListener {
+            HelperFunctions.makeToast(mContext, "This feature is under progress")
+        }
     }
 
     override fun getItemCount(): Int {
@@ -193,6 +197,7 @@ class GetAllUsersAdapter(context: Context, cursor: Cursor) :
         val cvMain: MaterialCardView = itemView.findViewById(R.id.cardView)
         val ivEditButton: ImageView = itemView.findViewById(R.id.ivBtnEdit)
         val ivInfoButton: ImageView = itemView.findViewById(R.id.ivBtnInfo)
+        val ivDeleteButton: ImageView = itemView.findViewById(R.id.ivBtnDelete)
 
         fun bindItems(userProfile: UserProfile) {
             val mUserName = itemView.findViewById<TextView>(R.id.tvGetUserName)

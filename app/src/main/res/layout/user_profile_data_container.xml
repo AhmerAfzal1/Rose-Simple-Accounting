@@ -10,16 +10,31 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="10dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/tvGetUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:text="@string/name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutButtons"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
+            android:gravity="end"
             android:orientation="horizontal">
 
             <ImageView
@@ -28,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_information"
+                app:srcCompat="@drawable/ic_baseline_info"
                 app:tint="@color/primaryColor" />
 
             <ImageView
@@ -37,19 +52,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_edit"
+                app:srcCompat="@drawable/ic_baseline_edit"
+                app:tint="@color/primaryColor" />
+
+            <ImageView
+                android:id="@+id/ivBtnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_baseline_delete_forever"
                 app:tint="@color/primaryColor" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvGetUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutButtons"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/user_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/black" />
-    </RelativeLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

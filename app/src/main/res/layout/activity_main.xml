@@ -51,7 +51,7 @@
             android:visibility="gone"
             app:borderWidth="2dp"
             app:elevation="6dp"
-            app:icon="@drawable/ic_add_user"
+            app:icon="@drawable/ic_baseline_person_add"
             app:iconTint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

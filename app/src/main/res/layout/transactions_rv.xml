@@ -16,6 +16,7 @@
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
+        app:menu="@menu/add_trans"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:title="@string/title_all_user_record"
         app:titleMarginStart="0dp" />
@@ -146,21 +147,6 @@
         android:gravity="top"
         android:scrollbars="vertical" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddTransaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/rvGetAllRecords"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@null"
-        app:backgroundTint="@color/primaryColor"
-        app:borderWidth="2dp"
-        app:elevation="6dp"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_rupee"
-        app:tint="@color/white" />
-
     <LinearLayout
         android:id="@+id/layoutSubTotal"
         android:layout_width="match_parent"
@@ -178,8 +164,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorRedLight"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
+            app:cardCornerRadius="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -216,8 +201,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/colorGreenLight"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
+            app:cardCornerRadius="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -253,8 +237,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
+            app:cardCornerRadius="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

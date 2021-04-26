@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -27,7 +26,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
@@ -64,7 +62,6 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
         val tvUserPhone = findViewById<TextView>(R.id.tvUserPhone)
-        val fabAddTransaction = findViewById<FloatingActionButton>(R.id.fabAddTransaction)
         mTvTotalDeb = findViewById(R.id.tvTotalDebit)
         mTvTotalCre = findViewById(R.id.tvTotalCredit)
         mCvTotalBal = findViewById(R.id.cvTotalBalance)
@@ -83,21 +80,16 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = linearLayoutManager
-        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0 && fabAddTransaction.visibility == View.VISIBLE) {
-                    fabAddTransaction.hide()
-                } else if (dy < 0 && fabAddTransaction.visibility != View.VISIBLE) {
-                    fabAddTransaction.show()
-                }
-            }
-        })
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
 
-        fabAddTransaction.setOnClickListener {
-            showAddTransactionDialog(it.context, mUserId)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_add_trans -> {
+                    showAddTransactionDialog(this, mUserId)
+                }
+            }
+            true
         }
     }
 
