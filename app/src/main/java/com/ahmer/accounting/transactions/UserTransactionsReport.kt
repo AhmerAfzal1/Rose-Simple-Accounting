@@ -16,7 +16,7 @@ import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
-import com.ahmer.accounting.adapter.GetAllTransactionsAdapter
+import com.ahmer.accounting.adapter.TransactionsAdapter
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyCursorLoader
@@ -34,7 +34,7 @@ import java.util.*
 class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private lateinit var myDatabaseHelper: MyDatabaseHelper
-    private lateinit var mAdapter: GetAllTransactionsAdapter
+    private lateinit var mAdapter: TransactionsAdapter
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mTvTotalDeb: TextView
     private lateinit var mTvTotalCre: TextView
@@ -217,7 +217,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         val context: Context = applicationContext
-        mAdapter = GetAllTransactionsAdapter(this, cursor!!)
+        mAdapter = TransactionsAdapter(this, cursor!!)
         mRecyclerView.adapter = mAdapter
 
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")

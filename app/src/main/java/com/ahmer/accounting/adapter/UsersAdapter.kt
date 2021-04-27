@@ -25,8 +25,8 @@ import com.ahmer.accounting.user.EditUserProfileData
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class GetAllUsersAdapter(context: Context, cursor: Cursor) :
-    RecyclerView.Adapter<GetAllUsersAdapter.UsersViewHolder>() {
+class UsersAdapter(context: Context, cursor: Cursor) :
+    RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
     private val mContext = context
     private val mCursor = cursor

@@ -30,8 +30,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 
-class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
-    RecyclerView.Adapter<GetAllTransactionsAdapter.TransactionsViewHolder>() {
+class TransactionsAdapter(context: Context, cursor: Cursor) :
+    RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
     private val mContext = context
     private val mCursor = cursor

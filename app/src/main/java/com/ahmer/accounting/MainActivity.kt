@@ -11,7 +11,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ahmer.accounting.adapter.GetAllUsersAdapter
+import com.ahmer.accounting.adapter.UsersAdapter
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
@@ -24,7 +24,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private lateinit var myDatabaseHelper: MyDatabaseHelper
-    private lateinit var mAdapter: GetAllUsersAdapter
+    private lateinit var mAdapter: UsersAdapter
     private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-        mAdapter = GetAllUsersAdapter(this, cursor!!)
+        mAdapter = UsersAdapter(this, cursor!!)
         mRecyclerView.adapter = mAdapter
     }
 
