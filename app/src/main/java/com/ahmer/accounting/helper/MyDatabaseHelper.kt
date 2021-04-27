@@ -225,6 +225,28 @@ class MyDatabaseHelper(context: Context) :
         return result != 0 // If 0 return it means not successfully updated
     }
 
+    fun deleteTransactions(id: Long): Boolean {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        var result = 0
+        try {
+            result = database.delete(
+                Constants.TranColumn.TABLE_NAME,
+                "${BaseColumns._ID} = ?",
+                arrayOf(id.toString())
+            )
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        } finally {
+            database.setTransactionSuccessful()
+            database.endTransaction()
+            database.close()
+        }
+        mContext.contentResolver.notifyChange(Constants.TranColumn.TRANSACTION_TABLE_URI, null)
+        return result != 0
+    }
+
     fun getAllTransactionsByUserId(mUserId: Int): Cursor {
         val database: SQLiteDatabase = this.readableDatabase
         val projections = arrayOf(
