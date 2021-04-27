@@ -4,7 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,8 +24,10 @@ class HelperFunctions : AppCompatActivity() {
             Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
         }
 
-        fun getRoundedValue(value: Double): Double {
-            return BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+        fun getRoundedValue(value: Double): String {
+            val round = DecimalFormat("#,##0.##")
+            round.roundingMode = RoundingMode.HALF_UP
+            return round.format(value)
         }
     }
 }

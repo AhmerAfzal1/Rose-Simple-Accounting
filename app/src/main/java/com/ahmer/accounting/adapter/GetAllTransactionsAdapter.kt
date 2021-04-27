@@ -3,6 +3,7 @@ package com.ahmer.accounting.adapter
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
+import android.os.Build
 import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -211,7 +212,7 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
 
             try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val inputFormatter = DateTimeFormatterBuilder().parseCaseInsensitive()
                         .append(
                             DateTimeFormatter.ofPattern(
@@ -242,12 +243,12 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
             if (transactions.debit == 0.toDouble()) {
                 tvDeb.text = ""
             } else {
-                tvDeb.text = transactions.debit.toString()
+                tvDeb.text = HelperFunctions.getRoundedValue(transactions.debit)
             }
             if (transactions.credit == 0.toDouble()) {
                 tvCre.text = ""
             } else {
-                tvCre.text = transactions.credit.toString()
+                tvCre.text = HelperFunctions.getRoundedValue(transactions.credit)
             }
         }
     }

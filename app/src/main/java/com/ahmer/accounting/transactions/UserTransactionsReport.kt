@@ -224,7 +224,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
         val mUserBalance = myDatabaseHelper.getSumForColumns(mUserId, "Balance")
         val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
-        if (mTotalBalance > 0) {
+        if (mTotalBalance > "0") {
             mCvTotalBal.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreenLight))
             mTvTotalBalHeading.setTextColor(ContextCompat.getColor(context, R.color.colorGreenDark))
             mTvTotalBal.setTextColor(ContextCompat.getColor(context, R.color.colorGreenDark))
@@ -233,9 +233,9 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             mTvTotalBalHeading.setTextColor(ContextCompat.getColor(context, R.color.colorRedDark))
             mTvTotalBal.setTextColor(ContextCompat.getColor(context, R.color.colorRedDark))
         }
-        mTvTotalDeb.text = HelperFunctions.getRoundedValue(mUserDebit).toString()
-        mTvTotalCre.text = HelperFunctions.getRoundedValue(mUserCredit).toString()
-        mTvTotalBal.text = mTotalBalance.toString()
+        mTvTotalDeb.text = HelperFunctions.getRoundedValue(mUserDebit)
+        mTvTotalCre.text = HelperFunctions.getRoundedValue(mUserCredit)
+        mTvTotalBal.text = mTotalBalance
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
