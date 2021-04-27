@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -22,6 +23,7 @@ import com.ahmer.accounting.model.Transactions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
@@ -65,8 +67,7 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
         }
         holder.bindView(transaction)
         holder.cvTransactionEntry.setOnClickListener {
-            showTransInfoDialog(mContext, transaction)
-            //showEditTransDialog(mContext, transaction)
+            showDropDownDialog(mContext, transaction)
         }
     }
 
@@ -195,6 +196,39 @@ class GetAllTransactionsAdapter(context: Context, cursor: Cursor) :
                 dialog.dismiss()
             }
             dialog.show()
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
+
+    private fun showDropDownDialog(context: Context, transactions: Transactions) {
+        try {
+            val dialogBuilder = MaterialAlertDialogBuilder(context)
+            dialogBuilder.setCancelable(false)
+            dialogBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
+                dialog.dismiss()
+            }
+            val adapter = ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1)
+            val options = arrayOf("Edit", "Info", "Delete")
+            adapter.add("Edit")
+            adapter.add("Info")
+            adapter.add("Delete")
+            dialogBuilder.setAdapter(adapter) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        showTransEditDialog(context, transactions)
+                    }
+                    1 -> {
+                        showTransInfoDialog(context, transactions)
+                    }
+                    2 -> {
+                        HelperFunctions.makeToast(mContext, "This feature is under progress")
+                    }
+                }
+                dialog.dismiss()
+            }
+            dialogBuilder.show()
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
