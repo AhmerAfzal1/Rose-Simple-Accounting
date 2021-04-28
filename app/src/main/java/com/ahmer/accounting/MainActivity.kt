@@ -12,10 +12,10 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.adapter.UsersAdapter
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mAdapter: UsersAdapter
+    private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mLayoutNoUserAccount: LinearLayout
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var myDatabaseHelper: MyDatabaseHelper
@@ -46,24 +47,19 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         toolbar.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
 
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        mDrawerLayout = findViewById(R.id.drawer_layout)
         val drawerToggle = ActionBarDrawerToggle(
             this,
-            drawerLayout,
+            mDrawerLayout,
             toolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
         drawerToggle.drawerArrowDrawable.color = Color.WHITE
-        drawerLayout.addDrawerListener(drawerToggle)
+        mDrawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
-        AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
 
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
         mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
@@ -108,10 +104,24 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_view -> {
-                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
+            R.id.nav_backup -> {
+                if (HelperFunctions.checkPermission(this)) {
+                    HelperFunctions.makeToast(
+                        applicationContext,
+                        getString(R.string.under_progress)
+                    )
+                }
+            }
+            R.id.nav_restore -> {
+                if (HelperFunctions.checkPermission(this)) {
+                    HelperFunctions.makeToast(
+                        applicationContext,
+                        getString(R.string.under_progress)
+                    )
+                }
             }
         }
+        mDrawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 

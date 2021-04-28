@@ -13,6 +13,7 @@ class Constants {
         const val DATABASE_VERSION: Int = 1
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
+        const val PERMISSION_REQUEST_CODE = 1
         const val SCHEME = "content"
     }
 
