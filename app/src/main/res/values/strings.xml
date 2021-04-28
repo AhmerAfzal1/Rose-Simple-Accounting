@@ -54,4 +54,8 @@
     <string name="trans_created">Created On:</string>
     <string name="trans_deleted">Transaction deleted successfully</string>
     <string name="trans_delete_warning_msg">Do you really want to delete this transaction entry? This action cannot be undone and you will be unable to recover any data.</string>
+    <string name="no_user_account">THERE IS NO USER ACCOUNT</string>
+    <string name="add_new_user_account">Click on Add User button to add user account</string>
+    <string name="no_transaction_added">NO TRANSACTION ADDED</string>
+    <string name="add_new_transaction">Click on Add button to add transaction</string>
 </resources>

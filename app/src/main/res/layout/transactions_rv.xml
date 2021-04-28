@@ -136,6 +136,42 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <LinearLayout
+        android:id="@+id/layoutNoTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:alpha="0.5"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/ic_baseline_warning"
+            app:tint="@color/colorRedDark" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.5"
+            android:text="@string/no_transaction_added" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.5"
+            android:text="@string/add_new_transaction" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGetAllRecords"
         android:layout_width="match_parent"
@@ -145,7 +181,8 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         android:gravity="top"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/layoutSubTotal"
@@ -156,6 +193,7 @@
         android:baselineAligned="false"
         android:gravity="bottom"
         android:padding="5dp"
+        android:visibility="gone"
         android:weightSum="3">
 
         <com.google.android.material.card.MaterialCardView

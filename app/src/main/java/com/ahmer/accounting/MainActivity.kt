@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -18,14 +19,14 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
-    private lateinit var myDatabaseHelper: MyDatabaseHelper
     private lateinit var mAdapter: UsersAdapter
+    private lateinit var mLayoutNoUserAccount: LinearLayout
     private lateinit var mRecyclerView: RecyclerView
+    private lateinit var myDatabaseHelper: MyDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +36,10 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.app_name)
 
-        var isFabOpened = false
-        val fabMain = findViewById<FloatingActionButton>(R.id.fabMain)
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
-        val fabBgView = findViewById<View>(R.id.fabBgView)
+        mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
         mRecyclerView = findViewById(R.id.rvMain)
+        mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
         myDatabaseHelper = MyDatabaseHelper(applicationContext)
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -53,43 +53,15 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0 && fabMain.visibility == View.VISIBLE) {
-                    fabMain.hide()
-                } else if (dy < 0 && fabMain.visibility != View.VISIBLE) {
-                    fabMain.show()
+                if (dy > 0 && fabAddNewUser.visibility == View.VISIBLE) {
+                    fabAddNewUser.hide()
+                } else if (dy < 0 && fabAddNewUser.visibility != View.VISIBLE) {
+                    fabAddNewUser.show()
                 }
             }
         })
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
-
-        fun showFab() {
-            isFabOpened = true
-            fabAddNewUser.visibility = View.VISIBLE
-            fabBgView.visibility = View.VISIBLE
-
-            fabMain.animate().rotationBy(135f)
-            fabAddNewUser.extend()
-            fabBgView.animate().alpha(1f)
-        }
-
-        fun hideFab() {
-            isFabOpened = false
-            fabMain.animate().rotationBy(0f)
-            fabBgView.animate().alpha(0f)
-
-            fabAddNewUser.visibility = View.GONE
-            fabAddNewUser.shrink()
-            fabBgView.visibility = View.GONE
-        }
-
-        fabMain.setOnClickListener {
-            if (!isFabOpened) {
-                showFab()
-            } else {
-                hideFab()
-            }
-        }
 
         fabAddNewUser.setOnClickListener {
             val intent = Intent(it.context, AddUserProfileData::class.java).apply {
@@ -101,7 +73,6 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
                 }
             }
             Log.v(Constants.LOG_TAG, "Add record activity opened")
-            hideFab()
             startActivity(intent)
         }
     }
@@ -120,6 +91,13 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         mAdapter = UsersAdapter(this, cursor!!)
+        if (mAdapter.itemCount > 0) {
+            mLayoutNoUserAccount.visibility = View.GONE
+            mRecyclerView.visibility = View.VISIBLE
+        } else {
+            mLayoutNoUserAccount.visibility = View.VISIBLE
+            mRecyclerView.visibility = View.GONE
+        }
         mRecyclerView.adapter = mAdapter
     }
 

@@ -6,7 +6,9 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -33,14 +35,16 @@ import java.util.*
 
 class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
-    private lateinit var myDatabaseHelper: MyDatabaseHelper
     private lateinit var mAdapter: TransactionsAdapter
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mTvTotalDeb: TextView
-    private lateinit var mTvTotalCre: TextView
     private lateinit var mCvTotalBal: MaterialCardView
-    private lateinit var mTvTotalBalHeading: TextView
+    private lateinit var mLayoutNoTransaction: LinearLayout
+    private lateinit var mLayoutSubTotal: LinearLayout
+    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mTvTotalBal: TextView
+    private lateinit var mTvTotalBalHeading: TextView
+    private lateinit var mTvTotalCre: TextView
+    private lateinit var mTvTotalDeb: TextView
+    private lateinit var myDatabaseHelper: MyDatabaseHelper
     private var mUserId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +66,8 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
         val tvUserPhone = findViewById<TextView>(R.id.tvUserPhone)
+        mLayoutNoTransaction = findViewById(R.id.layoutNoTransaction)
+        mLayoutSubTotal = findViewById(R.id.layoutSubTotal)
         mTvTotalDeb = findViewById(R.id.tvTotalDebit)
         mTvTotalCre = findViewById(R.id.tvTotalCredit)
         mCvTotalBal = findViewById(R.id.cvTotalBalance)
@@ -218,6 +224,15 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         val context: Context = applicationContext
         mAdapter = TransactionsAdapter(this, cursor!!)
+        if (mAdapter.itemCount > 0) {
+            mLayoutNoTransaction.visibility = View.GONE
+            mRecyclerView.visibility = View.VISIBLE
+            mLayoutSubTotal.visibility = View.VISIBLE
+        } else {
+            mLayoutNoTransaction.visibility = View.VISIBLE
+            mRecyclerView.visibility = View.GONE
+            mLayoutSubTotal.visibility = View.GONE
+        }
         mRecyclerView.adapter = mAdapter
 
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
