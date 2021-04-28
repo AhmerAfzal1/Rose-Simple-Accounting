@@ -126,7 +126,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivDeleteButton.setOnClickListener {
-            HelperFunctions.makeToast(mContext, "This feature is under progress")
+            HelperFunctions.makeToast(mContext, mContext.getString(R.string.under_progress))
         }
     }
 

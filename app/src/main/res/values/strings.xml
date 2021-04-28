@@ -58,4 +58,15 @@
     <string name="add_new_user_account">Click on Add User button to add user account</string>
     <string name="no_transaction_added">NO TRANSACTION ADDED</string>
     <string name="add_new_transaction">Click on Add button to add transaction</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="under_progress">This feature is under progress</string>
 </resources>

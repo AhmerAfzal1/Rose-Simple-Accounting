@@ -2,26 +2,35 @@ package com.ahmer.accounting
 
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.adapter.UsersAdapter
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
+    NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mAdapter: UsersAdapter
     private lateinit var mLayoutNoUserAccount: LinearLayout
@@ -35,6 +44,26 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.app_name)
+        setSupportActionBar(toolbar)
+
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val drawerToggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawerToggle.drawerArrowDrawable.color = Color.WHITE
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener(this)
+        AppBarConfiguration(
+            setOf(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+            ), drawerLayout
+        )
 
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
         mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
@@ -75,6 +104,30 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
             Log.v(Constants.LOG_TAG, "Add record activity opened")
             startActivity(intent)
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_view -> {
+                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
+            }
+        }
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.activity_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_search -> {
+                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
