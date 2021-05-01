@@ -1,5 +1,6 @@
 package com.ahmer.accounting.helper
 
+import android.content.ContentResolver
 import android.net.Uri
 import android.provider.BaseColumns
 import com.ahmer.accounting.BuildConfig
@@ -13,8 +14,6 @@ class Constants {
         const val DATABASE_VERSION: Int = 1
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
-        const val PERMISSION_REQUEST_CODE = 1
-        const val SCHEME = "content"
     }
 
     class UserColumn : BaseColumns {
@@ -31,7 +30,7 @@ class Constants {
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
 
-            val USER_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
+            val USER_TABLE_URI: Uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
                 .authority(APPLICATION_ID)
                 .appendPath(TABLE_NAME)
                 .build()
@@ -50,7 +49,7 @@ class Constants {
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
 
-            val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(SCHEME)
+            val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
                 .authority(APPLICATION_ID)
                 .appendPath(TABLE_NAME)
                 .build()

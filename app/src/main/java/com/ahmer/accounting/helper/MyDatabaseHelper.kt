@@ -6,11 +6,13 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.io.*
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION) {
@@ -334,5 +336,36 @@ class MyDatabaseHelper(context: Context) :
             getSumFromDatabase.close()
         }
         return sum
+    }
+
+    fun backupOrRestore(uri: Uri?, isBackup: Boolean) {
+        val databaseFilePath = mContext.getDatabasePath(Constants.DATABASE_NAME).toString()
+        var outputStream: OutputStream? = null
+        var inputStream: InputStream? = null
+        try {
+            val databaseFile = File(databaseFilePath)
+            if (isBackup) {
+                inputStream = FileInputStream(databaseFile)
+                // Open the empty db as the output stream
+                outputStream = mContext.contentResolver.openOutputStream(uri!!)
+            } else {
+                inputStream = mContext.contentResolver.openInputStream(uri!!)
+                // Open the empty db as the output stream
+                outputStream = FileOutputStream(databaseFilePath)
+            }
+            // Transfer bytes from the input file to the output file
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream!!.read(buffer).also { length = it } > 0) {
+                outputStream!!.write(buffer, 0, length)
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+        } finally {
+            // Close the streams
+            outputStream!!.flush()
+            outputStream.close()
+            inputStream?.close()
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.ahmer.accounting
 
+import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -24,10 +28,14 @@ import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
+import com.ahmer.afzal.utils.constants.PermissionConstants
+import com.ahmer.afzal.utils.utilcode.PermissionUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +44,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mLayoutNoUserAccount: LinearLayout
     private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mResultLauncherCreateDB: ActivityResultLauncher<Intent>
+    private lateinit var mResultLauncherRestoreDB: ActivityResultLauncher<Intent>
     private lateinit var myDatabaseHelper: MyDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,24 +110,50 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             Log.v(Constants.LOG_TAG, "Add record activity opened")
             startActivity(intent)
         }
+
+        mResultLauncherCreateDB =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val uri: Uri? = result.data?.data
+                    myDatabaseHelper.backupOrRestore(uri, true)
+                }
+            }
+
+        mResultLauncherRestoreDB =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val uri: Uri? = result.data?.data
+                    myDatabaseHelper.backupOrRestore(uri, false)
+                }
+            }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_backup -> {
-                if (HelperFunctions.checkPermission(this)) {
-                    HelperFunctions.makeToast(
-                        applicationContext,
-                        getString(R.string.under_progress)
-                    )
+                if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+                    val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                    val fileName = format.format(Date()).toString() + "_${Constants.DATABASE_NAME}"
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "application/vnd.sqlite3"
+                        putExtra(Intent.EXTRA_TITLE, fileName)
+                    }
+                    mResultLauncherCreateDB.launch(intent)
+                } else {
+                    HelperFunctions.checkPermission()
                 }
             }
             R.id.nav_restore -> {
-                if (HelperFunctions.checkPermission(this)) {
-                    HelperFunctions.makeToast(
-                        applicationContext,
-                        getString(R.string.under_progress)
-                    )
+                if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+                    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "*/*"
+                        Intent.createChooser(intent, "Choose Backup File")
+                    }
+                    mResultLauncherRestoreDB.launch(intent)
+                } else {
+                    HelperFunctions.checkPermission()
                 }
             }
         }
