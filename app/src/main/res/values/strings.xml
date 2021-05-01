@@ -69,4 +69,6 @@
     <string name="menu_restore">Restore Backup</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="under_progress">This feature is under progress</string>
+    <string name="backup_complete">Backup Completed</string>
+    <string name="restore_complete">Restore Completed</string>
 </resources>
