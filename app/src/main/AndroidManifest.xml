@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
         <activity
-            android:name=".Launcher"
+            android:name=".Splash"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,30 +38,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.OPENABLE" />
-
-                <data android:host="*" />
-                <data android:mimeType="application/octet-stream" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:pathPattern="/.*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.abf" />
-                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.abf" />
-            </intent-filter>
-
-        </activity>
+            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
             android:name=".user.AddUserProfileData"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />

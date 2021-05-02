@@ -1,20 +1,21 @@
 package com.ahmer.accounting
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.afzal.utils.constants.PermissionConstants
 import com.ahmer.afzal.utils.utilcode.PermissionUtils
 import com.ahmer.afzal.utils.utilcode.ScreenUtils
 
-class Launcher : Activity() {
+class Splash : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.splash)
         checkPermission(this)
     }
 
