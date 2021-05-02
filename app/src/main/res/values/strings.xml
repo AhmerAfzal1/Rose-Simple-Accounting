@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rose Simple Accounting</string>
+    <string name="app_name">Rose Account Manager</string>
 
     <string name="add_new_user">Add User</string>
     <string name="add_transaction">Add Transaction</string>

@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,11 +30,13 @@ import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
 import com.ahmer.afzal.utils.constants.PermissionConstants
+import com.ahmer.afzal.utils.utilcode.FileUtils
 import com.ahmer.afzal.utils.utilcode.PermissionUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -132,28 +135,59 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         when (item.itemId) {
             R.id.nav_backup -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
-                    val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
-                    val fileName = format.format(Date()).toString() + "_${Constants.DATABASE_NAME}"
-                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "application/vnd.sqlite3"
-                        putExtra(Intent.EXTRA_TITLE, fileName)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                        val fileName = format.format(Date()).toString() + "_backup.abf"
+                        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "application/vnd.sqlite3"
+                            putExtra(Intent.EXTRA_TITLE, fileName)
+                        }
+                        mResultLauncherCreateDB.launch(intent)
+                    } else {
+                        val src = File(getDatabasePath(Constants.DATABASE_NAME).absolutePath)
+                        val dst = File(
+                            "${Environment.getExternalStorageDirectory()}/${getString(R.string.app_name)}",
+                            "Backup.abf"
+                        )
+                        if (dst.exists()) {
+                            dst.delete()
+                        }
+                        val isBackup = FileUtils.copy(src, dst)
+                        if (isBackup) {
+                            HelperFunctions.makeToast(
+                                applicationContext,
+                                getString(R.string.backup_complete)
+                            )
+                        }
                     }
-                    mResultLauncherCreateDB.launch(intent)
-                } else {
-                    HelperFunctions.checkPermission()
                 }
             }
             R.id.nav_restore -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
-                    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "*/*"
-                        Intent.createChooser(intent, "Choose Backup File")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "*/*"
+                            Intent.createChooser(intent, "Choose Backup File")
+                        }
+                        mResultLauncherRestoreDB.launch(intent)
+                    } else {
+                        val src = File(
+                            "${Environment.getExternalStorageDirectory()}/${getString(R.string.app_name)}",
+                            "Backup.abf"
+                        )
+                        if (src.exists()) {
+                            myDatabaseHelper.backupOrRestore(Uri.fromFile(src), false)
+                        } else {
+                            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = "*/*"
+                                Intent.createChooser(intent, "Choose Backup File")
+                            }
+                            mResultLauncherRestoreDB.launch(intent)
+                        }
                     }
-                    mResultLauncherRestoreDB.launch(intent)
-                } else {
-                    HelperFunctions.checkPermission()
                 }
             }
         }
