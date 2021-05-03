@@ -228,7 +228,11 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     }
 
     fun searchTransactionDescription(keyword: String) {
-        val cursor = myDatabaseHelper.searchTransactionsDescription(keyword)
+        val cursor = myDatabaseHelper.search(
+            Constants.TranColumn.TABLE_NAME,
+            Constants.TranColumn.DESCRIPTION,
+            keyword
+        )
         mAdapter = TransactionsAdapter(applicationContext, cursor)
         mRecyclerView.adapter = mAdapter
     }
