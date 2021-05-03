@@ -12,11 +12,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.loader.app.LoaderManager
@@ -135,7 +137,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         when (item.itemId) {
             R.id.nav_backup -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
                         val fileName = format.format(Date()).toString() + "_backup.abf"
                         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
@@ -165,11 +167,11 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             }
             R.id.nav_restore -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                             addCategory(Intent.CATEGORY_OPENABLE)
                             type = "*/*"
-                            Intent.createChooser(intent, "Choose Backup File")
+                            Intent.createChooser(intent, getString(R.string.choose_backup))
                         }
                         mResultLauncherRestoreDB.launch(intent)
                     } else {
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                                 addCategory(Intent.CATEGORY_OPENABLE)
                                 type = "*/*"
-                                Intent.createChooser(intent, "Choose Backup File")
+                                Intent.createChooser(intent, getString(R.string.choose_backup))
                             }
                             mResultLauncherRestoreDB.launch(intent)
                         }
@@ -195,19 +197,32 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         return true
     }
 
+    fun searchUser(name: String) {
+        val cursor = myDatabaseHelper.searchUserProfileData(name)
+        mAdapter = UsersAdapter(applicationContext, cursor)
+        mRecyclerView.adapter = mAdapter
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.activity_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_search -> {
-                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
+        val searchItem = menu.findItem(R.id.menu_search_user_name)
+        val searchView: SearchView = searchItem.actionView as SearchView
+        val editText: EditText = searchView.findViewById(R.id.search_src_text)
+        editText.setTextColor(Color.WHITE)
+        editText.setHintTextColor(Color.GRAY)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchUser(query!!)
+                return false
             }
-        }
-        return super.onOptionsItemSelected(item)
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchUser(newText!!)
+                return false
+            }
+        })
+        return true
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {

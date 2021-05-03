@@ -62,6 +62,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             modified =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.UserColumn.LAST_MODIFIED))
 
+            /*
             val stringBuilder = StringBuilder()
             stringBuilder.append("GetUserProfileData ${BaseColumns._ID}: ")
                 .append(mCursor.getInt(mCursor.getColumnIndexOrThrow(BaseColumns._ID)))
@@ -86,6 +87,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             stringBuilder.append("\nGetUserProfileData ${Constants.UserColumn.LAST_MODIFIED}: ")
                 .append(mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.UserColumn.LAST_MODIFIED)))
             Log.v(Constants.LOG_TAG, stringBuilder.toString())
+            */
         }
         holder.bindItems(userProfile)
         holder.cvMain.setOnClickListener {

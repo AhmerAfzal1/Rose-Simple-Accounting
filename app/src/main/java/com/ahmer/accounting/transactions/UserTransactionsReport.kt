@@ -4,14 +4,17 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -32,6 +35,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -93,6 +97,23 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             when (it.itemId) {
                 R.id.menu_add_trans -> {
                     showAddTransactionDialog(this, mUserId)
+                }
+                R.id.menu_search_trans_desc -> {
+                    val searchView: SearchView = it?.actionView as SearchView
+                    val editText: EditText = searchView.findViewById(R.id.search_src_text)
+                    editText.setTextColor(Color.WHITE)
+                    editText.setHintTextColor(Color.GRAY)
+                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            searchTransactionDescription(query!!)
+                            return false
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            searchTransactionDescription(newText!!)
+                            return false
+                        }
+                    })
                 }
             }
             true
@@ -204,6 +225,12 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+    }
+
+    fun searchTransactionDescription(keyword: String) {
+        val cursor = myDatabaseHelper.searchTransactionsDescription(keyword)
+        mAdapter = TransactionsAdapter(applicationContext, cursor)
+        mRecyclerView.adapter = mAdapter
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
