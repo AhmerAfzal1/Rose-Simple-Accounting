@@ -37,7 +37,6 @@ class HelperFunctions : AppCompatActivity() {
 
         fun confirmDelete(context: Context, mId: Long, mUserName: String, isUserDelete: Boolean) {
             try {
-                var isDeleted = false
                 val myDatabaseHelper = MyDatabaseHelper(context)
                 val alertBuilder = MaterialAlertDialogBuilder(context)
                 alertBuilder.setTitle("Confirmation")
@@ -50,10 +49,17 @@ class HelperFunctions : AppCompatActivity() {
                 alertBuilder.setMessage(msg)
                 alertBuilder.setCancelable(false)
                 alertBuilder.setPositiveButton("Delete") { dialog, which ->
-                    isDeleted = if (isUserDelete) {
-                        myDatabaseHelper.deleteUserProfileData(mId)
+                    val isDeleted: Boolean
+                    if (isUserDelete) {
+                        isDeleted = myDatabaseHelper.deleteUserProfileData(mId)
+                        if (isDeleted) {
+                            makeToast(context, context.getString(R.string.users_deleted, mUserName))
+                        }
                     } else {
-                        myDatabaseHelper.deleteTransactions(mId)
+                        isDeleted = myDatabaseHelper.deleteTransactions(mId)
+                        if (isDeleted) {
+                            makeToast(context, context.getString(R.string.trans_deleted))
+                        }
                     }
                     dialog.dismiss()
                 }
@@ -63,13 +69,6 @@ class HelperFunctions : AppCompatActivity() {
                 val dialog = alertBuilder.create()
                 dialog.show()
                 dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
-                if (isDeleted) {
-                    if (isUserDelete) {
-                        makeToast(context, context.getString(R.string.users_deleted, mUserName))
-                    } else {
-                        makeToast(context, context.getString(R.string.trans_deleted))
-                    }
-                }
             } catch (e: Exception) {
                 Log.e(Constants.LOG_TAG, e.message, e)
                 FirebaseCrashlytics.getInstance().recordException(e)

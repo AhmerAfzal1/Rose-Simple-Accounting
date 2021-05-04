@@ -53,7 +53,7 @@
     <string name="transaction_id">Transaction ID:</string>
     <string name="trans_created">Created On:</string>
     <string name="trans_deleted">Transaction deleted successfully</string>
-    <string name="users_deleted">User %1$s deleted successfully</string>
+    <string name="users_deleted">%1$s account deleted successfully</string>
     <string name="trans_delete_warning_msg">Do you really want to delete this transaction entry? This action cannot be undone and you will be unable to recover any data.</string>
     <string name="user_delete_warning_msg">Do you really want to delete this %1$s account? All transaction(s) associated with this account will also be permanently deleted and this action cannot be undone and you will be unable to recover any data.</string>
     <string name="no_user_account">THERE IS NO USER ACCOUNT</string>
