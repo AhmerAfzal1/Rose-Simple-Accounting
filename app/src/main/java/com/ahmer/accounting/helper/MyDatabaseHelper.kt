@@ -86,7 +86,7 @@ class MyDatabaseHelper(context: Context) :
                     "${Constants.TranColumn.BALANCE} REAL, " +
                     "${Constants.TranColumn.CREATED_ON} TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "${Constants.TranColumn.LAST_MODIFIED} TIMESTAMP DEFAULT \"\", " +
-                    "FOREIGN KEY (${Constants.TranColumn.USER_ID}) REFERENCES ${Constants.UserColumn.TABLE_NAME}(${BaseColumns._ID})" +
+                    "FOREIGN KEY (${Constants.TranColumn.USER_ID}) REFERENCES ${Constants.UserColumn.TABLE_NAME}(${BaseColumns._ID}) ON DELETE CASCADE" +
                     ");"
             db?.execSQL("PRAGMA foreign_keys = ON;")
             db?.execSQL(userTable)
@@ -127,7 +127,7 @@ class MyDatabaseHelper(context: Context) :
         return result != (-1).toLong() // If -1 return it means not successfully inserted
     }
 
-    fun updateUserProfileData(userProfile: UserProfile, id: Int): Boolean {
+    fun updateUserProfileData(userProfile: UserProfile, id: Long): Boolean {
         val database: SQLiteDatabase = this.writableDatabase
         database.beginTransaction()
         var result = 0
@@ -148,6 +148,28 @@ class MyDatabaseHelper(context: Context) :
         }
         mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
         return result != 0 // If 0 return it means not successfully updated
+    }
+
+    fun deleteUserProfileData(id: Long): Boolean {
+        val database: SQLiteDatabase = this.writableDatabase
+        database.beginTransaction()
+        var result = 0
+        try {
+            result = database.delete(
+                Constants.UserColumn.TABLE_NAME,
+                "${BaseColumns._ID} = ?",
+                arrayOf(id.toString())
+            )
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        } finally {
+            database.setTransactionSuccessful()
+            database.endTransaction()
+            database.close()
+        }
+        mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
+        return result != 0
     }
 
     fun getAllUserProfileData(): Cursor {
@@ -250,7 +272,7 @@ class MyDatabaseHelper(context: Context) :
         return result != 0
     }
 
-    fun getAllTransactionsByUserId(mUserId: Int): Cursor {
+    fun getAllTransactionsByUserId(mUserId: Long): Cursor {
         val database: SQLiteDatabase = this.readableDatabase
         val projections = arrayOf(
             BaseColumns._ID,
@@ -282,7 +304,7 @@ class MyDatabaseHelper(context: Context) :
         return cursor
     }
 
-    fun getPreviousBalanceByUserId(id: Int): Double {
+    fun getPreviousBalanceByUserId(id: Long): Double {
         var previousBalance: Double = 0.toDouble()
         val getBalanceFromDatabase: SQLiteDatabase = this.readableDatabase
         val userID =
@@ -307,7 +329,7 @@ class MyDatabaseHelper(context: Context) :
         return previousBalance
     }
 
-    fun getSumForColumns(id: Int, nameColumn: String): Double {
+    fun getSumForColumns(id: Long, nameColumn: String): Double {
         var sum: Double = 0.toDouble()
         var sumForColumn = ""
         when (nameColumn) {

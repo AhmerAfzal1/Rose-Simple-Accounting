@@ -1,7 +1,9 @@
 package com.ahmer.accounting.user
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -35,6 +37,9 @@ class AddUserProfileData : AppCompatActivity() {
         val userComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
         val btnSave = findViewById<MaterialButton>(R.id.btnSaveUserData)
 
+        userName.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
         var typeGender = ""
         toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
             val checkedButton = findViewById<MaterialButton>(checkedId)

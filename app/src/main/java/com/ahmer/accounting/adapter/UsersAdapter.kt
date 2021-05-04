@@ -40,7 +40,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         mCursor.moveToPosition(position)
         val userProfile = UserProfile().apply {
-            id = mCursor.getInt(mCursor.getColumnIndexOrThrow(BaseColumns._ID))
+            id = mCursor.getLong(mCursor.getColumnIndexOrThrow(BaseColumns._ID))
             name =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.UserColumn.NAME))
             gender =
@@ -128,7 +128,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivDeleteButton.setOnClickListener {
-            HelperFunctions.makeToast(mContext, mContext.getString(R.string.under_progress))
+            HelperFunctions.confirmDelete(mContext, userProfile.id, userProfile.name, true)
         }
     }
 

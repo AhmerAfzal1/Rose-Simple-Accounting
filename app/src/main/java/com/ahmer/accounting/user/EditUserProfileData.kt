@@ -1,7 +1,9 @@
 package com.ahmer.accounting.user
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -42,7 +44,7 @@ class EditUserProfileData : AppCompatActivity() {
             typeGender = checkedButton.text.toString()
         }
 
-        val id = intent.getIntExtra("mID", -1)
+        val id = intent.getLongExtra("mID", -1)
         val name = intent.getStringExtra("mName")
         val gender = intent.getStringExtra("mGender")
         val address = intent.getStringExtra("mAddress")
@@ -52,6 +54,9 @@ class EditUserProfileData : AppCompatActivity() {
         val email = intent.getStringExtra("mEmail")
         val comment = intent.getStringExtra("mComments")
 
+        userName.requestFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
         userName.editText?.setText(name.toString())
         when (gender) {
             "Male" -> {

@@ -2,7 +2,7 @@ package com.ahmer.accounting.model
 
 class Transactions {
 
-    var userId: Int = 0
+    var userId: Long = 0
 
     var transId: Long = 0
 

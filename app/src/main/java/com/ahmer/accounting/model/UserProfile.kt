@@ -2,7 +2,7 @@ package com.ahmer.accounting.model
 
 class UserProfile {
 
-    var id: Int = 0
+    var id: Long = 0
 
     var name: String = ""
 

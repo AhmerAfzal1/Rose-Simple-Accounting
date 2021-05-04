@@ -49,7 +49,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     private lateinit var mTvTotalCre: TextView
     private lateinit var mTvTotalDeb: TextView
     private lateinit var myDatabaseHelper: MyDatabaseHelper
-    private var mUserId: Int = 0
+    private var mUserId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             finish()
         }
 
-        mUserId = intent.getIntExtra("mPosUserID", -1)
+        mUserId = intent.getLongExtra("mPosUserID", -1)
         val mUserName = intent.getStringExtra("mPosUserName")
         val mUserPhone = intent.getStringExtra("mPosUserPhone")
 
@@ -120,7 +120,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         }
     }
 
-    private fun showAddTransactionDialog(context: Context, userID: Int) {
+    private fun showAddTransactionDialog(context: Context, userID: Long) {
         try {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -286,5 +286,10 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
         // Keep empty
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myDatabaseHelper.close()
     }
 }

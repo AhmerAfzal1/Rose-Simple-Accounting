@@ -256,4 +256,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onLoaderReset(loader: Loader<Cursor>) {
         // Keep empty
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myDatabaseHelper.close()
+    }
 }

@@ -3,7 +3,6 @@ package com.ahmer.accounting.adapter
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Color
 import android.os.Build
 import android.provider.BaseColumns
 import android.util.Log
@@ -11,7 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -47,7 +49,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         val transaction = Transactions().apply {
             transId = mCursor.getLong(mCursor.getColumnIndexOrThrow(BaseColumns._ID))
             userId =
-                mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
+                mCursor.getLong(mCursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
             date =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
             description =
@@ -221,41 +223,13 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                         showTransInfoDialog(context, transactions)
                     }
                     2 -> {
-                        confirmTransDelete(context, transactions)
+                        HelperFunctions.confirmDelete(context, transactions.transId, "", false)
                     }
                 }
                 dialog.dismiss()
             }
             val dialog = dialogBuilder.create()
             dialog.show()
-        } catch (e: Exception) {
-            Log.e(Constants.LOG_TAG, e.message, e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-    }
-
-    private fun confirmTransDelete(context: Context, transactions: Transactions) {
-        try {
-            var isDeleted = false
-            val myDatabaseHelper = MyDatabaseHelper(context)
-            val alertBuilder = MaterialAlertDialogBuilder(context)
-            alertBuilder.setTitle("Confirmation")
-            alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
-            alertBuilder.setMessage(context.getString(R.string.trans_delete_warning_msg))
-            alertBuilder.setCancelable(false)
-            alertBuilder.setPositiveButton("Delete") { dialog, which ->
-                isDeleted = myDatabaseHelper.deleteTransactions(transactions.transId)
-                dialog.dismiss()
-            }
-            alertBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                dialog.dismiss()
-            }
-            val dialog = alertBuilder.create()
-            dialog.show()
-            dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
-            if (isDeleted) {
-                HelperFunctions.makeToast(context, context.getString(R.string.trans_deleted))
-            }
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
