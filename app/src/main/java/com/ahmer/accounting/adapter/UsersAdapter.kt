@@ -163,6 +163,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             val getCreated = dialog.findViewById<TextView>(R.id.dialogUserCreated)
             val getModified = dialog.findViewById<TextView>(R.id.dialogUserModified)
             val btnOk = dialog.findViewById<Button>(R.id.btnOk)
+            /*
             Log.v(Constants.LOG_TAG, "Dialog ID: ${userProfile.id}")
             Log.v(Constants.LOG_TAG, "Dialog Name: ${userProfile.name}")
             Log.v(Constants.LOG_TAG, "Dialog Gender: ${userProfile.gender}")
@@ -173,6 +174,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             Log.v(Constants.LOG_TAG, "Dialog Comments: ${userProfile.comment}")
             Log.v(Constants.LOG_TAG, "Dialog Created: ${userProfile.created}")
             Log.v(Constants.LOG_TAG, "Dialog Modified: ${userProfile.modified}")
+            */
             getID.text = userProfile.id.toString()
             getName.text = userProfile.name
             getGender.text = userProfile.gender

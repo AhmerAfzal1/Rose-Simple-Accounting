@@ -172,6 +172,20 @@ class MyDatabaseHelper(context: Context) :
         return result != 0
     }
 
+    fun searchUsersName(keyword: String): Cursor {
+        val database: SQLiteDatabase = this.readableDatabase
+        val query =
+            "SELECT * FROM ${Constants.UserColumn.TABLE_NAME} WHERE ${Constants.UserColumn.NAME} LIKE ?"
+        val mCursor: Cursor = database.rawQuery(query, arrayOf("%$keyword%"))
+        try {
+            mCursor.moveToNext()
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+        return mCursor
+    }
+
     fun getAllUserProfileData(): Cursor {
         val database: SQLiteDatabase = this.readableDatabase
         val projection = arrayOf(
@@ -272,6 +286,20 @@ class MyDatabaseHelper(context: Context) :
         return result != 0
     }
 
+    fun searchTransDesc(id: Long, keyword: String): Cursor {
+        val database: SQLiteDatabase = this.readableDatabase
+        val query =
+            "SELECT * FROM ${Constants.TranColumn.TABLE_NAME} WHERE ${Constants.TranColumn.USER_ID} = $id AND ${Constants.TranColumn.DESCRIPTION} LIKE ?"
+        val mCursor: Cursor = database.rawQuery(query, arrayOf("%$keyword%"))
+        try {
+            mCursor.moveToNext()
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+        return mCursor
+    }
+
     fun getAllTransactionsByUserId(mUserId: Long): Cursor {
         val database: SQLiteDatabase = this.readableDatabase
         val projections = arrayOf(
@@ -359,19 +387,6 @@ class MyDatabaseHelper(context: Context) :
             getSumFromDatabase.close()
         }
         return sum
-    }
-
-    fun search(tableName: String, columnName: String, keyword: String): Cursor {
-        val database: SQLiteDatabase = this.readableDatabase
-        val query = "SELECT * FROM $tableName WHERE $columnName LIKE ?"
-        val mCursor: Cursor = database.rawQuery(query, arrayOf("%$keyword%"))
-        try {
-            mCursor.moveToNext()
-        } catch (e: Exception) {
-            Log.e(Constants.LOG_TAG, e.message, e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-        return mCursor
     }
 
     fun backupOrRestore(uri: Uri?, isBackup: Boolean) {

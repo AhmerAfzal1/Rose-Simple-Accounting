@@ -198,11 +198,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     fun searchUser(name: String) {
-        val cursor = myDatabaseHelper.search(
-            Constants.UserColumn.TABLE_NAME,
-            Constants.UserColumn.NAME,
-            name
-        )
+        val cursor = myDatabaseHelper.searchUsersName(name)
         mAdapter = UsersAdapter(applicationContext, cursor)
         mRecyclerView.adapter = mAdapter
     }
