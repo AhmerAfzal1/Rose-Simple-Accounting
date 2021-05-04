@@ -58,6 +58,7 @@ class EditUserProfileData : AppCompatActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
         userName.editText?.setText(name.toString())
+        Log.v(Constants.LOG_TAG, "Gender type: $gender")
         when (gender) {
             "Male" -> {
                 toggleGroupGender.check(R.id.btnMale)
@@ -100,6 +101,7 @@ class EditUserProfileData : AppCompatActivity() {
                 else -> {
                     val myDatabaseHelper = MyDatabaseHelper(it.context)
                     isSuccessfullyUpdated = myDatabaseHelper.updateUserProfileData(userProfile, id)
+                    /*
                     Log.v(Constants.LOG_TAG, "Updated Record")
                     Log.v(Constants.LOG_TAG, "Name: ${userProfile.name}")
                     Log.v(Constants.LOG_TAG, "Gender: ${userProfile.gender}")
@@ -111,6 +113,7 @@ class EditUserProfileData : AppCompatActivity() {
                     Log.v(Constants.LOG_TAG, "Comments: ${userProfile.comment}")
                     Log.v(Constants.LOG_TAG, "Created: ${userProfile.created}")
                     Log.v(Constants.LOG_TAG, "Modified: ${userProfile.modified}")
+                    */
                 }
             }
 

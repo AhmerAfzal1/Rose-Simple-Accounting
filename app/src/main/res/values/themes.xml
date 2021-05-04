@@ -43,11 +43,6 @@
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
 
-    <style name="Theme.RoseSimpleAccounting.NoActionBar.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="Theme.RoseSimpleAccounting.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.RoseSimpleAccounting.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

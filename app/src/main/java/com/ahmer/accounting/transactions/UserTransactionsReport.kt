@@ -36,7 +36,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private lateinit var mAdapter: TransactionsAdapter
