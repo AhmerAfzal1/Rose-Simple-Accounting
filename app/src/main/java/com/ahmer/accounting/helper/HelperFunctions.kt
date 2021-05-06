@@ -35,14 +35,14 @@ class HelperFunctions : AppCompatActivity() {
             return round.format(value)
         }
 
-        fun confirmDelete(context: Context, mId: Long, mUserName: String, isUserDelete: Boolean) {
+        fun confirmDelete(context: Context, id: Long, userName: String = "", isUserDel: Boolean) {
             try {
                 val myDatabaseHelper = MyDatabaseHelper(context)
                 val alertBuilder = MaterialAlertDialogBuilder(context)
                 alertBuilder.setTitle("Confirmation")
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
-                val msg: String = if (isUserDelete) {
-                    context.getString(R.string.user_delete_warning_msg, mUserName)
+                val msg: String = if (isUserDel) {
+                    context.getString(R.string.user_delete_warning_msg, userName)
                 } else {
                     context.getString(R.string.trans_delete_warning_msg)
                 }
@@ -50,13 +50,13 @@ class HelperFunctions : AppCompatActivity() {
                 alertBuilder.setCancelable(false)
                 alertBuilder.setPositiveButton("Delete") { dialog, which ->
                     val isDeleted: Boolean
-                    if (isUserDelete) {
-                        isDeleted = myDatabaseHelper.deleteUserProfileData(mId)
+                    if (isUserDel) {
+                        isDeleted = myDatabaseHelper.deleteUserProfileData(id)
                         if (isDeleted) {
-                            makeToast(context, context.getString(R.string.users_deleted, mUserName))
+                            makeToast(context, context.getString(R.string.users_deleted, userName))
                         }
                     } else {
-                        isDeleted = myDatabaseHelper.deleteTransactions(mId)
+                        isDeleted = myDatabaseHelper.deleteTransactions(id)
                         if (isDeleted) {
                             makeToast(context, context.getString(R.string.trans_deleted))
                         }

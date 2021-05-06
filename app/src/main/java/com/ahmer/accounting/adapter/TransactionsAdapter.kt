@@ -38,7 +38,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
 
     private val mContext = context
     private val mCursor = cursor
-    private var mSelectedPositions = ArrayList<Int>()
+    private var mSelectedIds = ArrayList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -71,7 +71,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.cvTransactionEntry.setOnClickListener {
             showDropDownDialog(mContext, transaction)
         }
-        if (mSelectedPositions.contains(position)) {
+        if (mSelectedIds.contains(position)) {
             holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
         } else {
             holder.itemView.setBackgroundResource(R.color.white)
@@ -87,11 +87,11 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
     }
 
     fun selectedIds(ids: ArrayList<Int>) {
-        mSelectedPositions = ids
+        mSelectedIds = ids
         notifyDataSetChanged()
     }
 
-    private fun showTransInfoDialog(context: Context, transactions: Transactions) {
+    private fun showTransInfoDialog(context: Context, trans: Transactions) {
         try {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -106,9 +106,9 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             val tvTransCreated = dialog.findViewById<TextView>(R.id.dialogTransCreated)
             val tvTransModified = dialog.findViewById<TextView>(R.id.dialogTransModified)
             val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-            tvTransId.text = transactions.transId.toString()
-            tvTransCreated.text = transactions.created
-            tvTransModified.text = transactions.modified
+            tvTransId.text = trans.transId.toString()
+            tvTransCreated.text = trans.created
+            tvTransModified.text = trans.modified
             btnOk.setOnClickListener {
                 dialog.dismiss()
             }
@@ -214,7 +214,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         }
     }
 
-    private fun showDropDownDialog(context: Context, transactions: Transactions) {
+    private fun showDropDownDialog(context: Context, trans: Transactions) {
         try {
             val dialogBuilder = MaterialAlertDialogBuilder(context)
             dialogBuilder.setCancelable(false)
@@ -223,19 +223,21 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             }
             val adapter =
                 ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1)
-            adapter.add("Edit")
-            adapter.add("Info")
-            adapter.add("Delete")
+            adapter.addAll(
+                context.getString(R.string.edit),
+                context.getString(R.string.info),
+                context.getString(R.string.delete)
+            )
             dialogBuilder.setAdapter(adapter) { dialog, which ->
                 when (which) {
                     0 -> {
-                        showTransEditDialog(context, transactions)
+                        showTransEditDialog(context, trans)
                     }
                     1 -> {
-                        showTransInfoDialog(context, transactions)
+                        showTransInfoDialog(context, trans)
                     }
                     2 -> {
-                        HelperFunctions.confirmDelete(context, transactions.transId, "", false)
+                        HelperFunctions.confirmDelete(context, trans.transId, isUserDel = false)
                     }
                 }
                 dialog.dismiss()
@@ -252,7 +254,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
 
         val cvTransactionEntry: MaterialCardView = itemView.findViewById(R.id.cvTransactionEntry)
 
-        fun bindView(transactions: Transactions) {
+        fun bindView(trans: Transactions) {
             val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
             val tvDesc = itemView.findViewById<TextView>(R.id.tvDescription)
             val tvDeb = itemView.findViewById<TextView>(R.id.tvDebit)
@@ -268,7 +270,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                             )
                         )
                         .toFormatter()
-                    val parsed = LocalDateTime.parse(transactions.date, inputFormatter)
+                    val parsed = LocalDateTime.parse(trans.date, inputFormatter)
                     val outputFormatter =
                         DateTimeFormatter.ofPattern(
                             Constants.DATE_SHORT_PATTERN,
@@ -277,7 +279,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                     tvDate.text = outputFormatter.format(parsed)
                 } else {
                     val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
-                    val date: Date = sdfOld.parse(transactions.date)!!
+                    val date: Date = sdfOld.parse(trans.date)!!
                     val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
                     tvDate.text = sdfNew.format(date)
                 }
@@ -286,16 +288,16 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 FirebaseCrashlytics.getInstance().recordException(pe)
             }
 
-            tvDesc.text = transactions.description
-            if (transactions.debit == 0.toDouble()) {
+            tvDesc.text = trans.description
+            if (trans.debit == 0.toDouble()) {
                 tvDeb.text = ""
             } else {
-                tvDeb.text = HelperFunctions.getRoundedValue(transactions.debit)
+                tvDeb.text = HelperFunctions.getRoundedValue(trans.debit)
             }
-            if (transactions.credit == 0.toDouble()) {
+            if (trans.credit == 0.toDouble()) {
                 tvCre.text = ""
             } else {
-                tvCre.text = HelperFunctions.getRoundedValue(transactions.credit)
+                tvCre.text = HelperFunctions.getRoundedValue(trans.credit)
             }
         }
     }

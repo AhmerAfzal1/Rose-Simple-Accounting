@@ -70,4 +70,8 @@
     <string name="backup_complete">Backup Completed</string>
     <string name="restore_complete">Restore Completed</string>
     <string name="choose_backup">Choose Backup File</string>
+    <string name="select_all">Select All</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="info">Info</string>
 </resources>

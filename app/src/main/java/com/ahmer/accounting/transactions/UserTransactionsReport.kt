@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     ActionMode.Callback {
@@ -48,6 +49,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     private var mActionMode: ActionMode? = null
     private var mIsMultiSelect = false
     private var mSelectedIds = ArrayList<Int>()
+    private var mIsSelectAll = false
     private var mUserId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -338,10 +340,29 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_delete_trans -> {
+                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
                 mode?.finish()
             }
             R.id.menu_select_all_trans -> {
-                mode?.finish()
+                if (!mIsSelectAll) {
+                    Log.v(Constants.LOG_TAG, "Select All")
+                    mIsSelectAll = true
+                    mSelectedIds = ArrayList()
+                    mAdapter.selectedIds(ArrayList())
+                    val tempList = ArrayList<Int>()
+                    for (i in 0 until mAdapter.itemCount) {
+                        tempList.add(i)
+                        mSelectedIds.add(i)
+                    }
+                    mAdapter.selectedIds(tempList)
+                    mActionMode!!.title = mSelectedIds.size.toString()
+                } else {
+                    Log.v(Constants.LOG_TAG, "DeSelect All")
+                    mIsSelectAll = false
+                    mSelectedIds = ArrayList()
+                    mAdapter.selectedIds(ArrayList())
+                    mActionMode!!.title = ""
+                }
             }
         }
         return true
