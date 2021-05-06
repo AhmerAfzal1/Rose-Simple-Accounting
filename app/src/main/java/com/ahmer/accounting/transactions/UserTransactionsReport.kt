@@ -7,8 +7,7 @@ import android.database.Cursor
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.Window
+import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -22,10 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.adapter.TransactionsAdapter
-import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.HelperFunctions
-import com.ahmer.accounting.helper.MyCursorLoader
-import com.ahmer.accounting.helper.MyDatabaseHelper
+import com.ahmer.accounting.helper.*
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -36,7 +32,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
 import java.util.*
 
-class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
+    ActionMode.Callback {
 
     private lateinit var mAdapter: TransactionsAdapter
     private lateinit var mCvTotalBal: MaterialCardView
@@ -48,6 +45,9 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     private lateinit var mTvTotalCre: TextView
     private lateinit var mTvTotalDeb: TextView
     private lateinit var myDatabaseHelper: MyDatabaseHelper
+    private var mActionMode: ActionMode? = null
+    private var mIsMultiSelect = false
+    private var mSelectedIds = ArrayList<Int>()
     private var mUserId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +89,27 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = linearLayoutManager
+        mRecyclerView.addOnItemTouchListener(object : RecyclerItemClickListener(
+            applicationContext,
+            mRecyclerView,
+            object : OnItemClickListener {
+                override fun onItemClick(view: View, position: Int) {
+                    if (mIsMultiSelect) {
+                        //if multiple selection is enabled then select item on single click else perform normal click on item.
+                        multiSelect(position)
+                    }
+                }
+
+                override fun onItemLongClick(view: View, position: Int) {
+                    if (!mIsMultiSelect) {
+                        mSelectedIds = ArrayList()
+                        mIsMultiSelect = true
+                        mActionMode = startActionMode(this@UserTransactionsReport)
+                    }
+                    multiSelect(position)
+                }
+
+            }) {})
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
 
@@ -226,10 +247,31 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         }
     }
 
-    fun searchTransactionDescription(keyword: String) {
+    private fun searchTransactionDescription(keyword: String) {
         val cursor = myDatabaseHelper.searchTransDesc(mUserId, keyword)
-        mAdapter = TransactionsAdapter(applicationContext, cursor)
+        mAdapter = TransactionsAdapter(this, cursor)
         mRecyclerView.adapter = mAdapter
+    }
+
+    private fun multiSelect(position: Int) {
+        if (position < mAdapter.itemCount) {
+            if (mActionMode != null) {
+                if (mSelectedIds.contains(position)) {
+                    mSelectedIds.remove(position)
+                } else {
+                    mSelectedIds.add(position)
+                    mAdapter.selectedIds(mSelectedIds)
+                }
+                if (mSelectedIds.size > 0) {
+                    //show selected item count on action mode.
+                    mActionMode!!.title = mSelectedIds.size.toString()
+                } else {
+                    mActionMode!!.title = "" //remove item count from action mode.
+                    mActionMode!!.finish() //hide action mode.
+                }
+                mAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
@@ -281,6 +323,35 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
         // Keep empty
+    }
+
+    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        val inflater: MenuInflater? = mode?.menuInflater
+        inflater?.inflate(R.menu.activity_trans_delete, menu)
+        return true
+    }
+
+    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+        return false
+    }
+
+    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_delete_trans -> {
+                mode?.finish()
+            }
+            R.id.menu_select_all_trans -> {
+                mode?.finish()
+            }
+        }
+        return true
+    }
+
+    override fun onDestroyActionMode(mode: ActionMode?) {
+        mActionMode = null
+        mIsMultiSelect = false
+        mSelectedIds = ArrayList()
+        mAdapter.selectedIds(ArrayList<Int>())
     }
 
     override fun onDestroy() {

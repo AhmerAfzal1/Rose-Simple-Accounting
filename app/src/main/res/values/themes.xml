@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/primaryColor</item>
     </style>
 
     <style name="Theme.RoseSimpleAccounting.NoActionBar" parent="Theme.RoseSimpleAccounting">

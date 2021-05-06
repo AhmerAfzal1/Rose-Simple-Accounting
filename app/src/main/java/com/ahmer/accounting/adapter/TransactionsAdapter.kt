@@ -31,12 +31,14 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TransactionsAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
     private val mContext = context
     private val mCursor = cursor
+    private var mSelectedPositions = ArrayList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -69,6 +71,11 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.cvTransactionEntry.setOnClickListener {
             showDropDownDialog(mContext, transaction)
         }
+        if (mSelectedPositions.contains(position)) {
+            holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
+        } else {
+            holder.itemView.setBackgroundResource(R.color.white)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -77,6 +84,11 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         } else {
             mCursor.count
         }
+    }
+
+    fun selectedIds(ids: ArrayList<Int>) {
+        mSelectedPositions = ids
+        notifyDataSetChanged()
     }
 
     private fun showTransInfoDialog(context: Context, transactions: Transactions) {
