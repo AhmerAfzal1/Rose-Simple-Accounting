@@ -20,5 +20,4 @@ class Transactions {
 
     var modified: String = ""
 
-    var isSelected: Boolean = false
 }
