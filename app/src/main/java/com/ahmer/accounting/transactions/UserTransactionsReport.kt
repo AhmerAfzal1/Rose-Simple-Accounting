@@ -8,10 +8,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -234,7 +231,8 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 if (isSuccessfullyInserted) {
                     HelperFunctions.makeToast(
                         context,
-                        getString(R.string.transaction_added_successfully)
+                        getString(R.string.transaction_added_successfully),
+                        Toast.LENGTH_SHORT
                     )
                     Thread.sleep(200)
                     dialog.dismiss()
@@ -358,7 +356,11 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                         isDeletedSuccessfully = myDatabaseHelper.deleteTransactions(pos.toLong())
                     }
                     if (isDeletedSuccessfully) {
-                        HelperFunctions.makeToast(this, getString(R.string.trans_deleted))
+                        HelperFunctions.makeToast(
+                            this,
+                            getString(R.string.trans_deleted),
+                            Toast.LENGTH_SHORT
+                        )
                     }
                     dialog.dismiss()
                     mode?.finish()

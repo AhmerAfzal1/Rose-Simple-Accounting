@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -88,7 +89,11 @@ class AddUserProfileData : AppCompatActivity() {
             }
 
             if (isSuccessfullyAdded) {
-                HelperFunctions.makeToast(it.context, getString(R.string.toast_record_saved))
+                HelperFunctions.makeToast(
+                    it.context,
+                    getString(R.string.toast_record_saved),
+                    Toast.LENGTH_SHORT
+                )
                 Thread.sleep(200)
                 finish()
             }

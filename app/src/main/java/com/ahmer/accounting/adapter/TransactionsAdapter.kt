@@ -10,10 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -203,7 +200,8 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 if (isSuccessfullyUpdated) {
                     HelperFunctions.makeToast(
                         context,
-                        context.getString(R.string.transaction_updated_successfully)
+                        context.getString(R.string.transaction_updated_successfully),
+                        Toast.LENGTH_SHORT
                     )
                     Thread.sleep(200)
                     dialog.dismiss()

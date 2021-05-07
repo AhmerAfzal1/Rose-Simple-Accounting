@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
+import android.widget.Toast
 import com.ahmer.accounting.R
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
@@ -414,10 +415,18 @@ class MyDatabaseHelper(context: Context) :
             Log.e(Constants.LOG_TAG, e.message, e)
         } finally {
             if (isBackup) {
-                HelperFunctions.makeToast(mContext, mContext.getString(R.string.backup_complete))
+                HelperFunctions.makeToast(
+                    mContext,
+                    mContext.getString(R.string.backup_complete),
+                    Toast.LENGTH_SHORT
+                )
             } else {
                 mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
-                HelperFunctions.makeToast(mContext, mContext.getString(R.string.restore_complete))
+                HelperFunctions.makeToast(
+                    mContext,
+                    mContext.getString(R.string.restore_complete),
+                    Toast.LENGTH_SHORT
+                )
             }
             // Close the streams
             outputStream!!.flush()

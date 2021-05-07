@@ -21,12 +21,11 @@ class HelperFunctions : AppCompatActivity() {
         fun getDateTime(): String {
             val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
             val dateTime = Calendar.getInstance().time
-            Log.v(Constants.LOG_TAG, dateFormat.format(dateTime))
             return dateFormat.format(dateTime)
         }
 
-        fun makeToast(context: Context, msg: String) {
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+        fun makeToast(context: Context, msg: String, length: Int = Toast.LENGTH_LONG) {
+            Toast.makeText(context, msg, length).show()
         }
 
         fun getRoundedValue(value: Double): String {
@@ -53,12 +52,20 @@ class HelperFunctions : AppCompatActivity() {
                     if (isUserDel) {
                         isDeleted = myDatabaseHelper.deleteUserProfileData(id)
                         if (isDeleted) {
-                            makeToast(context, context.getString(R.string.users_deleted, userName))
+                            makeToast(
+                                context,
+                                context.getString(R.string.users_deleted, userName),
+                                Toast.LENGTH_SHORT
+                            )
                         }
                     } else {
                         isDeleted = myDatabaseHelper.deleteTransactions(id)
                         if (isDeleted) {
-                            makeToast(context, context.getString(R.string.trans_deleted))
+                            makeToast(
+                                context,
+                                context.getString(R.string.trans_deleted),
+                                Toast.LENGTH_SHORT
+                            )
                         }
                     }
                     dialog.dismiss()
