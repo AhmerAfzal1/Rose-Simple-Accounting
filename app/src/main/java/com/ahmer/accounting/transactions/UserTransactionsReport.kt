@@ -27,6 +27,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.text.SimpleDateFormat
@@ -341,8 +342,32 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_delete_trans -> {
-                HelperFunctions.makeToast(applicationContext, getString(R.string.under_progress))
-                mode?.finish()
+                val alertBuilder = MaterialAlertDialogBuilder(this)
+                alertBuilder.setTitle(getString(R.string.confirmation))
+                alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
+                alertBuilder.setMessage(
+                    getString(
+                        R.string.trans_bulk_delete_warning_msg,
+                        mSelectedIds.size
+                    )
+                )
+                alertBuilder.setCancelable(false)
+                alertBuilder.setPositiveButton(getString(R.string.delete)) { dialog, which ->
+                    var isDeletedSuccessfully = false
+                    for (pos in mSelectedIds) {
+                        isDeletedSuccessfully = myDatabaseHelper.deleteTransactions(pos.toLong())
+                    }
+                    if (isDeletedSuccessfully) {
+                        HelperFunctions.makeToast(this, getString(R.string.trans_deleted))
+                    }
+                    dialog.dismiss()
+                    mode?.finish()
+                }
+                alertBuilder.setNegativeButton(getString(android.R.string.cancel)) { dialog, which ->
+                    dialog.dismiss()
+                    mode?.finish()
+                }
+                alertBuilder.show()
             }
             R.id.menu_select_all_trans -> {
                 if (!mIsSelectAll) {

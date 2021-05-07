@@ -39,7 +39,7 @@ class HelperFunctions : AppCompatActivity() {
             try {
                 val myDatabaseHelper = MyDatabaseHelper(context)
                 val alertBuilder = MaterialAlertDialogBuilder(context)
-                alertBuilder.setTitle("Confirmation")
+                alertBuilder.setTitle(context.getString(R.string.confirmation))
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
                 val msg: String = if (isUserDel) {
                     context.getString(R.string.user_delete_warning_msg, userName)
@@ -48,7 +48,7 @@ class HelperFunctions : AppCompatActivity() {
                 }
                 alertBuilder.setMessage(msg)
                 alertBuilder.setCancelable(false)
-                alertBuilder.setPositiveButton("Delete") { dialog, which ->
+                alertBuilder.setPositiveButton(context.getString(R.string.delete)) { dialog, which ->
                     val isDeleted: Boolean
                     if (isUserDel) {
                         isDeleted = myDatabaseHelper.deleteUserProfileData(id)
