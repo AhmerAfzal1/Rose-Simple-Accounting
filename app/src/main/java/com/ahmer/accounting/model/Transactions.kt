@@ -19,4 +19,6 @@ class Transactions {
     var created: String = ""
 
     var modified: String = ""
+
+    var isSelected: Boolean = false
 }

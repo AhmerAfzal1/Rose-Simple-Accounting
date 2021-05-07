@@ -86,8 +86,13 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         }
     }
 
-    fun selectedIds(ids: ArrayList<Int>) {
+    fun addSelectedIds(ids: ArrayList<Int>) {
         mSelectedIds = ids
+        notifyDataSetChanged()
+    }
+
+    fun removeSelectedIds(ids: Int) {
+        mSelectedIds.remove(ids)
         notifyDataSetChanged()
     }
 

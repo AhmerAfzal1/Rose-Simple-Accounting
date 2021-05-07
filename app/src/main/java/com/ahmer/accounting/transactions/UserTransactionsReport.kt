@@ -260,16 +260,17 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
             if (mActionMode != null) {
                 if (mSelectedIds.contains(position)) {
                     mSelectedIds.remove(position)
+                    mAdapter.removeSelectedIds(position)
                 } else {
                     mSelectedIds.add(position)
-                    mAdapter.selectedIds(mSelectedIds)
+                    mAdapter.addSelectedIds(mSelectedIds)
                 }
                 if (mSelectedIds.size > 0) {
-                    //show selected item count on action mode.
-                    mActionMode!!.title = mSelectedIds.size.toString()
+                    //Show title selected item count on action mode.
+                    mActionMode!!.title = "${mSelectedIds.size} selected"
                 } else {
-                    mActionMode!!.title = "" //remove item count from action mode.
-                    mActionMode!!.finish() //hide action mode.
+                    mActionMode!!.title = "" //Remove item count from action mode.
+                    mActionMode!!.finish() //Hide action mode.
                 }
                 mAdapter.notifyDataSetChanged()
             }
@@ -347,21 +348,24 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 if (!mIsSelectAll) {
                     Log.v(Constants.LOG_TAG, "Select All")
                     mIsSelectAll = true
+                    mIsMultiSelect = true
                     mSelectedIds = ArrayList()
-                    mAdapter.selectedIds(ArrayList())
+                    mAdapter.addSelectedIds(ArrayList())
                     val tempList = ArrayList<Int>()
                     for (i in 0 until mAdapter.itemCount) {
                         tempList.add(i)
                         mSelectedIds.add(i)
                     }
-                    mAdapter.selectedIds(tempList)
-                    mActionMode!!.title = mSelectedIds.size.toString()
+                    mAdapter.addSelectedIds(tempList)
+                    mActionMode!!.title = "${mSelectedIds.size} selected"
                 } else {
                     Log.v(Constants.LOG_TAG, "DeSelect All")
                     mIsSelectAll = false
+                    mIsMultiSelect = false
                     mSelectedIds = ArrayList()
-                    mAdapter.selectedIds(ArrayList())
+                    mAdapter.addSelectedIds(ArrayList())
                     mActionMode!!.title = ""
+                    mActionMode!!.finish()
                 }
             }
         }
@@ -371,8 +375,9 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
     override fun onDestroyActionMode(mode: ActionMode?) {
         mActionMode = null
         mIsMultiSelect = false
+        mIsSelectAll = false
         mSelectedIds = ArrayList()
-        mAdapter.selectedIds(ArrayList<Int>())
+        mAdapter.addSelectedIds(ArrayList())
     }
 
     override fun onDestroy() {
