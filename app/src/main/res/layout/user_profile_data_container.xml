@@ -44,7 +44,7 @@
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
                 app:srcCompat="@drawable/ic_baseline_info"
-                app:tint="@color/primaryColor" />
+                app:tint="?attr/colorSecondaryVariant" />
 
             <ImageView
                 android:id="@+id/ivBtnEdit"
@@ -53,7 +53,7 @@
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
                 app:srcCompat="@drawable/ic_baseline_edit"
-                app:tint="@color/primaryColor" />
+                app:tint="?attr/colorSecondaryVariant" />
 
             <ImageView
                 android:id="@+id/ivBtnDelete"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
                 app:srcCompat="@drawable/ic_baseline_delete_forever"
-                app:tint="@color/primaryColor" />
+                app:tint="?attr/colorSecondaryVariant" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

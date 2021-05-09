@@ -1,8 +1,7 @@
-# RoseSimpleAccounting
-A simple accounting task perform and keep all transactions in database using Kotlin
+# Rose Account Manager
+A simple accounting task perform and keep all transactions record in database using Kotlin
 
 This project is under progress...
-
 
 ## App-Ads.txt
 

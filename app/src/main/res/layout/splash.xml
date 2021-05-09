@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryDarkColor"
+    android:background="?attr/colorPrimary"
     tools:ignore="Overdraw">
 
     <ImageView
-        android:layout_width="192dp"
-        android:layout_height="192dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="top|center"
-        android:layout_marginTop="96dp"
         android:contentDescription="@null"
-        android:src="@drawable/logo" />
+        android:src="@drawable/bg_splash" />
 </FrameLayout>

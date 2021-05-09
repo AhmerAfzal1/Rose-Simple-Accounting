@@ -33,7 +33,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/primaryDarkColor"
+            app:cardBackgroundColor="?attr/colorSecondaryVariant"
             app:cardCornerRadius="5dp"
             app:cardElevation="10dp"
             app:cardPreventCornerOverlap="false">
@@ -93,7 +93,7 @@
         android:layout_below="@id/linearLayoutUserBasicInfo"
         android:layout_centerInParent="true"
         android:padding="5dp"
-        app:cardBackgroundColor="@color/primaryColor"
+        app:cardBackgroundColor="?attr/colorPrimary"
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp">
 
@@ -292,7 +292,7 @@
                     android:gravity="center"
                     android:text="@string/balances"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/primaryDarkColor"
+                    android:textColor="?attr/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -303,7 +303,7 @@
                     android:gravity="center"
                     android:text="@string/balances"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/primaryDarkColor" />
+                    android:textColor="?attr/colorPrimary" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

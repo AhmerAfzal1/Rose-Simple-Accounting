@@ -69,7 +69,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             showDropDownDialog(mContext, transaction)
         }
         if (mSelectedIds.contains(position)) {
-            holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
+            holder.itemView.setBackgroundResource(R.color.teal_200)
         } else {
             holder.itemView.setBackgroundResource(R.color.white)
         }

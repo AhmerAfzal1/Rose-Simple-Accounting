@@ -35,7 +35,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:visibility="visible"
-        app:backgroundTint="@color/primaryDarkColor"
+        app:backgroundTint="?attr/colorSecondaryVariant"
         app:borderWidth="2dp"
         app:elevation="6dp"
         app:icon="@drawable/ic_baseline_person_add"
