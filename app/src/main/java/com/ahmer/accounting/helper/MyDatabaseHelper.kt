@@ -358,7 +358,7 @@ class MyDatabaseHelper(context: Context) :
         return previousBalance
     }
 
-    fun getSumForColumns(id: Long, nameColumn: String): Double {
+    fun getSumForColumns(id: Long, nameColumn: String, isAllAccountsSum: Boolean = false): Double {
         var sum: Double = 0.toDouble()
         var sumForColumn = ""
         when (nameColumn) {
@@ -373,9 +373,12 @@ class MyDatabaseHelper(context: Context) :
             }
         }
         val getSumFromDatabase: SQLiteDatabase = this.readableDatabase
-        val userID =
-            "SELECT SUM ($sumForColumn) AS TOTAL FROM ${Constants.TranColumn.TABLE_NAME} WHERE ${Constants.TranColumn.USER_ID} = $id ;"
-        val cursor: Cursor = getSumFromDatabase.rawQuery(userID, null)
+        val query: String = if (isAllAccountsSum) {
+            "SELECT SUM ($sumForColumn) AS TOTAL FROM ${Constants.TranColumn.TABLE_NAME};"
+        } else {
+            "SELECT SUM ($sumForColumn) AS TOTAL FROM ${Constants.TranColumn.TABLE_NAME} WHERE ${Constants.TranColumn.USER_ID} = $id;"
+        }
+        val cursor: Cursor = getSumFromDatabase.rawQuery(query, null)
         try {
             if (cursor.moveToFirst()) {
                 sum = cursor.getDouble(cursor.getColumnIndexOrThrow("TOTAL"))

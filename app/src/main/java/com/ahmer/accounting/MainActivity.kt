@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -53,6 +54,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     private lateinit var mResultLauncherCreateDB: ActivityResultLauncher<Intent>
     private lateinit var mResultLauncherRestoreDB: ActivityResultLauncher<Intent>
     private lateinit var myDatabaseHelper: MyDatabaseHelper
+    private lateinit var mTvTotalAllDebit: TextView
+    private lateinit var mTvTotalAllCredit: TextView
+    private lateinit var mTvTotalAllBalances: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +80,10 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         drawerToggle.syncState()
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
+        val headerNavView = navView.getHeaderView(0)
+        mTvTotalAllDebit = headerNavView.findViewById(R.id.tvAllTotalDebit)
+        mTvTotalAllCredit = headerNavView.findViewById(R.id.tvAllTotalCredit)
+        mTvTotalAllBalances = headerNavView.findViewById(R.id.tvAllTotalBalance)
 
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
         mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
@@ -249,6 +257,12 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             mRecyclerView.visibility = View.GONE
         }
         mRecyclerView.adapter = mAdapter
+        val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
+        val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
+        val mAllBalance = myDatabaseHelper.getSumForColumns(0, "Balance", true)
+        mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit)
+        mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit)
+        mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
