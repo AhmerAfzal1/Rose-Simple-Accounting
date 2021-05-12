@@ -76,4 +76,7 @@
     <string name="edit">Edit</string>
     <string name="info">Info</string>
     <string name="confirmation">Confirmation</string>
+    <string name="diary_export_header">Headache diary export: %1$s - %2$s</string>
+    <string name="diary_export_footer">Page %1$s / %2$s | Export date: %3$s</string>
+    <string name="generate_pdf">Generate PDF</string>
 </resources>

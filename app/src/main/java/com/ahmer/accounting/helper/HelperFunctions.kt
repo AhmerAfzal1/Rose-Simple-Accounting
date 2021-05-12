@@ -2,6 +2,7 @@ package com.ahmer.accounting.helper
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -12,6 +13,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 
 class HelperFunctions : AppCompatActivity() {
@@ -22,6 +26,50 @@ class HelperFunctions : AppCompatActivity() {
             val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
             val dateTime = Calendar.getInstance().time
             return dateFormat.format(dateTime)
+        }
+
+        fun getDateTimeForFileName(): String {
+            var dateTime = ""
+            try {
+                val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                dateTime = format.format(Date()).toString()
+            }catch (pe: Exception) {
+                Log.e(Constants.LOG_TAG, pe.message, pe)
+                FirebaseCrashlytics.getInstance().recordException(pe)
+            }
+            return dateTime
+        }
+
+        fun convertDateTimeShortFormat(dataTime: String): String {
+            var dateTimeShort = ""
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val inputFormatter = DateTimeFormatterBuilder().parseCaseInsensitive()
+                        .append(
+                            DateTimeFormatter.ofPattern(
+                                Constants.DATE_TIME_PATTERN,
+                                Locale.getDefault()
+                            )
+                        )
+                        .toFormatter()
+                    val parsed = LocalDateTime.parse(dataTime, inputFormatter)
+                    val outputFormatter =
+                        DateTimeFormatter.ofPattern(
+                            Constants.DATE_SHORT_PATTERN,
+                            Locale.getDefault()
+                        )
+                    dateTimeShort = outputFormatter.format(parsed)
+                } else {
+                    val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
+                    val date: Date = sdfOld.parse(dataTime)!!
+                    val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                    dateTimeShort = sdfNew.format(date)
+                }
+            } catch (pe: Exception) {
+                Log.e(Constants.LOG_TAG, pe.message, pe)
+                FirebaseCrashlytics.getInstance().recordException(pe)
+            }
+            return dateTimeShort
         }
 
         fun makeToast(context: Context, msg: String, length: Int = Toast.LENGTH_LONG) {

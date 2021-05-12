@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.helper.Constants
-import com.ahmer.afzal.utils.constants.PermissionConstants
-import com.ahmer.afzal.utils.utilcode.PermissionUtils
-import com.ahmer.afzal.utils.utilcode.ScreenUtils
+import io.ahmer.utils.constants.PermissionConstants
+import io.ahmer.utils.utilcode.PermissionUtils
+import io.ahmer.utils.utilcode.ScreenUtils
 
 class Splash : AppCompatActivity() {
 

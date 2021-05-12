@@ -33,13 +33,13 @@ import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.user.AddUserProfileData
-import com.ahmer.afzal.utils.constants.PermissionConstants
-import com.ahmer.afzal.utils.utilcode.FileUtils
-import com.ahmer.afzal.utils.utilcode.PermissionUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.constants.PermissionConstants
+import io.ahmer.utils.utilcode.FileUtils
+import io.ahmer.utils.utilcode.PermissionUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -147,8 +147,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             R.id.nav_backup -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
-                        val fileName = format.format(Date()).toString() + "_backup.abf"
+                        val fileName = HelperFunctions.getDateTimeForFileName() + "_backup.abf"
                         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                             addCategory(Intent.CATEGORY_OPENABLE)
                             type = "application/vnd.sqlite3"

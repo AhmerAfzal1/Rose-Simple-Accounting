@@ -14,7 +14,13 @@ import com.ahmer.accounting.R
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.itextpdf.text.Document
+import com.itextpdf.text.DocumentException
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
 import java.io.*
+
 
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION) {
@@ -301,7 +307,7 @@ class MyDatabaseHelper(context: Context) :
         return mCursor
     }
 
-    fun getAllTransactionsByUserId(mUserId: Long): Cursor {
+    fun getAllTransactionsByUserId(mUserId: Long, orderBy: String? = null): Cursor {
         val database: SQLiteDatabase = this.readableDatabase
         val projections = arrayOf(
             BaseColumns._ID,
@@ -321,7 +327,7 @@ class MyDatabaseHelper(context: Context) :
             arrayOf(mUserId.toString()),
             null,
             null,
-            null
+            orderBy
         )
         try {
             cursor.moveToNext()
@@ -435,6 +441,68 @@ class MyDatabaseHelper(context: Context) :
             outputStream!!.flush()
             outputStream.close()
             inputStream?.close()
+        }
+    }
+
+    fun generatePdf(uri: Uri, id: Long, userName: String): Boolean {
+        val mDocument = Document()
+        val mOrderBy: String = BaseColumns._ID + " ASC"
+        val mCursor = getAllTransactionsByUserId(id, mOrderBy)
+        try {
+            val mOutPutStream = mContext.contentResolver.openOutputStream(uri)
+
+            PdfWriter.getInstance(mDocument, mOutPutStream)
+            mDocument.open()
+            mDocument.addCreationDate()
+            mDocument.addAuthor(mContext.getString(R.string.app_name))
+            mDocument.addTitle("Transaction record for $userName")
+            mDocument.addCreator(mContext.getString(R.string.app_name))
+
+            val mParagraph = Paragraph()
+            mParagraph.add(mContext.getString(R.string.app_name))
+            mParagraph.add("$userName Account Statement")
+            mDocument.add(mParagraph)
+
+            val mTable = PdfPTable(5)
+            mTable.addCell(Constants.TranColumn.DATE)
+            mTable.addCell(Constants.TranColumn.DESCRIPTION)
+            mTable.addCell(Constants.TranColumn.DEBIT)
+            mTable.addCell(Constants.TranColumn.CREDIT)
+            mTable.addCell(Constants.TranColumn.BALANCE)
+
+            mCursor.moveToFirst()
+            if (mCursor.moveToFirst()) do {
+                val mDate: String = HelperFunctions.convertDateTimeShortFormat(
+                    mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
+                )
+                val mDescription: String =
+                    mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
+                val mCredit: Double =
+                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
+                val mDebit: Double =
+                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
+                val mBalance: Double =
+                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
+                mTable.addCell(mDate)
+                mTable.addCell(mDescription)
+                mTable.addCell(mCredit.toString())
+                mTable.addCell(mDebit.toString())
+                mTable.addCell(mBalance.toString())
+            } while (mCursor.moveToNext())
+
+            mDocument.add(mTable)
+            return true
+        } catch (de: DocumentException) {
+            Log.e(Constants.LOG_TAG, de.message, de)
+            FirebaseCrashlytics.getInstance().recordException(de)
+            return false
+        } catch (e: Exception) {
+            Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            return false
+        } finally {
+            mDocument.close()
+            mCursor.close()
         }
     }
 }

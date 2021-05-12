@@ -3,7 +3,6 @@ package com.ahmer.accounting.adapter
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
-import android.os.Build
 import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,11 +22,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.util.*
 import kotlin.collections.ArrayList
 
 class TransactionsAdapter(context: Context, cursor: Cursor) :
@@ -262,35 +256,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             val tvDesc = itemView.findViewById<TextView>(R.id.tvDescription)
             val tvDeb = itemView.findViewById<TextView>(R.id.tvDebit)
             val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
-
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val inputFormatter = DateTimeFormatterBuilder().parseCaseInsensitive()
-                        .append(
-                            DateTimeFormatter.ofPattern(
-                                Constants.DATE_TIME_PATTERN,
-                                Locale.getDefault()
-                            )
-                        )
-                        .toFormatter()
-                    val parsed = LocalDateTime.parse(trans.date, inputFormatter)
-                    val outputFormatter =
-                        DateTimeFormatter.ofPattern(
-                            Constants.DATE_SHORT_PATTERN,
-                            Locale.getDefault()
-                        )
-                    tvDate.text = outputFormatter.format(parsed)
-                } else {
-                    val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
-                    val date: Date = sdfOld.parse(trans.date)!!
-                    val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
-                    tvDate.text = sdfNew.format(date)
-                }
-            } catch (pe: Exception) {
-                Log.e(Constants.LOG_TAG, pe.message, pe)
-                FirebaseCrashlytics.getInstance().recordException(pe)
-            }
-
+            tvDate.text = HelperFunctions.convertDateTimeShortFormat(trans.date)
             tvDesc.text = trans.description
             if (trans.debit == 0.toDouble()) {
                 tvDeb.text = ""

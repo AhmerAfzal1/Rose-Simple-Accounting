@@ -1,14 +1,21 @@
 package com.ahmer.accounting.transactions
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -27,6 +34,9 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.constants.PermissionConstants
+import io.ahmer.utils.utilcode.PermissionUtils
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -113,6 +123,16 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
 
+        val mResultLauncherGeneratePdf: ActivityResultLauncher<Intent> =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val uri: Uri? = result.data?.data
+                    if (uri != null && mUserName != null) {
+                        myDatabaseHelper.generatePdf(uri, mUserId, mUserName)
+                    }
+                }
+            }
+
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_add_trans -> {
@@ -134,6 +154,44 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                             return false
                         }
                     })
+                }
+                R.id.menu_export_to_pdf -> {
+                    if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            val fileName = HelperFunctions.getDateTimeForFileName() + ".pdf"
+                            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = "application/pdf"
+                                putExtra(Intent.EXTRA_TITLE, fileName)
+                            }
+                            mResultLauncherGeneratePdf.launch(intent)
+                        } else {
+                            val mPath = Environment.getExternalStorageDirectory().absolutePath
+                            val mDirPath = File("$mPath/${getString(R.string.app_name)}")
+                            if (!mDirPath.exists()) {
+                                mDirPath.mkdirs()
+                            }
+                            val mFileName =
+                                File(mDirPath, HelperFunctions.getDateTimeForFileName() + ".pdf")
+                            if (mFileName.exists()) {
+                                mFileName.delete()
+                            }
+                            if (mUserName != null) {
+                                val isGenerated = myDatabaseHelper.generatePdf(
+                                    Uri.fromFile(mFileName),
+                                    mUserId,
+                                    mUserName
+                                )
+                                if (isGenerated) {
+                                    HelperFunctions.makeToast(
+                                        applicationContext,
+                                        "Successfully pdf generated",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
             true
