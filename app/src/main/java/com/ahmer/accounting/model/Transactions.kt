@@ -16,6 +16,8 @@ class Transactions {
 
     var balance: Double = 0.toDouble()
 
+    var isDebit: Boolean = false
+
     var created: String = ""
 
     var modified: String = ""

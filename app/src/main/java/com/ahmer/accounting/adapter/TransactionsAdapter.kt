@@ -22,7 +22,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlin.collections.ArrayList
 
 class TransactionsAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
@@ -53,6 +52,8 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
             balance =
                 mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
+            isDebit =
+                HelperFunctions.checkBoolean(mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.IS_DEBIT)))
             created =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREATED_ON))
             modified =
@@ -175,13 +176,16 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                             userId = trans.userId
                             credit = 0.toDouble()
                             debit = 0.toDouble()
+                            balance = myDatabaseHelper.getPreviousBalanceByUserId(trans.userId)
                             if (typeAmount == context.getString(R.string.credit_plus)) {
                                 credit = newAmount
                                 balance += newAmount
+                                isDebit = false
                             }
                             if (typeAmount == context.getString(R.string.debit_minus)) {
                                 debit = newAmount
                                 balance -= newAmount
+                                isDebit = true
                             }
                             date = inputDate.text.toString()
                             description = inputDescription.text.toString()

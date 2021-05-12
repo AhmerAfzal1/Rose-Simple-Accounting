@@ -46,6 +46,7 @@ class Constants {
             const val CREDIT: String = "Credit"
             const val DEBIT: String = "Debit"
             const val BALANCE: String = "Balance"
+            const val IS_DEBIT: String = "IsDebit"
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
 

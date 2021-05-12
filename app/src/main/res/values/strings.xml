@@ -79,4 +79,6 @@
     <string name="diary_export_header">Headache diary export: %1$s - %2$s</string>
     <string name="diary_export_footer">Page %1$s / %2$s | Export date: %3$s</string>
     <string name="generate_pdf">Generate PDF</string>
+    <string name="pdf_generated">Successfully PDF file generated.</string>
+    <string name="pdf_not_generated">There is no transaction for generate PDF file.</string>
 </resources>

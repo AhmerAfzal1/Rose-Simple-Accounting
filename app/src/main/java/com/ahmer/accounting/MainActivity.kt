@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         mRecyclerView.adapter = mAdapter
         val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
         val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
-        val mAllBalance = myDatabaseHelper.getSumForColumns(0, "Balance", true)
+        val mAllBalance = mAllCredit - mAllDebit
         mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit)
         mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit)
         mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance)

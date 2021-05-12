@@ -176,19 +176,27 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                             if (mFileName.exists()) {
                                 mFileName.delete()
                             }
-                            if (mUserName != null) {
-                                val isGenerated = myDatabaseHelper.generatePdf(
-                                    Uri.fromFile(mFileName),
-                                    mUserId,
-                                    mUserName
-                                )
-                                if (isGenerated) {
-                                    HelperFunctions.makeToast(
-                                        applicationContext,
-                                        "Successfully pdf generated",
-                                        Toast.LENGTH_SHORT
+                            if (mAdapter.itemCount > 0) {
+                                if (mUserName != null) {
+                                    val isGenerated = myDatabaseHelper.generatePdf(
+                                        Uri.fromFile(mFileName),
+                                        mUserId,
+                                        mUserName
                                     )
+                                    if (isGenerated) {
+                                        HelperFunctions.makeToast(
+                                            applicationContext,
+                                            getString(R.string.pdf_generated),
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
                                 }
+                            } else {
+                                HelperFunctions.makeToast(
+                                    applicationContext,
+                                    getString(R.string.pdf_not_generated),
+                                    Toast.LENGTH_LONG
+                                )
                             }
                         }
                     }
@@ -270,13 +278,16 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                             userId = userID
                             credit = 0.toDouble()
                             debit = 0.toDouble()
+                            balance = myDatabaseHelper.getPreviousBalanceByUserId(userID)
                             if (typeAmount == getString(R.string.credit_plus)) {
                                 credit = newAmount
                                 balance += newAmount
+                                isDebit = false
                             }
                             if (typeAmount == getString(R.string.debit_minus)) {
                                 debit = newAmount
                                 balance -= newAmount
+                                isDebit = true
                             }
                             date = newDate
                             description = newDescription
@@ -365,7 +376,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
         val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
-        val mUserBalance = myDatabaseHelper.getSumForColumns(mUserId, "Balance")
+        val mUserBalance = mUserCredit - mUserDebit
         val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
         if (mTotalBalance > "0") {
             mCvTotalBal.setBackgroundColor(ContextCompat.getColor(context, R.color.colorGreenLight))

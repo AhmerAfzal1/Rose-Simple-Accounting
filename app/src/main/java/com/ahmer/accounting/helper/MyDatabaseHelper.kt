@@ -53,6 +53,7 @@ class MyDatabaseHelper(context: Context) :
             put(Constants.TranColumn.CREDIT, trans.credit)
             put(Constants.TranColumn.DEBIT, trans.debit)
             put(Constants.TranColumn.BALANCE, trans.balance)
+            put(Constants.TranColumn.IS_DEBIT, trans.isDebit)
             if (isModified) {
                 put(Constants.TranColumn.LAST_MODIFIED, trans.modified)
             } else {
@@ -91,8 +92,10 @@ class MyDatabaseHelper(context: Context) :
                     "${Constants.TranColumn.CREDIT} REAL, " +
                     "${Constants.TranColumn.DEBIT} REAL, " +
                     "${Constants.TranColumn.BALANCE} REAL, " +
+                    "${Constants.TranColumn.IS_DEBIT} INTEGER, " +
                     "${Constants.TranColumn.CREATED_ON} TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "${Constants.TranColumn.LAST_MODIFIED} TIMESTAMP DEFAULT \"\", " +
+                    "CHECK(${Constants.TranColumn.IS_DEBIT} IN (0, 1)), " +
                     "FOREIGN KEY (${Constants.TranColumn.USER_ID}) REFERENCES ${Constants.UserColumn.TABLE_NAME}(${BaseColumns._ID}) ON DELETE CASCADE" +
                     ");"
             db?.execSQL("PRAGMA foreign_keys = ON;")
@@ -317,6 +320,7 @@ class MyDatabaseHelper(context: Context) :
             Constants.TranColumn.CREDIT,
             Constants.TranColumn.DEBIT,
             Constants.TranColumn.BALANCE,
+            Constants.TranColumn.IS_DEBIT,
             Constants.TranColumn.CREATED_ON,
             Constants.TranColumn.LAST_MODIFIED
         )
@@ -373,9 +377,6 @@ class MyDatabaseHelper(context: Context) :
             }
             "Debit" -> {
                 sumForColumn = Constants.TranColumn.DEBIT
-            }
-            "Balance" -> {
-                sumForColumn = Constants.TranColumn.BALANCE
             }
         }
         val getSumFromDatabase: SQLiteDatabase = this.readableDatabase
@@ -437,7 +438,6 @@ class MyDatabaseHelper(context: Context) :
                     Toast.LENGTH_SHORT
                 )
             }
-            // Close the streams
             outputStream!!.flush()
             outputStream.close()
             inputStream?.close()
@@ -455,7 +455,7 @@ class MyDatabaseHelper(context: Context) :
             mDocument.open()
             mDocument.addCreationDate()
             mDocument.addAuthor(mContext.getString(R.string.app_name))
-            mDocument.addTitle("Transaction record for $userName")
+            mDocument.addTitle("$userName Account Statement")
             mDocument.addCreator(mContext.getString(R.string.app_name))
 
             val mParagraph = Paragraph()

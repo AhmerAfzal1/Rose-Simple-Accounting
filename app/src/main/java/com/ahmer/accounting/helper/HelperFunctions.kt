@@ -33,7 +33,7 @@ class HelperFunctions : AppCompatActivity() {
             try {
                 val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
                 dateTime = format.format(Date()).toString()
-            }catch (pe: Exception) {
+            } catch (pe: Exception) {
                 Log.e(Constants.LOG_TAG, pe.message, pe)
                 FirebaseCrashlytics.getInstance().recordException(pe)
             }
@@ -80,6 +80,11 @@ class HelperFunctions : AppCompatActivity() {
             val round = DecimalFormat("#,##0.##")
             round.roundingMode = RoundingMode.HALF_UP
             return round.format(value)
+        }
+
+        fun checkBoolean(int: Int): Boolean {
+            // 0 for false and 1 for true
+            return int != 0
         }
 
         fun confirmDelete(context: Context, id: Long, userName: String = "", isUserDel: Boolean) {
