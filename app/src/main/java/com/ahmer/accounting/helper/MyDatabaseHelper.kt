@@ -13,9 +13,8 @@ import com.ahmer.accounting.R
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.itextpdf.text.Document
-import com.itextpdf.text.DocumentException
-import com.itextpdf.text.Paragraph
+import com.itextpdf.text.*
+import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import io.ahmer.utils.utilcode.ToastUtils
@@ -438,7 +437,7 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun generatePdf(uri: Uri, id: Long, userName: String): Boolean {
-        val mDocument = Document()
+        val mDocument = Document(PageSize.A4, 72F, 72F, 72F, 72F)
         val mOrderBy: String = BaseColumns._ID + " ASC"
         val mCursor = getAllTransactionsByUserId(id, mOrderBy)
         try {
@@ -451,17 +450,22 @@ class MyDatabaseHelper(context: Context) :
             mDocument.addTitle("$userName Account Statement")
             mDocument.addCreator(mContext.getString(R.string.app_name))
 
-            val mParagraph = Paragraph()
-            mParagraph.add(mContext.getString(R.string.app_name))
-            mParagraph.add("$userName Account Statement")
-            mDocument.add(mParagraph)
+            val mParagraph1 = paragraphFormat(mContext.getString(R.string.app_name), false)
+            val mParagraph2 = paragraphFormat("$userName Account Statement", true)
+            val mParagraph3 = Paragraph("\n")
+            mDocument.add(mParagraph1)
+            mDocument.add(mParagraph2)
+            mDocument.add(mParagraph3)
 
             val mTable = PdfPTable(5)
-            mTable.addCell(Constants.TranColumn.DATE)
-            mTable.addCell(Constants.TranColumn.DESCRIPTION)
-            mTable.addCell(Constants.TranColumn.DEBIT)
-            mTable.addCell(Constants.TranColumn.CREDIT)
-            mTable.addCell(Constants.TranColumn.BALANCE)
+            mTable.widthPercentage = 100F
+            mTable.setTotalWidth(floatArrayOf(72F, 216F, 72F, 72F, 72F))
+            mTable.isLockedWidth = true
+            mTable.addCell(cellFormat(Constants.TranColumn.DATE, true))
+            mTable.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
+            mTable.addCell(cellFormat(Constants.TranColumn.DEBIT, true))
+            mTable.addCell(cellFormat(Constants.TranColumn.CREDIT, true))
+            mTable.addCell(cellFormat(Constants.TranColumn.BALANCE, true))
 
             mCursor.moveToFirst()
             if (mCursor.moveToFirst()) do {
@@ -470,17 +474,43 @@ class MyDatabaseHelper(context: Context) :
                 )
                 val mDescription: String =
                     mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
-                val mCredit: Double =
-                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
-                val mDebit: Double =
-                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
-                val mBalance: Double =
-                    mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
-                mTable.addCell(mDate)
-                mTable.addCell(mDescription)
-                mTable.addCell(mCredit.toString())
-                mTable.addCell(mDebit.toString())
-                mTable.addCell(mBalance.toString())
+                val mCredit: String =
+                    HelperFunctions.getRoundedValue(
+                        mCursor.getDouble(
+                            mCursor.getColumnIndexOrThrow(
+                                Constants.TranColumn.CREDIT
+                            )
+                        )
+                    )
+                val mDebit: String =
+                    HelperFunctions.getRoundedValue(
+                        mCursor.getDouble(
+                            mCursor.getColumnIndexOrThrow(
+                                Constants.TranColumn.DEBIT
+                            )
+                        )
+                    )
+                val mBalance: String =
+                    HelperFunctions.getRoundedValue(
+                        mCursor.getDouble(
+                            mCursor.getColumnIndexOrThrow(
+                                Constants.TranColumn.BALANCE
+                            )
+                        )
+                    )
+                mTable.addCell(cellFormat(mDate, false, "Center"))
+                mTable.addCell(cellFormat(mDescription, false))
+                if (mCredit == "0") {
+                    mTable.addCell("")
+                } else {
+                    mTable.addCell(cellFormat(mCredit, false, "Right"))
+                }
+                if (mDebit == "0") {
+                    mTable.addCell("")
+                } else {
+                    mTable.addCell(cellFormat(mDebit, false, "Right"))
+                }
+                mTable.addCell(cellFormat(mBalance, false, "Right"))
             } while (mCursor.moveToNext())
 
             mDocument.add(mTable)
@@ -497,5 +527,54 @@ class MyDatabaseHelper(context: Context) :
             mDocument.close()
             mCursor.close()
         }
+    }
+
+    private fun cellFormat(string: String, isForTable: Boolean, alignment: String = ""): PdfPCell {
+        val font = Font(Font.FontFamily.HELVETICA)
+        font.color = BaseColor.BLACK
+        if (isForTable) {
+            font.size = 14F
+            font.style = Font.BOLD
+        } else {
+            font.size = 12F
+            font.style = Font.NORMAL
+        }
+        val pdfPCell = PdfPCell(Phrase(string, font))
+        if (isForTable) {
+            pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+            pdfPCell.horizontalAlignment = Element.ALIGN_CENTER
+            pdfPCell.paddingTop = 5F
+            pdfPCell.paddingBottom = 8F
+        } else {
+            when (alignment) {
+                "Right" -> {
+                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                    pdfPCell.horizontalAlignment = Element.ALIGN_RIGHT
+                }
+                "Center" -> {
+                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                    pdfPCell.horizontalAlignment = Element.ALIGN_CENTER
+                }
+                "" -> {
+                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                }
+            }
+        }
+        return pdfPCell
+    }
+
+    private fun paragraphFormat(string: String, isSubParagraph: Boolean): Paragraph {
+        val font = Font(Font.FontFamily.HELVETICA)
+        font.color = BaseColor.BLACK
+        if (!isSubParagraph) {
+            font.size = 18F
+            font.style = Font.BOLD
+        } else {
+            font.size = 16F
+            font.style = Font.NORMAL
+        }
+        val paragraph = Paragraph(string, font)
+        paragraph.alignment = Element.ALIGN_CENTER
+        return paragraph
     }
 }
