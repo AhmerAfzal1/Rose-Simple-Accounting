@@ -19,7 +19,7 @@
     <string name="name">Name</string>
     <string name="phone">Phone</string>
     <string name="save">Save</string>
-    <string name="title_all_transaction_record">All Transactions Record</string>
+    <string name="title_all_transaction_record">All Transactions</string>
     <string name="title_all_user_record">All Users Record</string>
     <string name="title_toolbar_add_user">Add User Data</string>
     <string name="title_toolbar_edit_user">Edit User Data</string>

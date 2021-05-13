@@ -14,7 +14,9 @@ import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.itextpdf.text.*
-import com.itextpdf.text.pdf.*
+import com.itextpdf.text.pdf.PdfPCell
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
 import io.ahmer.utils.utilcode.ToastUtils
 import java.io.*
 
@@ -450,10 +452,10 @@ class MyDatabaseHelper(context: Context) :
 
             val mParagraph1 = paragraphFormat(mContext.getString(R.string.app_name), false)
             val mParagraph2 = paragraphFormat("$userName Account Statement", true)
-            val mParagraph3 = Paragraph("\n")
+            mParagraph2.spacingBefore = 3F
+            mParagraph2.spacingAfter = 20F
             mDocument.add(mParagraph1)
             mDocument.add(mParagraph2)
-            mDocument.add(mParagraph3)
 
             val mTable = PdfPTable(5)
             mTable.widthPercentage = 100F
@@ -498,15 +500,15 @@ class MyDatabaseHelper(context: Context) :
                     )
                 mTable.addCell(cellFormat(mDate, false, "Center"))
                 mTable.addCell(cellFormat(mDescription, false))
-                if (mCredit == "0") {
-                    mTable.addCell("")
-                } else {
-                    mTable.addCell(cellFormat(mCredit, false, "Right"))
-                }
                 if (mDebit == "0") {
                     mTable.addCell("")
                 } else {
                     mTable.addCell(cellFormat(mDebit, false, "Right"))
+                }
+                if (mCredit == "0") {
+                    mTable.addCell("")
+                } else {
+                    mTable.addCell(cellFormat(mCredit, false, "Right"))
                 }
                 mTable.addCell(cellFormat(mBalance, false, "Right"))
             } while (mCursor.moveToNext())
@@ -557,6 +559,8 @@ class MyDatabaseHelper(context: Context) :
                     pdfPCell.verticalAlignment = Element.ALIGN_CENTER
                 }
             }
+            pdfPCell.paddingTop = 3F
+            pdfPCell.paddingBottom = 5F
         }
         return pdfPCell
     }
@@ -569,8 +573,9 @@ class MyDatabaseHelper(context: Context) :
             font.size = 18F
             font.style = Font.BOLD
             val phrase = Phrase("", font)
-            val chunk = Chunk(mContext.getString(R.string.app_name))
+            val chunk = Chunk(string)
             chunk.setAnchor(Constants.PLAY_STORE_LINK)
+            phrase.add(chunk)
             paragraph = Paragraph(phrase)
         } else {
             font.size = 16F
