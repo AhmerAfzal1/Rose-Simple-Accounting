@@ -19,6 +19,7 @@
         tools:ignore="ScopedStorage" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:backupAgent=".BackupAgent"
         android:fullBackupContent="@xml/full_backup"
@@ -29,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
         <activity
-            android:name=".Splash"
+            android:name=".ui.Splash"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,16 +39,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
-            android:name=".user.AddUserProfileData"
+            android:name=".ui.AddUser"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
-            android:name=".transactions.UserTransactionsReport"
+            android:name=".ui.AddTransactions"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
         <activity
-            android:name=".user.EditUserProfileData"
+            android:name=".ui.EditUser"
             android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar" />
 
         <meta-data

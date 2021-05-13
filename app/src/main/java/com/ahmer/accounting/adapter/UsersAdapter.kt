@@ -20,8 +20,8 @@ import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.model.UserProfile
-import com.ahmer.accounting.transactions.UserTransactionsReport
-import com.ahmer.accounting.user.EditUserProfileData
+import com.ahmer.accounting.ui.AddTransactions
+import com.ahmer.accounting.ui.EditUser
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
@@ -91,7 +91,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
         }
         holder.bindItems(userProfile)
         holder.cvMain.setOnClickListener {
-            val intent = Intent(mContext, UserTransactionsReport::class.java).apply {
+            val intent = Intent(mContext, AddTransactions::class.java).apply {
                 putExtra("mPosUserID", userProfile.id)
                 putExtra("mPosUserName", userProfile.name)
                 putExtra("mPosUserPhone", userProfile.phone1)
@@ -108,7 +108,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             showDialogMoreInfo(userProfile)
         }
         holder.ivEditButton.setOnClickListener {
-            val intent = Intent(mContext, EditUserProfileData::class.java).apply {
+            val intent = Intent(mContext, EditUser::class.java).apply {
                 putExtra("mID", userProfile.id)
                 putExtra("mName", userProfile.name)
                 putExtra("mGender", userProfile.gender)

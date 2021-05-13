@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
-import android.widget.Toast
 import com.ahmer.accounting.R
 import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
@@ -19,6 +18,7 @@ import com.itextpdf.text.DocumentException
 import com.itextpdf.text.Paragraph
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
+import io.ahmer.utils.utilcode.ToastUtils
 import java.io.*
 
 
@@ -423,20 +423,13 @@ class MyDatabaseHelper(context: Context) :
             }
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             if (isBackup) {
-                HelperFunctions.makeToast(
-                    mContext,
-                    mContext.getString(R.string.backup_complete),
-                    Toast.LENGTH_SHORT
-                )
+                ToastUtils.showShort(mContext.getString(R.string.backup_complete))
             } else {
                 mContext.contentResolver.notifyChange(Constants.UserColumn.USER_TABLE_URI, null)
-                HelperFunctions.makeToast(
-                    mContext,
-                    mContext.getString(R.string.restore_complete),
-                    Toast.LENGTH_SHORT
-                )
+                ToastUtils.showShort(mContext.getString(R.string.restore_complete))
             }
             outputStream!!.flush()
             outputStream.close()

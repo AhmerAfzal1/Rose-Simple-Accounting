@@ -1,4 +1,4 @@
-package com.ahmer.accounting.transactions
+package com.ahmer.accounting.ui
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -34,14 +34,13 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.ahmer.utils.constants.PermissionConstants
-import io.ahmer.utils.utilcode.PermissionUtils
+import io.ahmer.utils.utilcode.ToastUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
+class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     ActionMode.Callback {
 
     private lateinit var mAdapter: TransactionsAdapter
@@ -99,10 +98,8 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
         mRecyclerView.layoutManager = linearLayoutManager
-        mRecyclerView.addOnItemTouchListener(object : RecyclerItemClickListener(
-            applicationContext,
-            mRecyclerView,
-            object : OnItemClickListener {
+        mRecyclerView.addOnItemTouchListener(object : RecyclerItemClickListener(applicationContext,
+            mRecyclerView, object : OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     if (mIsMultiSelect) {
                         //if multiple selection is enabled then select item on single click else perform normal click on item.
@@ -114,7 +111,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                     if (!mIsMultiSelect) {
                         mSelectedIds = ArrayList()
                         mIsMultiSelect = true
-                        mActionMode = startActionMode(this@UserTransactionsReport)
+                        mActionMode = startActionMode(this@AddTransactions)
                     }
                     multiSelect(position)
                 }
@@ -128,7 +125,10 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri: Uri? = result.data?.data
                     if (uri != null && mUserName != null) {
-                        myDatabaseHelper.generatePdf(uri, mUserId, mUserName)
+                        val isGenerated = myDatabaseHelper.generatePdf(uri, mUserId, mUserName)
+                        if (isGenerated) {
+                            ToastUtils.showShort(getString(R.string.pdf_generated))
+                        }
                     }
                 }
             }
@@ -156,7 +156,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                     })
                 }
                 R.id.menu_export_to_pdf -> {
-                    if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+                    if (mAdapter.itemCount > 0) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             val fileName = HelperFunctions.getDateTimeForFileName() + ".pdf"
                             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
@@ -172,33 +172,23 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                                 mDirPath.mkdirs()
                             }
                             val mFileName =
-                                File(mDirPath, HelperFunctions.getDateTimeForFileName() + ".pdf")
+                                File(
+                                    mDirPath, HelperFunctions.getDateTimeForFileName() + ".pdf"
+                                )
                             if (mFileName.exists()) {
                                 mFileName.delete()
                             }
-                            if (mAdapter.itemCount > 0) {
-                                if (mUserName != null) {
-                                    val isGenerated = myDatabaseHelper.generatePdf(
-                                        Uri.fromFile(mFileName),
-                                        mUserId,
-                                        mUserName
-                                    )
-                                    if (isGenerated) {
-                                        HelperFunctions.makeToast(
-                                            applicationContext,
-                                            getString(R.string.pdf_generated),
-                                            Toast.LENGTH_SHORT
-                                        )
-                                    }
-                                }
-                            } else {
-                                HelperFunctions.makeToast(
-                                    applicationContext,
-                                    getString(R.string.pdf_not_generated),
-                                    Toast.LENGTH_LONG
+                            if (mUserName != null) {
+                                val isGenerated = myDatabaseHelper.generatePdf(
+                                    Uri.fromFile(mFileName), mUserId, mUserName
                                 )
+                                if (isGenerated) {
+                                    ToastUtils.showShort(getString(R.string.pdf_generated))
+                                }
                             }
                         }
+                    } else {
+                        ToastUtils.showLong(getString(R.string.pdf_not_generated))
                     }
                 }
             }
@@ -262,16 +252,13 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
 
                 when {
                     newAmount == 0.toDouble() -> {
-                        HelperFunctions.makeToast(context, getString(R.string.enter_the_amount))
+                        ToastUtils.showLong(getString(R.string.enter_the_amount))
                     }
                     typeAmount.isEmpty() -> {
-                        HelperFunctions.makeToast(context, getString(R.string.select_type_amount))
+                        ToastUtils.showLong(getString(R.string.select_type_amount))
                     }
                     newDescription.trim().isEmpty() -> {
-                        HelperFunctions.makeToast(
-                            context,
-                            getString(R.string.enter_transaction_description)
-                        )
+                        ToastUtils.showLong(getString(R.string.enter_transaction_description))
                     }
                     else -> {
                         val addNewTransaction = Transactions().apply {
@@ -298,11 +285,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                     }
                 }
                 if (isSuccessfullyInserted) {
-                    HelperFunctions.makeToast(
-                        context,
-                        getString(R.string.transaction_added_successfully),
-                        Toast.LENGTH_SHORT
-                    )
+                    ToastUtils.showShort(getString(R.string.transaction_added_successfully))
                     Thread.sleep(200)
                     dialog.dismiss()
                 }
@@ -352,8 +335,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 val mCursor = myDatabaseHelper.getAllTransactionsByUserId(mUserId)
                 mCursor.registerContentObserver(mObserver)
                 mCursor.setNotificationUri(
-                    contentResolver,
-                    Constants.TranColumn.TRANSACTION_TABLE_URI
+                    contentResolver, Constants.TranColumn.TRANSACTION_TABLE_URI
                 )
                 return mCursor
             }
@@ -414,8 +396,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
                 alertBuilder.setMessage(
                     getString(
-                        R.string.trans_bulk_delete_warning_msg,
-                        mSelectedIds.size
+                        R.string.trans_bulk_delete_warning_msg, mSelectedIds.size
                     )
                 )
                 alertBuilder.setCancelable(false)
@@ -425,11 +406,7 @@ class UserTransactionsReport : AppCompatActivity(), LoaderManager.LoaderCallback
                         isDeletedSuccessfully = myDatabaseHelper.deleteTransactions(pos.toLong())
                     }
                     if (isDeletedSuccessfully) {
-                        HelperFunctions.makeToast(
-                            this,
-                            getString(R.string.trans_deleted),
-                            Toast.LENGTH_SHORT
-                        )
+                        ToastUtils.showShort(getString(R.string.trans_deleted))
                     }
                     dialog.dismiss()
                     mode?.finish()

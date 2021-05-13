@@ -5,11 +5,11 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.ToastUtils
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -72,10 +72,6 @@ class HelperFunctions : AppCompatActivity() {
             return dateTimeShort
         }
 
-        fun makeToast(context: Context, msg: String, length: Int = Toast.LENGTH_LONG) {
-            Toast.makeText(context, msg, length).show()
-        }
-
         fun getRoundedValue(value: Double): String {
             val round = DecimalFormat("#,##0.##")
             round.roundingMode = RoundingMode.HALF_UP
@@ -105,20 +101,14 @@ class HelperFunctions : AppCompatActivity() {
                     if (isUserDel) {
                         isDeleted = myDatabaseHelper.deleteUserProfileData(id)
                         if (isDeleted) {
-                            makeToast(
-                                context,
-                                context.getString(R.string.users_deleted, userName),
-                                Toast.LENGTH_SHORT
+                            ToastUtils.showShort(
+                                context.getString(R.string.users_deleted, userName)
                             )
                         }
                     } else {
                         isDeleted = myDatabaseHelper.deleteTransactions(id)
                         if (isDeleted) {
-                            makeToast(
-                                context,
-                                context.getString(R.string.trans_deleted),
-                                Toast.LENGTH_SHORT
-                            )
+                            ToastUtils.showShort(context.getString(R.string.trans_deleted))
                         }
                     }
                     dialog.dismiss()

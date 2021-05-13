@@ -23,7 +23,6 @@ class BackupAgent : BackupAgentHelper() {
         val file: File = getDatabasePath(Constants.DATABASE_NAME).parentFile!!
         Log.v(Constants.LOG_TAG, file.toString())
         return file
-
     }
 
     @Throws(IOException::class)

@@ -1,10 +1,9 @@
-package com.ahmer.accounting.user
+package com.ahmer.accounting.ui
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -16,8 +15,9 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.ToastUtils
 
-class AddUserProfileData : AppCompatActivity() {
+class AddUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_profile_add_data)
@@ -64,10 +64,10 @@ class AddUserProfileData : AppCompatActivity() {
 
             when {
                 userProfile.name.trim().isEmpty() -> {
-                    HelperFunctions.makeToast(it.context, getString(R.string.toast_enter_name))
+                    ToastUtils.showLong(getString(R.string.toast_enter_name))
                 }
                 userProfile.gender.trim().isEmpty() -> {
-                    HelperFunctions.makeToast(it.context, getString(R.string.toast_select_gender))
+                    ToastUtils.showLong(getString(R.string.toast_select_gender))
                 }
                 else -> {
                     val myDatabaseHelper = MyDatabaseHelper(it.context)
@@ -89,11 +89,7 @@ class AddUserProfileData : AppCompatActivity() {
             }
 
             if (isSuccessfullyAdded) {
-                HelperFunctions.makeToast(
-                    it.context,
-                    getString(R.string.toast_record_saved),
-                    Toast.LENGTH_SHORT
-                )
+                ToastUtils.showShort(getString(R.string.toast_record_saved))
                 Thread.sleep(200)
                 finish()
             }

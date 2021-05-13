@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.ui
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
 import io.ahmer.utils.constants.PermissionConstants
 import io.ahmer.utils.utilcode.PermissionUtils

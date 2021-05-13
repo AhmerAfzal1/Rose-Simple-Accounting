@@ -1,4 +1,4 @@
-package com.ahmer.accounting
+package com.ahmer.accounting.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -15,7 +15,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -27,12 +26,12 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ahmer.accounting.R
 import com.ahmer.accounting.adapter.UsersAdapter
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyCursorLoader
 import com.ahmer.accounting.helper.MyDatabaseHelper
-import com.ahmer.accounting.user.AddUserProfileData
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -40,9 +39,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.constants.PermissionConstants
 import io.ahmer.utils.utilcode.FileUtils
 import io.ahmer.utils.utilcode.PermissionUtils
+import io.ahmer.utils.utilcode.ToastUtils
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     NavigationView.OnNavigationItemSelectedListener {
@@ -113,7 +111,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         LoaderManager.getInstance(this).initLoader(1, null, this)
 
         fabAddNewUser.setOnClickListener {
-            val intent = Intent(it.context, AddUserProfileData::class.java).apply {
+            val intent = Intent(it.context, AddUser::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
@@ -165,11 +163,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                         }
                         val isBackup = FileUtils.copy(src, dst)
                         if (isBackup) {
-                            HelperFunctions.makeToast(
-                                applicationContext,
-                                getString(R.string.backup_complete),
-                                Toast.LENGTH_SHORT
-                            )
+                            ToastUtils.showShort(getString(R.string.backup_complete))
                         }
                     }
                 }

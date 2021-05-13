@@ -9,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -22,6 +25,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.ToastUtils
 
 class TransactionsAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
@@ -154,22 +158,13 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 val newAmount: Double = inputAmount.text.toString().trim().toDouble()
                 when {
                     newAmount == 0.toDouble() -> {
-                        HelperFunctions.makeToast(
-                            context,
-                            context.getString(R.string.enter_the_amount)
-                        )
+                        ToastUtils.showLong(context.getString(R.string.enter_the_amount))
                     }
                     typeAmount.isEmpty() -> {
-                        HelperFunctions.makeToast(
-                            context,
-                            context.getString(R.string.select_type_amount)
-                        )
+                        ToastUtils.showLong(context.getString(R.string.select_type_amount))
                     }
                     inputDescription.toString().trim().isEmpty() -> {
-                        HelperFunctions.makeToast(
-                            context,
-                            context.getString(R.string.enter_transaction_description)
-                        )
+                        ToastUtils.showLong(context.getString(R.string.enter_transaction_description))
                     }
                     else -> {
                         val transContentValues = Transactions().apply {
@@ -196,11 +191,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                     }
                 }
                 if (isSuccessfullyUpdated) {
-                    HelperFunctions.makeToast(
-                        context,
-                        context.getString(R.string.transaction_updated_successfully),
-                        Toast.LENGTH_SHORT
-                    )
+                    ToastUtils.showShort(context.getString(R.string.transaction_updated_successfully))
                     Thread.sleep(200)
                     dialog.dismiss()
                 }
