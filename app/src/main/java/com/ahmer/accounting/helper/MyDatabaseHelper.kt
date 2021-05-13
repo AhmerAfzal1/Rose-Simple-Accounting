@@ -14,9 +14,7 @@ import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.itextpdf.text.*
-import com.itextpdf.text.pdf.PdfPCell
-import com.itextpdf.text.pdf.PdfPTable
-import com.itextpdf.text.pdf.PdfWriter
+import com.itextpdf.text.pdf.*
 import io.ahmer.utils.utilcode.ToastUtils
 import java.io.*
 
@@ -564,16 +562,21 @@ class MyDatabaseHelper(context: Context) :
     }
 
     private fun paragraphFormat(string: String, isSubParagraph: Boolean): Paragraph {
+        val paragraph: Paragraph
         val font = Font(Font.FontFamily.HELVETICA)
         font.color = BaseColor.BLACK
         if (!isSubParagraph) {
             font.size = 18F
             font.style = Font.BOLD
+            val phrase = Phrase("", font)
+            val chunk = Chunk(mContext.getString(R.string.app_name))
+            chunk.setAnchor(Constants.PLAY_STORE_LINK)
+            paragraph = Paragraph(phrase)
         } else {
             font.size = 16F
             font.style = Font.NORMAL
+            paragraph = Paragraph(string, font)
         }
-        val paragraph = Paragraph(string, font)
         paragraph.alignment = Element.ALIGN_CENTER
         return paragraph
     }

@@ -175,9 +175,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                                 File(
                                     mDirPath, HelperFunctions.getDateTimeForFileName() + ".pdf"
                                 )
-                            if (mFileName.exists()) {
-                                mFileName.delete()
-                            }
                             if (mUserName != null) {
                                 val isGenerated = myDatabaseHelper.generatePdf(
                                     Uri.fromFile(mFileName), mUserId, mUserName

@@ -31,7 +31,7 @@ class HelperFunctions : AppCompatActivity() {
         fun getDateTimeForFileName(): String {
             var dateTime = ""
             try {
-                val format = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault())
+                val format = SimpleDateFormat("ddMMyyHHmmss", Locale.ENGLISH)
                 dateTime = format.format(Date()).toString()
             } catch (pe: Exception) {
                 Log.e(Constants.LOG_TAG, pe.message, pe)

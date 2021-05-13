@@ -14,6 +14,7 @@ class Constants {
         const val DATABASE_VERSION: Int = 1
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
+        const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=$APPLICATION_ID"
     }
 
     class UserColumn : BaseColumns {
