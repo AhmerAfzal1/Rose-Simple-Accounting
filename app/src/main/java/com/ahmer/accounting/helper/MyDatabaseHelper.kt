@@ -437,7 +437,7 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun generatePdf(uri: Uri, id: Long, userName: String): Boolean {
-        val mDocument = Document(PageSize.A4, 72F, 72F, 72F, 72F)
+        val mDocument = Document(PageSize.A4, 36F, 36F, 0F, 36F)
         val mOrderBy: String = BaseColumns._ID + " ASC"
         val mCursor = getAllTransactionsByUserId(id, mOrderBy)
         try {
@@ -457,15 +457,15 @@ class MyDatabaseHelper(context: Context) :
             mDocument.add(mParagraph1)
             mDocument.add(mParagraph2)
 
-            val mTable = PdfPTable(5)
-            mTable.widthPercentage = 100F
-            mTable.setTotalWidth(floatArrayOf(72F, 216F, 72F, 72F, 72F))
-            mTable.isLockedWidth = true
-            mTable.addCell(cellFormat(Constants.TranColumn.DATE, true))
-            mTable.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
-            mTable.addCell(cellFormat(Constants.TranColumn.DEBIT, true))
-            mTable.addCell(cellFormat(Constants.TranColumn.CREDIT, true))
-            mTable.addCell(cellFormat(Constants.TranColumn.BALANCE, true))
+            val mTableMain = PdfPTable(5)
+            mTableMain.widthPercentage = 100F
+            mTableMain.setTotalWidth(floatArrayOf(63F, 216F, 90F, 90F, 117F))
+            mTableMain.isLockedWidth = true
+            mTableMain.addCell(cellFormat(Constants.TranColumn.DATE, true))
+            mTableMain.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
+            mTableMain.addCell(cellFormat(Constants.TranColumn.DEBIT, true))
+            mTableMain.addCell(cellFormat(Constants.TranColumn.CREDIT, true))
+            mTableMain.addCell(cellFormat(Constants.TranColumn.BALANCE, true))
 
             mCursor.moveToFirst()
             if (mCursor.moveToFirst()) do {
@@ -498,22 +498,56 @@ class MyDatabaseHelper(context: Context) :
                             )
                         )
                     )
-                mTable.addCell(cellFormat(mDate, false, "Center"))
-                mTable.addCell(cellFormat(mDescription, false))
+                mTableMain.addCell(cellFormat(mDate, false, "Center"))
+                mTableMain.addCell(cellFormat(mDescription, false))
                 if (mDebit == "0") {
-                    mTable.addCell("")
+                    mTableMain.addCell("")
                 } else {
-                    mTable.addCell(cellFormat(mDebit, false, "Right"))
+                    mTableMain.addCell(cellFormat(mDebit, false, "Right"))
                 }
                 if (mCredit == "0") {
-                    mTable.addCell("")
+                    mTableMain.addCell("")
                 } else {
-                    mTable.addCell(cellFormat(mCredit, false, "Right"))
+                    mTableMain.addCell(cellFormat(mCredit, false, "Right"))
                 }
-                mTable.addCell(cellFormat(mBalance, false, "Right"))
+                mTableMain.addCell(cellFormat(mBalance, false, "Right"))
             } while (mCursor.moveToNext())
 
-            mDocument.add(mTable)
+            val mTotalCredit = getSumForColumns(id, "Credit", false)
+            val mTotalDebit = getSumForColumns(id, "Debit", false)
+            val mTotalBalance = mTotalCredit - mTotalDebit
+            val mTableBalance = PdfPTable(4)
+            mTableBalance.spacingBefore = 5F
+            mTableBalance.setTotalWidth(floatArrayOf(279F, 90F, 90F, 117F))
+            mTableBalance.isLockedWidth = true
+            mTableMain.addCell(cellFormat("Total", false, "Center",true))
+            mTableMain.addCell(
+                cellFormat(
+                    HelperFunctions.getRoundedValue(mTotalDebit),
+                    false,
+                    "Right",
+                    true
+                )
+            )
+            mTableMain.addCell(
+                cellFormat(
+                    HelperFunctions.getRoundedValue(mTotalCredit),
+                    false,
+                    "Right",
+                    true
+                )
+            )
+            mTableMain.addCell(
+                cellFormat(
+                    HelperFunctions.getRoundedValue(mTotalBalance),
+                    false,
+                    "Right",
+                    true
+                )
+            )
+
+            mDocument.add(mTableMain)
+            mDocument.add(mTableBalance)
             return true
         } catch (de: DocumentException) {
             Log.e(Constants.LOG_TAG, de.message, de)
@@ -529,7 +563,12 @@ class MyDatabaseHelper(context: Context) :
         }
     }
 
-    private fun cellFormat(string: String, isForTable: Boolean, alignment: String = ""): PdfPCell {
+    private fun cellFormat(
+        string: String,
+        isForTable: Boolean,
+        alignment: String = "",
+        isCellBold: Boolean = false
+    ): PdfPCell {
         val font = Font(Font.FontFamily.HELVETICA)
         font.color = BaseColor.BLACK
         if (isForTable) {
@@ -537,7 +576,11 @@ class MyDatabaseHelper(context: Context) :
             font.style = Font.BOLD
         } else {
             font.size = 12F
-            font.style = Font.NORMAL
+            if (isCellBold) {
+                font.style = Font.BOLD
+            } else {
+                font.style = Font.NORMAL
+            }
         }
         val pdfPCell = PdfPCell(Phrase(string, font))
         if (isForTable) {
