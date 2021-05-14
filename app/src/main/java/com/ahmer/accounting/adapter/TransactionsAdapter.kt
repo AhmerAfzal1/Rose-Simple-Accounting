@@ -171,7 +171,6 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                             userId = trans.userId
                             credit = 0.toDouble()
                             debit = 0.toDouble()
-                            balance = myDatabaseHelper.getPreviousBalanceByUserId(trans.userId)
                             if (typeAmount == context.getString(R.string.credit_plus)) {
                                 credit = newAmount
                                 balance += newAmount
