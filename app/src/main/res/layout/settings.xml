@@ -6,7 +6,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        style="@style/Theme.RoseSimpleAccounting.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -18,7 +17,8 @@
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_baseline_back"
         app:title="@string/settings"
-        app:titleMarginStart="0dp" />
+        app:titleMarginStart="0dp"
+        app:titleTextColor="@android:color/white" />
 
     <FrameLayout
         android:id="@+id/settings"

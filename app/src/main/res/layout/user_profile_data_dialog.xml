@@ -30,7 +30,7 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/user_information"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <TableRow
@@ -41,7 +41,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/_id"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserID"
@@ -50,7 +51,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -61,7 +62,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_name"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserName"
@@ -70,7 +72,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -81,7 +83,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_gender"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserGender"
@@ -90,7 +93,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -101,7 +104,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_address"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserAddress"
@@ -110,7 +114,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -121,7 +125,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_city"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserCity"
@@ -130,7 +135,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -141,7 +146,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_phone1"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserPhone1"
@@ -150,7 +156,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -161,7 +167,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_phone2"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserPhone2"
@@ -170,7 +177,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -181,7 +188,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/email"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserEmail"
@@ -190,7 +198,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -201,7 +209,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_comments"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserComments"
@@ -210,7 +219,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -221,7 +230,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_created_on"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserCreated"
@@ -230,7 +240,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <TableRow
@@ -241,7 +251,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_modified"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dialogUserModified"
@@ -250,7 +261,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:text="@string/_id"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/black" />
                 </TableRow>
 
                 <LinearLayout
@@ -266,6 +277,7 @@
                         android:layout_height="wrap_content"
                         android:text="@android:string/ok"
                         android:textAllCaps="true"
+                        android:textColor="@android:color/white"
                         android:textStyle="bold" />
                 </LinearLayout>
             </TableLayout>

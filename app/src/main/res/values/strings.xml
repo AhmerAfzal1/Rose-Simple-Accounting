@@ -2,8 +2,8 @@
     <string name="app_name">Rose Account Manager</string>
 
     <string name="add_new_user">Add User</string>
-    <string name="add_transaction">Add Transaction</string>
-    <string name="update_transaction">Update Transaction</string>
+    <string name="add_transaction">Add</string>
+    <string name="update_transaction">Update</string>
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="comments">Comments</string>

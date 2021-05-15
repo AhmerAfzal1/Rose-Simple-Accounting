@@ -5,13 +5,13 @@
         android:id="@+id/menu_delete_trans"
         android:icon="@drawable/ic_baseline_delete_forever"
         android:title="@string/delete"
-        app:iconTint="@color/white"
+        app:iconTint="@android:color/white"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_select_all_trans"
         android:icon="@drawable/ic_baseline_select_all"
         android:title="@string/select_all"
-        app:iconTint="@color/white"
+        app:iconTint="@android:color/white"
         app:showAsAction="always" />
 </menu>

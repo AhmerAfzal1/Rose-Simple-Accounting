@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/colorBgDialog"
     app:cardCornerRadius="10dp"
     app:cardElevation="10dp">
 
@@ -18,7 +18,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:textCursorDrawable="@drawable/cursor"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDate"
@@ -30,7 +32,7 @@
                 android:hint="@string/date"
                 android:inputType="date"
                 android:lines="1"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
@@ -69,7 +71,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/btnToggleGroupAmount"
-            android:layout_marginEnd="3dp">
+            android:layout_marginEnd="3dp"
+            android:textCursorDrawable="@drawable/cursor"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAmount"
@@ -81,7 +85,7 @@
                 android:hint="@string/enter_amount"
                 android:inputType="numberDecimal"
                 android:lines="1"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -90,7 +94,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textInputLayoutAmount"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:textCursorDrawable="@drawable/cursor"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDescription"
@@ -103,7 +109,7 @@
                 android:inputType="textMultiLine|textCapWords"
                 android:lines="1"
                 android:maxLines="2"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -118,14 +124,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="@android:string/cancel" />
+                android:text="@android:string/cancel"
+                android:textColor="@android:color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddTransaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="@string/add_transaction" />
+                android:text="@string/add_transaction"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
