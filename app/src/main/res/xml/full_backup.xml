@@ -3,4 +3,7 @@
     <include
         domain="database"
         path="SimpleAccounting.db" />
+    <include
+        domain="sharedpref"
+        path="." />
 </full-backup-content>

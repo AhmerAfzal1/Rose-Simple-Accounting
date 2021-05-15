@@ -520,7 +520,7 @@ class MyDatabaseHelper(context: Context) :
             mTableBalance.spacingBefore = 5F
             mTableBalance.setTotalWidth(floatArrayOf(279F, 90F, 90F, 117F))
             mTableBalance.isLockedWidth = true
-            mTableMain.addCell(cellFormat("Total", false, "Center",true))
+            mTableMain.addCell(cellFormat("Total", false, "Center", true))
             mTableMain.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalDebit),

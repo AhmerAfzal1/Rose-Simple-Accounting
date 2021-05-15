@@ -12,9 +12,14 @@ class BackupAgent : BackupAgentHelper() {
 
     override fun onCreate() {
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        val file = getDatabasePath(Constants.DATABASE_NAME)
-        val database = FileBackupHelper(this, file.name)
-        addHelper("SimpleAccounting", database)
+        val file: File = getDatabasePath(Constants.DATABASE_NAME)
+        FileBackupHelper(this, file.name).also {
+            addHelper("RoseDatabase", it)
+        }
+        //Add multiple SharedPreferences files name separate with comma
+        SharedPreferencesBackupHelper(this, Constants.PREFERENCE_THEME).also {
+            addHelper("RosePreferences", it)
+        }
         val backupManager = BackupManager(this)
         backupManager.dataChanged()
     }

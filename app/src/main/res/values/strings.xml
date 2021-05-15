@@ -81,4 +81,17 @@
     <string name="generate_pdf">Generate PDF</string>
     <string name="pdf_generated">Successfully PDF file generated.</string>
     <string name="pdf_not_generated">There is no transaction for generate PDF file.</string>
+
+    <!-- Preference Titles -->
+    <string name="header_theme">Theme</string>
+    <string name="header_general">General</string>
+
+    <!-- Messages Preferences -->
+    <string name="title_cache">Clear Caches</string>
+    <string name="title_dark_mode">Dark Theme</string>
+    <string name="title_light_mode">Light Theme</string>
+    <string name="title_version">App Version</string>
+    <string name="summary_dark_mode">Change theme to night mode</string>
+    <string name="summary_light_mode">Change theme to day mode</string>
+    <string name="summary_cache_size">Caches Size: %1$d</string>
 </resources>
