@@ -437,7 +437,7 @@ class MyDatabaseHelper(context: Context) :
     }
 
     fun generatePdf(uri: Uri, id: Long, userName: String): Boolean {
-        val mDocument = Document(PageSize.A4, 36F, 36F, 0F, 36F)
+        val mDocument = Document(PageSize.A4, 54F, 54F, 36F, 54F)
         val mOrderBy: String = BaseColumns._ID + " ASC"
         val mCursor = getAllTransactionsByUserId(id, mOrderBy)
         try {
@@ -459,7 +459,7 @@ class MyDatabaseHelper(context: Context) :
 
             val mTableMain = PdfPTable(5)
             mTableMain.widthPercentage = 100F
-            mTableMain.setTotalWidth(floatArrayOf(63F, 216F, 90F, 90F, 117F))
+            mTableMain.setTotalWidth(floatArrayOf(63F, 198F, 84F, 84F, 111F))
             mTableMain.isLockedWidth = true
             mTableMain.addCell(cellFormat(Constants.TranColumn.DATE, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
@@ -517,11 +517,11 @@ class MyDatabaseHelper(context: Context) :
             val mTotalDebit = getSumForColumns(id, "Debit", false)
             val mTotalBalance = mTotalCredit - mTotalDebit
             val mTableBalance = PdfPTable(4)
-            mTableBalance.spacingBefore = 5F
-            mTableBalance.setTotalWidth(floatArrayOf(279F, 90F, 90F, 117F))
+            mTableBalance.widthPercentage = 100F
+            mTableBalance.setTotalWidth(floatArrayOf(261F, 84F, 84F, 111F))
             mTableBalance.isLockedWidth = true
-            mTableMain.addCell(cellFormat("Total", false, "Center", true))
-            mTableMain.addCell(
+            mTableBalance.addCell(cellFormat("Total", false, "Center", true))
+            mTableBalance.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalDebit),
                     false,
@@ -529,7 +529,7 @@ class MyDatabaseHelper(context: Context) :
                     true
                 )
             )
-            mTableMain.addCell(
+            mTableBalance.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalCredit),
                     false,
@@ -537,7 +537,7 @@ class MyDatabaseHelper(context: Context) :
                     true
                 )
             )
-            mTableMain.addCell(
+            mTableBalance.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalBalance),
                     false,
@@ -567,7 +567,7 @@ class MyDatabaseHelper(context: Context) :
         string: String,
         isForTable: Boolean,
         alignment: String = "",
-        isCellBold: Boolean = false
+        isCellForTotal: Boolean = false
     ): PdfPCell {
         val font = Font(Font.FontFamily.HELVETICA)
         font.color = BaseColor.BLACK
@@ -575,35 +575,41 @@ class MyDatabaseHelper(context: Context) :
             font.size = 14F
             font.style = Font.BOLD
         } else {
-            font.size = 12F
-            if (isCellBold) {
+            if (isCellForTotal) {
+                font.size = 14F
                 font.style = Font.BOLD
             } else {
+                font.size = 12F
                 font.style = Font.NORMAL
             }
         }
         val pdfPCell = PdfPCell(Phrase(string, font))
         if (isForTable) {
-            pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+            pdfPCell.verticalAlignment = Element.ALIGN_MIDDLE
             pdfPCell.horizontalAlignment = Element.ALIGN_CENTER
             pdfPCell.paddingTop = 5F
             pdfPCell.paddingBottom = 8F
         } else {
             when (alignment) {
                 "Right" -> {
-                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                    pdfPCell.verticalAlignment = Element.ALIGN_MIDDLE
                     pdfPCell.horizontalAlignment = Element.ALIGN_RIGHT
                 }
                 "Center" -> {
-                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                    pdfPCell.verticalAlignment = Element.ALIGN_MIDDLE
                     pdfPCell.horizontalAlignment = Element.ALIGN_CENTER
                 }
                 "" -> {
-                    pdfPCell.verticalAlignment = Element.ALIGN_CENTER
+                    pdfPCell.verticalAlignment = Element.ALIGN_MIDDLE
                 }
             }
-            pdfPCell.paddingTop = 3F
-            pdfPCell.paddingBottom = 5F
+            if (isCellForTotal) {
+                pdfPCell.paddingTop = 5F
+                pdfPCell.paddingBottom = 7F
+            } else {
+                pdfPCell.paddingTop = 3F
+                pdfPCell.paddingBottom = 5F
+            }
         }
         return pdfPCell
     }

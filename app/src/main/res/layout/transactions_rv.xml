@@ -18,7 +18,7 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:menu="@menu/activity_trans"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="@drawable/ic_baseline_back"
         app:title="@string/title_all_user_record"
         app:titleMarginStart="0dp" />
 

@@ -37,6 +37,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.constants.PermissionConstants
+import io.ahmer.utils.utilcode.AppUtils
 import io.ahmer.utils.utilcode.FileUtils
 import io.ahmer.utils.utilcode.PermissionUtils
 import io.ahmer.utils.utilcode.ToastUtils
@@ -194,6 +195,18 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                         }
                     }
                 }
+            }
+            R.id.nav_settings -> {
+                val intent = Intent(applicationContext, Settings::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                }
+                startActivity(intent)
+            }
+            R.id.nav_exit -> {
+                AppUtils.exitApp()
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START)

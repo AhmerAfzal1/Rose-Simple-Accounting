@@ -23,7 +23,7 @@ class Settings : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        setContentView(R.layout.settings)
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -79,7 +79,11 @@ class Settings : AppCompatActivity() {
             val versionApp: Preference = findPreference("appVersion")!!
             versionApp.summary = String.format(
                 Locale.getDefault(),
-                "App Version: ${AppUtils.getAppVersionName()} (${AppUtils.getAppVersionCode()})"
+                getString(
+                    R.string.summary_version,
+                    AppUtils.getAppVersionName(),
+                    AppUtils.getAppVersionCode()
+                )
             )
             initializeCache()
         }
@@ -96,7 +100,8 @@ class Settings : AppCompatActivity() {
             var size = 0L
             size += getDirSize(Utils.getApp().cacheDir)
             size += getDirSize(Utils.getApp().externalCacheDir!!)
-            btnCaches.summary = "Caches Size ${HelperUtils.getFileSize(size)}"
+            btnCaches.summary =
+                getString(R.string.summary_cache_size, HelperUtils.getFileSize(size))
         }
 
         private fun getDirSize(dir: File): Long {

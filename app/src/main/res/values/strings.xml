@@ -93,5 +93,8 @@
     <string name="title_version">App Version</string>
     <string name="summary_dark_mode">Change theme to night mode</string>
     <string name="summary_light_mode">Change theme to day mode</string>
-    <string name="summary_cache_size">Caches Size: %1$d</string>
+    <string name="summary_cache_size">Caches Size: %1$s</string>
+    <string name="summary_version">Version Name: %1$s\nVersion Code: %2$d</string>
+    <string name="settings">Settings</string>
+    <string name="exit">EXIT</string>
 </resources>

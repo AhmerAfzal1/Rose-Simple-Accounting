@@ -16,8 +16,8 @@
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_back"
-        app:title="Settings"
+        app:navigationIcon="@drawable/ic_baseline_back"
+        app:title="@string/settings"
         app:titleMarginStart="0dp" />
 
     <FrameLayout
