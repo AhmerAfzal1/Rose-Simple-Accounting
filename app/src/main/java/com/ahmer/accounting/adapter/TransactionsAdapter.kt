@@ -16,7 +16,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -70,9 +69,9 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             showDropDownDialog(mContext, transaction)
         }
         if (mSelectedIds.contains(position)) {
-            holder.itemView.setBackgroundResource(R.color.colorSecondaryLight)
+            holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
         } else {
-            holder.itemView.setBackgroundResource(R.color.white)
+            holder.itemView.setBackgroundResource(R.color.colorBgContainer)
         }
     }
 
@@ -112,16 +111,6 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             tvTransId.text = trans.transId.toString()
             tvTransCreated.text = trans.created
             tvTransModified.text = trans.modified
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    btnOk.backgroundTintList =
-                        ContextCompat.getColorStateList(context, R.color.black)
-                    btnOk.setTextColor(context.getColor(R.color.white))
-                } else {
-                    btnOk.setBackgroundColor(context.resources.getColor(R.color.black))
-                    btnOk.setTextColor(context.resources.getColor(R.color.white))
-                }
-            }
             btnOk.setOnClickListener {
                 dialog.dismiss()
             }
@@ -150,18 +139,6 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 dialog.findViewById<TextInputLayout>(R.id.textInputLayoutDescription)
             val addTransaction = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
             val cancelTransaction = dialog.findViewById<MaterialButton>(R.id.btnCancelTransaction)
-
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    inputDate.boxStrokeColor = context.getColor(R.color.black)
-                    inputAmount.boxStrokeColor = context.getColor(R.color.black)
-                    inputDescription.boxStrokeColor = context.getColor(R.color.black)
-                } else {
-                    inputDate.boxStrokeColor = context.resources.getColor(R.color.black)
-                    inputAmount.boxStrokeColor = context.resources.getColor(R.color.black)
-                    inputDescription.boxStrokeColor = context.resources.getColor(R.color.black)
-                }
-            }
 
             val typeAmount: String = if (trans.credit == 0.toDouble()) {
                 context.getString(R.string.debit_minus)

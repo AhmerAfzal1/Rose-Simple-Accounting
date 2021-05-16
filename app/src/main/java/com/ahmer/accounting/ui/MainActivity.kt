@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        item.isCheckable = false
         when (item.itemId) {
             R.id.nav_backup -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {

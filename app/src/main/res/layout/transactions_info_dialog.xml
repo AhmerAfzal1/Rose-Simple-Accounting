@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Theme.RoseSimpleAccounting.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/colorBgDialog"
     app:cardCornerRadius="10dp"
     app:cardElevation="10dp">
 
@@ -105,8 +104,9 @@
                     android:layout_height="wrap_content"
                     android:text="@android:string/ok"
                     android:textAllCaps="true"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:backgroundTint="?attr/colorSecondaryVariant" />
             </LinearLayout>
         </TableLayout>
     </ScrollView>

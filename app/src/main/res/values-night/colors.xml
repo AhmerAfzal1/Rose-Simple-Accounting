@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorMainPrimaryLight">#CC252525</color>
-    <color name="colorMainPrimary">#FF252525</color>
-    <color name="colorMainPrimaryDark">#FF000000</color>
-    <color name="colorMainPrimaryTextColor">#FF000000</color>
-    <color name="colorSecondaryLight">#FF08D7C7</color>
-    <color name="colorSecondaryDark">#FF00A596</color>
+    <color name="primaryColor">#FF252525</color>
+    <color name="primaryDarkColor">#FF000000</color>
+    <color name="primaryLightColor">#FF2E2E2E</color>
+    <color name="primaryTextColor">#FFFFFFFF</color>
+    <color name="secondaryColor">#FF08D7C7</color>
+    <color name="secondaryDarkColor">#FF00A596</color>
+    <color name="secondaryLightColor">#FF08D7C7</color>
+    <color name="secondaryTextColor">#FF000000</color>
 
     <color name="white">#FF000000</color>
     <color name="black">#FFFFFFFF</color>
 
-    <color name="colorBgMainLayout">#1B1A1A</color>
-    <color name="colorBgDialog">#FF1E1E1E</color>
+    <color name="colorBgMainLayout">#FF18191A</color>
+    <color name="colorBgCardView">#FF252525</color>
+    <color name="colorBgDialog">#FF353535</color>
+    <color name="colorBgContainer">#FF303030</color>
+    <color name="colorTextInputLayout">#FFFFFFFF</color>
 
 </resources>

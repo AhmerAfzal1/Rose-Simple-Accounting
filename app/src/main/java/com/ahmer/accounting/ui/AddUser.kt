@@ -48,26 +48,6 @@ class AddUser : AppCompatActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                userName.boxStrokeColor = getColor(R.color.black)
-                userAddress.boxStrokeColor = getColor(R.color.black)
-                userCity.boxStrokeColor = getColor(R.color.black)
-                userPhone1.boxStrokeColor = getColor(R.color.black)
-                userPhone2.boxStrokeColor = getColor(R.color.black)
-                userEmail.boxStrokeColor = getColor(R.color.black)
-                userComments.boxStrokeColor = getColor(R.color.black)
-            } else {
-                userName.boxStrokeColor = resources.getColor(R.color.black)
-                userAddress.boxStrokeColor = resources.getColor(R.color.black)
-                userCity.boxStrokeColor = resources.getColor(R.color.black)
-                userPhone1.boxStrokeColor = resources.getColor(R.color.black)
-                userPhone2.boxStrokeColor = resources.getColor(R.color.black)
-                userEmail.boxStrokeColor = resources.getColor(R.color.black)
-                userComments.boxStrokeColor = resources.getColor(R.color.black)
-            }
-        }
-
         var typeGender = ""
         toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
             val checkedButton = findViewById<MaterialButton>(checkedId)

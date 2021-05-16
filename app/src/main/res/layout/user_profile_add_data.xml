@@ -9,6 +9,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Theme.RoseSimpleAccounting.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -40,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -52,6 +54,7 @@
                     android:maxLength="46"
                     android:maxLines="1"
                     android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor"
                     app:counterEnabled="true"
                     app:counterMaxLength="20" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -81,6 +84,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:shadowColor="@color/colorTextInputLayout"
                     android:text="@string/gender_female"
                     app:icon="@drawable/ic_gender_female"
                     app:iconSize="24dp" />
@@ -90,6 +94,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:shadowColor="@color/colorTextInputLayout"
                     android:text="@string/gender_unknown"
                     app:icon="@drawable/ic_gender_unknown"
                     app:iconSize="24dp" />
@@ -102,7 +107,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/btnToggleGroupGender"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +121,8 @@
                     android:lines="3"
                     android:maxLength="255"
                     android:maxLines="4"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -126,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/inputLayoutAddress"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -137,7 +143,8 @@
                     android:hint="@string/city"
                     android:inputType="textCapWords"
                     android:maxLines="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -147,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/inputLayoutCity"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -158,7 +165,8 @@
                     android:hint="@string/phone"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -168,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/inputLayoutPhone1"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -179,7 +187,8 @@
                     android:hint="@string/phone"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -189,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/inputLayoutPhone2"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -200,7 +209,8 @@
                     android:hint="@string/email_address"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -210,7 +220,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/inputLayoutEmail"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
+                app:boxStrokeColor="@color/colorTextInputLayout"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -223,7 +233,8 @@
                     android:inputType="textMultiLine|textCapWords"
                     android:lines="4"
                     android:maxLines="10"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/insertion_cursor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -237,8 +248,9 @@
                 android:gravity="center"
                 android:text="@string/save"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="?attr/colorSecondaryVariant" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
