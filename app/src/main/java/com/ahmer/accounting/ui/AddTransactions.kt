@@ -287,15 +287,12 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                             userId = userID
                             credit = 0.toDouble()
                             debit = 0.toDouble()
-                            balance = myDatabaseHelper.getPreviousBalanceByUserId(userID)
                             if (typeAmount == getString(R.string.credit_plus)) {
                                 credit = newAmount
-                                balance += newAmount
                                 isDebit = false
                             }
                             if (typeAmount == getString(R.string.debit_minus)) {
                                 debit = newAmount
-                                balance -= newAmount
                                 isDebit = true
                             }
                             date = newDate

@@ -58,8 +58,6 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
             debit =
                 mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
-            balance =
-                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
             isDebit =
                 HelperFunctions.checkBoolean(mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.IS_DEBIT)))
             created =
@@ -200,12 +198,10 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                             debit = 0.toDouble()
                             if (typeAmount == context.getString(R.string.credit_plus)) {
                                 credit = newAmount
-                                balance += newAmount
                                 isDebit = false
                             }
                             if (typeAmount == context.getString(R.string.debit_minus)) {
                                 debit = newAmount
-                                balance -= newAmount
                                 isDebit = true
                             }
                             date = inputDate.editText?.text.toString()

@@ -51,7 +51,6 @@ class MyDatabaseHelper(context: Context) :
             put(Constants.TranColumn.DESCRIPTION, trans.description)
             put(Constants.TranColumn.CREDIT, trans.credit)
             put(Constants.TranColumn.DEBIT, trans.debit)
-            put(Constants.TranColumn.BALANCE, trans.balance)
             put(Constants.TranColumn.IS_DEBIT, trans.isDebit)
             if (isModified) {
                 put(Constants.TranColumn.LAST_MODIFIED, trans.modified)
@@ -90,7 +89,6 @@ class MyDatabaseHelper(context: Context) :
                     "${Constants.TranColumn.DESCRIPTION} TEXT NOT NULL, " +
                     "${Constants.TranColumn.CREDIT} REAL, " +
                     "${Constants.TranColumn.DEBIT} REAL, " +
-                    "${Constants.TranColumn.BALANCE} REAL, " +
                     "${Constants.TranColumn.IS_DEBIT} INTEGER, " +
                     "${Constants.TranColumn.CREATED_ON} TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "${Constants.TranColumn.LAST_MODIFIED} TIMESTAMP DEFAULT \"\", " +
@@ -318,7 +316,6 @@ class MyDatabaseHelper(context: Context) :
             Constants.TranColumn.DESCRIPTION,
             Constants.TranColumn.CREDIT,
             Constants.TranColumn.DEBIT,
-            Constants.TranColumn.BALANCE,
             Constants.TranColumn.IS_DEBIT,
             Constants.TranColumn.CREATED_ON,
             Constants.TranColumn.LAST_MODIFIED
@@ -340,31 +337,6 @@ class MyDatabaseHelper(context: Context) :
         }
 
         return cursor
-    }
-
-    fun getPreviousBalanceByUserId(id: Long): Double {
-        var previousBalance: Double = 0.toDouble()
-        val getBalanceFromDatabase: SQLiteDatabase = this.readableDatabase
-        val userID =
-            "SELECT * FROM ${Constants.TranColumn.TABLE_NAME} WHERE ${Constants.TranColumn.USER_ID} = $id;"
-        val cursor: Cursor = getBalanceFromDatabase.rawQuery(userID, null)
-        try {
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                if (cursor.count > 0) {
-                    previousBalance =
-                        cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.TranColumn.BALANCE))
-                    cursor.moveToNext()
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(Constants.LOG_TAG, e.message, e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-        } finally {
-            cursor.close()
-            getBalanceFromDatabase.close()
-        }
-        return previousBalance
     }
 
     fun getSumForColumns(id: Long, nameColumn: String, isAllAccountsSum: Boolean = false): Double {
@@ -465,7 +437,6 @@ class MyDatabaseHelper(context: Context) :
             mTableMain.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.DEBIT, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.CREDIT, true))
-            mTableMain.addCell(cellFormat(Constants.TranColumn.BALANCE, true))
 
             mCursor.moveToFirst()
             if (mCursor.moveToFirst()) do {
@@ -490,14 +461,6 @@ class MyDatabaseHelper(context: Context) :
                             )
                         )
                     )
-                val mBalance: String =
-                    HelperFunctions.getRoundedValue(
-                        mCursor.getDouble(
-                            mCursor.getColumnIndexOrThrow(
-                                Constants.TranColumn.BALANCE
-                            )
-                        )
-                    )
                 mTableMain.addCell(cellFormat(mDate, false, "Center"))
                 mTableMain.addCell(cellFormat(mDescription, false))
                 if (mDebit == "0") {
@@ -510,7 +473,6 @@ class MyDatabaseHelper(context: Context) :
                 } else {
                     mTableMain.addCell(cellFormat(mCredit, false, "Right"))
                 }
-                mTableMain.addCell(cellFormat(mBalance, false, "Right"))
             } while (mCursor.moveToNext())
 
             val mTotalCredit = getSumForColumns(id, "Credit", false)
