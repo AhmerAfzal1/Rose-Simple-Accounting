@@ -5,7 +5,9 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.ahmer.accounting.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -119,6 +121,23 @@ class HelperFunctions : AppCompatActivity() {
                 val dialog = alertBuilder.create()
                 dialog.show()
                 dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(context.getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(context.getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(context.getColor(R.color.black))
+                    } else {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(context.resources.getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(context.resources.getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(context.resources.getColor(R.color.black))
+                    }
+                }
             } catch (e: Exception) {
                 Log.e(Constants.LOG_TAG, e.message, e)
                 FirebaseCrashlytics.getInstance().recordException(e)

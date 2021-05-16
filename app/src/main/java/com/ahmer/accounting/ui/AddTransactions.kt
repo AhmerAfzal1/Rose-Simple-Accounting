@@ -17,6 +17,7 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.loader.app.LoaderManager
@@ -208,6 +209,8 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
             val toggleGroup =
                 dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
+            val btnCredit = dialog.findViewById<MaterialButton>(R.id.toggleBtnCredit)
+            val btnDebit = dialog.findViewById<MaterialButton>(R.id.toggleBtnDebit)
             val inputDate = dialog.findViewById<TextInputEditText>(R.id.inputDate)
             val inputDescription = dialog.findViewById<TextInputEditText>(R.id.inputDescription)
             val addTransactions = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
@@ -218,6 +221,28 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 val checkedButton = dialog.findViewById<MaterialButton>(checkedId)
                 typeAmount = checkedButton.text.toString()
                 Log.v(Constants.LOG_TAG, "TypeAmount: $typeAmount")
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        when (typeAmount) {
+                            getString(R.string.credit_plus) -> {
+                                btnCredit.backgroundTintList =
+                                    ContextCompat.getColorStateList(this, R.color.black)
+                                btnDebit.backgroundTintList =
+                                    ContextCompat.getColorStateList(
+                                        this, android.R.color.transparent
+                                    )
+                            }
+                            else -> {
+                                btnCredit.backgroundTintList =
+                                    ContextCompat.getColorStateList(
+                                        this, android.R.color.transparent
+                                    )
+                                btnDebit.backgroundTintList =
+                                    ContextCompat.getColorStateList(this, R.color.black)
+                            }
+                        }
+                    }
+                }
             }
 
             val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())

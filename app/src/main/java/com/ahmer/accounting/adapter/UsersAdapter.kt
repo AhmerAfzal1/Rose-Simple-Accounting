@@ -15,6 +15,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -186,6 +188,16 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             getComments.text = userProfile.comment
             getCreated.text = userProfile.created
             getModified.text = userProfile.modified
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    btnOk.backgroundTintList =
+                        ContextCompat.getColorStateList(mContext, R.color.black)
+                    btnOk.setTextColor(mContext.getColor(R.color.white))
+                } else {
+                    btnOk.setBackgroundColor(mContext.resources.getColor(R.color.black))
+                    btnOk.setTextColor(mContext.resources.getColor(R.color.white))
+                }
+            }
             btnOk.setOnClickListener {
                 dialog.dismiss()
             }

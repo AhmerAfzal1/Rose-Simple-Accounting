@@ -1,6 +1,7 @@
 package com.ahmer.accounting.ui
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -100,6 +101,9 @@ class Settings : AppCompatActivity() {
             var size = 0L
             size += getDirSize(Utils.getApp().cacheDir)
             size += getDirSize(Utils.getApp().externalCacheDir!!)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                size += getDirSize(Utils.getApp().codeCacheDir)
+            }
             btnCaches.summary =
                 getString(R.string.summary_cache_size, HelperUtils.getFileSize(size))
         }

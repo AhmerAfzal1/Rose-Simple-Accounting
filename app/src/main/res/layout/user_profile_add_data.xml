@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBgMainLayout"
     tools:context=".ui.AddUser">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -39,7 +40,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textCursorDrawable="@drawable/cursor"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText

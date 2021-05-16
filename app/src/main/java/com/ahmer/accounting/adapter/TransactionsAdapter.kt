@@ -3,6 +3,7 @@ package com.ahmer.accounting.adapter
 import android.app.Dialog
 import android.content.Context
 import android.database.Cursor
+import android.os.Build
 import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
@@ -23,7 +27,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
@@ -68,7 +72,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             showDropDownDialog(mContext, transaction)
         }
         if (mSelectedIds.contains(position)) {
-            holder.itemView.setBackgroundResource(R.color.teal_200)
+            holder.itemView.setBackgroundResource(R.color.colorSecondaryLight)
         } else {
             holder.itemView.setBackgroundResource(R.color.white)
         }
@@ -110,6 +114,16 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             tvTransId.text = trans.transId.toString()
             tvTransCreated.text = trans.created
             tvTransModified.text = trans.modified
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    btnOk.backgroundTintList =
+                        ContextCompat.getColorStateList(context, R.color.black)
+                    btnOk.setTextColor(context.getColor(R.color.white))
+                } else {
+                    btnOk.setBackgroundColor(context.resources.getColor(R.color.black))
+                    btnOk.setTextColor(context.resources.getColor(R.color.white))
+                }
+            }
             btnOk.setOnClickListener {
                 dialog.dismiss()
             }
@@ -131,12 +145,25 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             )
             dialog.setCancelable(false)
             var isSuccessfullyUpdated = false
-            val inputDate = dialog.findViewById<TextInputEditText>(R.id.inputDate)
+            val inputDate = dialog.findViewById<TextInputLayout>(R.id.textInputLayoutDate)
             val toggle = dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
-            val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
-            val inputDescription = dialog.findViewById<TextInputEditText>(R.id.inputDescription)
+            val inputAmount = dialog.findViewById<TextInputLayout>(R.id.textInputLayoutAmount)
+            val inputDescription =
+                dialog.findViewById<TextInputLayout>(R.id.textInputLayoutDescription)
             val addTransaction = dialog.findViewById<MaterialButton>(R.id.btnAddTransaction)
             val cancelTransaction = dialog.findViewById<MaterialButton>(R.id.btnCancelTransaction)
+
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    inputDate.boxStrokeColor = context.getColor(R.color.black)
+                    inputAmount.boxStrokeColor = context.getColor(R.color.black)
+                    inputDescription.boxStrokeColor = context.getColor(R.color.black)
+                } else {
+                    inputDate.boxStrokeColor = context.resources.getColor(R.color.black)
+                    inputAmount.boxStrokeColor = context.resources.getColor(R.color.black)
+                    inputDescription.boxStrokeColor = context.resources.getColor(R.color.black)
+                }
+            }
 
             val typeAmount: String = if (trans.credit == 0.toDouble()) {
                 context.getString(R.string.debit_minus)
@@ -145,17 +172,17 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             }
             if (typeAmount == context.getString(R.string.debit_minus)) {
                 toggle.check(R.id.toggleBtnDebit)
-                inputAmount.setText(trans.debit.toString())
+                inputAmount.editText?.setText(trans.debit.toString())
             } else {
                 toggle.check(R.id.toggleBtnCredit)
-                inputAmount.setText(trans.credit.toString())
+                inputAmount.editText?.setText(trans.credit.toString())
             }
-            inputDate.setText(HelperFunctions.getDateTime())
-            inputDescription.setText(trans.description)
+            inputDate.editText?.setText(HelperFunctions.getDateTime())
+            inputDescription.editText?.setText(trans.description)
             addTransaction.text = context.getString(R.string.update_transaction)
             addTransaction.setOnClickListener {
                 val myDatabaseHelper = MyDatabaseHelper(context)
-                val newAmount: Double = inputAmount.text.toString().trim().toDouble()
+                val newAmount: Double = inputAmount.editText?.text.toString().trim().toDouble()
                 when {
                     newAmount == 0.toDouble() -> {
                         ToastUtils.showLong(context.getString(R.string.enter_the_amount))
@@ -181,8 +208,8 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                                 balance -= newAmount
                                 isDebit = true
                             }
-                            date = inputDate.text.toString()
-                            description = inputDescription.text.toString()
+                            date = inputDate.editText?.text.toString()
+                            description = inputDescription.editText?.text.toString()
                             modified = HelperFunctions.getDateTime()
                         }
                         isSuccessfullyUpdated =
@@ -211,7 +238,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             dialogBuilder.setCancelable(false)
             dialogBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
                 dialog.dismiss()
-            }
+            }.create()
             val adapter =
                 ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1)
             adapter.addAll(
@@ -235,6 +262,15 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             }
             val dialog = dialogBuilder.create()
             dialog.show()
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                        .setTextColor(mContext.getColor(R.color.black))
+                } else {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                        .setTextColor(mContext.resources.getColor(R.color.black))
+                }
+            }
         } catch (e: Exception) {
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)

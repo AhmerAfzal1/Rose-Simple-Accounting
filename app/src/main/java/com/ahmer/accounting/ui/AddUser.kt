@@ -1,10 +1,13 @@
 package com.ahmer.accounting.ui
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
@@ -30,6 +33,9 @@ class AddUser : AppCompatActivity() {
 
         val userName = findViewById<TextInputLayout>(R.id.inputLayoutName)
         val toggleGroupGender = findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupGender)
+        val btnMale = findViewById<MaterialButton>(R.id.btnMale)
+        val btnFemale = findViewById<MaterialButton>(R.id.btnFemale)
+        val btnUnknown = findViewById<MaterialButton>(R.id.btnUnknown)
         val userAddress = findViewById<TextInputLayout>(R.id.inputLayoutAddress)
         val userCity = findViewById<TextInputLayout>(R.id.inputLayoutCity)
         val userPhone1 = findViewById<TextInputLayout>(R.id.inputLayoutPhone1)
@@ -41,11 +47,80 @@ class AddUser : AppCompatActivity() {
         userName.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                userName.boxStrokeColor = getColor(R.color.black)
+                userAddress.boxStrokeColor = getColor(R.color.black)
+                userCity.boxStrokeColor = getColor(R.color.black)
+                userPhone1.boxStrokeColor = getColor(R.color.black)
+                userPhone2.boxStrokeColor = getColor(R.color.black)
+                userEmail.boxStrokeColor = getColor(R.color.black)
+                userComments.boxStrokeColor = getColor(R.color.black)
+            } else {
+                userName.boxStrokeColor = resources.getColor(R.color.black)
+                userAddress.boxStrokeColor = resources.getColor(R.color.black)
+                userCity.boxStrokeColor = resources.getColor(R.color.black)
+                userPhone1.boxStrokeColor = resources.getColor(R.color.black)
+                userPhone2.boxStrokeColor = resources.getColor(R.color.black)
+                userEmail.boxStrokeColor = resources.getColor(R.color.black)
+                userComments.boxStrokeColor = resources.getColor(R.color.black)
+            }
+        }
+
         var typeGender = ""
         toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
             val checkedButton = findViewById<MaterialButton>(checkedId)
             typeGender = checkedButton.text.toString()
             Log.v(Constants.LOG_TAG, "TypeGender: $typeGender")
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    when (typeGender) {
+                        "Male" -> {
+                            btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                            btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                        }
+                        "Female" -> {
+                            btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                        }
+                        else -> {
+                            btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                        }
+                    }
+                } else {
+                    when (typeGender) {
+                        "Male" -> {
+                            btnMale.setBackgroundResource(R.color.black)
+                            btnFemale.setBackgroundResource(android.R.color.transparent)
+                            btnUnknown.setBackgroundResource(android.R.color.transparent)
+                        }
+                        "Female" -> {
+                            btnMale.setBackgroundResource(android.R.color.transparent)
+                            btnUnknown.setBackgroundResource(android.R.color.transparent)
+                            btnFemale.setBackgroundResource(R.color.black)
+                        }
+                        else -> {
+                            btnMale.setBackgroundResource(android.R.color.transparent)
+                            btnFemale.setBackgroundResource(android.R.color.transparent)
+                            btnUnknown.setBackgroundResource(R.color.black)
+                        }
+                    }
+                }
+            }
         }
 
         btnSave.setOnClickListener {
