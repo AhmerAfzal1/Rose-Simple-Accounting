@@ -12,6 +12,7 @@ class Constants {
         const val APPLICATION_ID = BuildConfig.APPLICATION_ID
         const val DATABASE_NAME: String = "SimpleAccounting.db"
         const val DATABASE_VERSION: Int = 1
+        const val DATE_LONG_PATTERN = "dd-MM-yyyy"
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
         const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=$APPLICATION_ID"

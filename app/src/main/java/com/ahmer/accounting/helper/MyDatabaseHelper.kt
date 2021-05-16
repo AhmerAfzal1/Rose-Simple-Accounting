@@ -20,7 +20,6 @@ import com.itextpdf.text.pdf.PdfWriter
 import io.ahmer.utils.utilcode.ToastUtils
 import java.io.*
 
-
 class MyDatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION) {
 
@@ -415,6 +414,10 @@ class MyDatabaseHelper(context: Context) :
         try {
             val mOutPutStream = mContext.contentResolver.openOutputStream(uri)
 
+            val mTotalCredit = getSumForColumns(id, "Credit", false)
+            val mTotalDebit = getSumForColumns(id, "Debit", false)
+            val mTotalBalance = mTotalCredit - mTotalDebit
+
             PdfWriter.getInstance(mDocument, mOutPutStream)
             mDocument.open()
             mDocument.addCreationDate()
@@ -431,17 +434,21 @@ class MyDatabaseHelper(context: Context) :
 
             val mTableMain = PdfPTable(5)
             mTableMain.widthPercentage = 100F
-            mTableMain.setTotalWidth(floatArrayOf(63F, 198F, 84F, 84F, 111F))
+            mTableMain.setTotalWidth(floatArrayOf(36F, 72F, 199F, 90F, 90F))
             mTableMain.isLockedWidth = true
+            mTableMain.addCell(cellFormat("Sr", true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.DATE, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.DESCRIPTION, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.DEBIT, true))
             mTableMain.addCell(cellFormat(Constants.TranColumn.CREDIT, true))
 
+            var srNo = 0
             mCursor.moveToFirst()
             if (mCursor.moveToFirst()) do {
+                srNo += 1
                 val mDate: String = HelperFunctions.convertDateTimeShortFormat(
-                    mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
+                    mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE)),
+                    true
                 )
                 val mDescription: String =
                     mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
@@ -461,6 +468,7 @@ class MyDatabaseHelper(context: Context) :
                             )
                         )
                     )
+                mTableMain.addCell(cellFormat(srNo.toString(), false, "Center"))
                 mTableMain.addCell(cellFormat(mDate, false, "Center"))
                 mTableMain.addCell(cellFormat(mDescription, false))
                 if (mDebit == "0") {
@@ -475,15 +483,12 @@ class MyDatabaseHelper(context: Context) :
                 }
             } while (mCursor.moveToNext())
 
-            val mTotalCredit = getSumForColumns(id, "Credit", false)
-            val mTotalDebit = getSumForColumns(id, "Debit", false)
-            val mTotalBalance = mTotalCredit - mTotalDebit
-            val mTableBalance = PdfPTable(4)
-            mTableBalance.widthPercentage = 100F
-            mTableBalance.setTotalWidth(floatArrayOf(261F, 84F, 84F, 111F))
-            mTableBalance.isLockedWidth = true
-            mTableBalance.addCell(cellFormat("Total", false, "Center", true))
-            mTableBalance.addCell(
+            val mTableTotal = PdfPTable(3)
+            mTableTotal.widthPercentage = 100F
+            mTableTotal.setTotalWidth(floatArrayOf(307F, 90F, 90F))
+            mTableTotal.isLockedWidth = true
+            mTableTotal.addCell(cellFormat("Total", false, "Center", true))
+            mTableTotal.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalDebit),
                     false,
@@ -491,7 +496,7 @@ class MyDatabaseHelper(context: Context) :
                     true
                 )
             )
-            mTableBalance.addCell(
+            mTableTotal.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalCredit),
                     false,
@@ -499,6 +504,12 @@ class MyDatabaseHelper(context: Context) :
                     true
                 )
             )
+
+            val mTableBalance = PdfPTable(2)
+            mTableBalance.widthPercentage = 100F
+            mTableBalance.setTotalWidth(floatArrayOf(307F, 180F))
+            mTableBalance.isLockedWidth = true
+            mTableBalance.addCell(cellFormat("Balance", false, "Center", true))
             mTableBalance.addCell(
                 cellFormat(
                     HelperFunctions.getRoundedValue(mTotalBalance),
@@ -509,6 +520,7 @@ class MyDatabaseHelper(context: Context) :
             )
 
             mDocument.add(mTableMain)
+            mDocument.add(mTableTotal)
             mDocument.add(mTableBalance)
             return true
         } catch (de: DocumentException) {

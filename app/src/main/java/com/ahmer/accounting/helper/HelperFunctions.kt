@@ -42,7 +42,7 @@ class HelperFunctions : AppCompatActivity() {
             return dateTime
         }
 
-        fun convertDateTimeShortFormat(dataTime: String): String {
+        fun convertDateTimeShortFormat(dataTime: String, forStatement: Boolean = false): String {
             var dateTimeShort = ""
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -55,16 +55,27 @@ class HelperFunctions : AppCompatActivity() {
                         )
                         .toFormatter()
                     val parsed = LocalDateTime.parse(dataTime, inputFormatter)
-                    val outputFormatter =
+
+                    val outputFormatter: DateTimeFormatter = if (!forStatement) {
                         DateTimeFormatter.ofPattern(
                             Constants.DATE_SHORT_PATTERN,
                             Locale.getDefault()
                         )
+                    } else {
+                        DateTimeFormatter.ofPattern(
+                            Constants.DATE_LONG_PATTERN,
+                            Locale.getDefault()
+                        )
+                    }
                     dateTimeShort = outputFormatter.format(parsed)
                 } else {
                     val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
                     val date: Date = sdfOld.parse(dataTime)!!
-                    val sdfNew = SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                    val sdfNew: SimpleDateFormat = if (!forStatement) {
+                        SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
+                    } else {
+                        SimpleDateFormat(Constants.DATE_LONG_PATTERN, Locale.getDefault())
+                    }
                     dateTimeShort = sdfNew.format(date)
                 }
             } catch (pe: Exception) {
