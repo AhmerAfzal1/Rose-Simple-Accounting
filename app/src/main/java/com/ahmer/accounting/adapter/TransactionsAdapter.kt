@@ -33,6 +33,7 @@ import io.ahmer.utils.utilcode.ToastUtils
 class TransactionsAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
+    private var mCanStart = true
     private val mContext = context
     private val mCursor = cursor
     private var mSelectedIds = ArrayList<Int>()
@@ -68,7 +69,9 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.bindView(transaction)
         addTransList(transaction)
         holder.cvTransactionEntry.setOnClickListener {
-            showDropDownDialog(mContext, transaction)
+            if (mCanStart) {
+                showDropDownDialog(mContext, transaction)
+            }
         }
         if (mSelectedIds.contains(position)) {
             holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
@@ -85,11 +88,15 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         }
     }
 
-    private fun addTransList(transactions: Transactions){
+    fun setCanStart(start: Boolean) {
+        mCanStart = start
+    }
+
+    private fun addTransList(transactions: Transactions) {
         mTransactions.add(transactions)
     }
 
-    fun getTransList(): ArrayList<Transactions>{
+    fun getTransList(): ArrayList<Transactions> {
         return mTransactions
     }
 

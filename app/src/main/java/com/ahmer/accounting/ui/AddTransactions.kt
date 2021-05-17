@@ -111,6 +111,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
                 override fun onItemLongClick(view: View, position: Int) {
                     if (!mIsMultiSelect) {
+                        mAdapter.setCanStart(false)
                         mSelectedIds = ArrayList()
                         mIsMultiSelect = true
                         mActionMode = startActionMode(this@AddTransactions)
@@ -485,6 +486,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
+        mAdapter.setCanStart(true)
         mActionMode = null
         mIsMultiSelect = false
         mIsSelectAll = false

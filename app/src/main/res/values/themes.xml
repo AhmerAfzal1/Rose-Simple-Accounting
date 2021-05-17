@@ -16,6 +16,8 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/primaryColor</item>
         <item name="android:windowBackground">@null</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
     <style name="Theme.RoseSimpleAccounting.NoActionBar" parent="AppTheme">

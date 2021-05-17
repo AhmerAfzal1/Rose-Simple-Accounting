@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 open class RecyclerItemClickListener(
     context: Context,
     recyclerView: RecyclerView,
-    listener: OnItemClickListener
+    private val listener: OnItemClickListener
 ) : RecyclerView.OnItemTouchListener {
 
-    private val mListener: OnItemClickListener = listener
-    private val mGestureDetector: GestureDetector =
+    private var mGestureDetector: GestureDetector =
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapUp(e: MotionEvent): Boolean {
                 return true
@@ -22,7 +21,7 @@ open class RecyclerItemClickListener(
             override fun onLongPress(e: MotionEvent) {
                 val childView = recyclerView.findChildViewUnder(e.x, e.y)
                 if (childView != null) {
-                    mListener.onItemLongClick(
+                    listener.onItemLongClick(
                         childView,
                         recyclerView.getChildAdapterPosition(childView)
                     )
@@ -30,19 +29,20 @@ open class RecyclerItemClickListener(
             }
         })
 
-    interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int)
-        fun onItemLongClick(view: View, position: Int)
-    }
-
-    override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
-        val childView = view.findChildViewUnder(e.x, e.y)
+    override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        val childView = rv.findChildViewUnder(e.x, e.y)
         if (childView != null && mGestureDetector.onTouchEvent(e)) {
-            mListener.onItemClick(childView, view.getChildAdapterPosition(childView))
+            listener.onItemClick(childView, rv.getChildAdapterPosition(childView))
+            return true
         }
         return false
     }
 
-    override fun onTouchEvent(view: RecyclerView, motionEvent: MotionEvent) {}
+    override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int)
+        fun onItemLongClick(view: View, position: Int)
+    }
 }
