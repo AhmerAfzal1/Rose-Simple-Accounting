@@ -68,6 +68,9 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = resources.getString(R.string.title_all_transaction_record)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.overflowIcon?.setTint(Color.WHITE)
+        }
         toolbar.setOnClickListener {
             finish()
         }

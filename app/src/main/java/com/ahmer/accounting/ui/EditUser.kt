@@ -1,6 +1,8 @@
 package com.ahmer.accounting.ui
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -25,6 +27,9 @@ class EditUser : AppCompatActivity() {
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = resources.getString(R.string.title_toolbar_edit_user)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.overflowIcon?.setTint(Color.WHITE)
+        }
         toolbar.setOnClickListener {
             finish()
         }

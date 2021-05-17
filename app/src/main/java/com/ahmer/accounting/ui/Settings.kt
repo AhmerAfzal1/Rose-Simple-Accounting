@@ -1,5 +1,6 @@
 package com.ahmer.accounting.ui
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -34,6 +35,9 @@ class Settings : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.overflowIcon?.setTint(Color.WHITE)
+        }
         toolbar.setOnClickListener {
             finish()
         }

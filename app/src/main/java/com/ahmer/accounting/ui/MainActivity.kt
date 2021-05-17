@@ -64,6 +64,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.app_name)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.overflowIcon?.setTint(Color.WHITE)
+        }
         setSupportActionBar(toolbar)
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
