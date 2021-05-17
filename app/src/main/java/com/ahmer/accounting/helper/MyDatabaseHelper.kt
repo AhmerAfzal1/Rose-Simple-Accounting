@@ -357,6 +357,7 @@ class MyDatabaseHelper(context: Context) :
         }
         val cursor: Cursor = getSumFromDatabase.rawQuery(query, null)
         try {
+            getSumFromDatabase.beginTransaction()
             if (cursor.moveToFirst()) {
                 sum = cursor.getDouble(cursor.getColumnIndexOrThrow("TOTAL"))
             }
@@ -364,6 +365,7 @@ class MyDatabaseHelper(context: Context) :
             Log.e(Constants.LOG_TAG, e.message, e)
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
+            getSumFromDatabase.setTransactionSuccessful()
             cursor.close()
             getSumFromDatabase.close()
         }

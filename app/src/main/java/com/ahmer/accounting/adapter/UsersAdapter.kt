@@ -130,7 +130,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivDeleteButton.setOnClickListener {
-            HelperFunctions.confirmDelete(mContext, userProfile.id, userProfile.name, true)
+            HelperFunctions.confirmUserDelete(mContext, userProfile.id, userProfile.name)
         }
     }
 

@@ -421,8 +421,9 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 alertBuilder.setPositiveButton(getString(R.string.delete)) { dialog, which ->
                     var isDeletedSuccessfully = false
                     for (pos in mSelectedIds) {
-                        Log.v(Constants.LOG_TAG, "Pos: $pos")
-                        isDeletedSuccessfully = myDatabaseHelper.deleteTransactions(pos.toLong())
+                        val trans = mAdapter.getTransList()
+                        isDeletedSuccessfully =
+                            myDatabaseHelper.deleteTransactions(trans[pos].transId)
                     }
                     if (isDeletedSuccessfully) {
                         ToastUtils.showShort(getString(R.string.trans_deleted))

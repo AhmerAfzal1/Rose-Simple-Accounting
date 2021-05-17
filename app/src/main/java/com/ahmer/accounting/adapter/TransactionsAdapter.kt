@@ -36,6 +36,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
     private val mContext = context
     private val mCursor = cursor
     private var mSelectedIds = ArrayList<Int>()
+    private val mTransactions = ArrayList<Transactions>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -65,6 +66,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED))
         }
         holder.bindView(transaction)
+        addTransList(transaction)
         holder.cvTransactionEntry.setOnClickListener {
             showDropDownDialog(mContext, transaction)
         }
@@ -81,6 +83,14 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         } else {
             mCursor.count
         }
+    }
+
+    private fun addTransList(transactions: Transactions){
+        mTransactions.add(transactions)
+    }
+
+    fun getTransList(): ArrayList<Transactions>{
+        return mTransactions
     }
 
     fun addSelectedIds(ids: ArrayList<Int>) {
@@ -228,7 +238,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                         showTransInfoDialog(context, trans)
                     }
                     2 -> {
-                        HelperFunctions.confirmDelete(context, trans.transId, isUserDel = false)
+                        HelperFunctions.confirmTransDelete(context, trans.transId)
                     }
                 }
                 dialog.dismiss()

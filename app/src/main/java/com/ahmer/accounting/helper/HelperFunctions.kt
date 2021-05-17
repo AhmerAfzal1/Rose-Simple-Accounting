@@ -96,33 +96,64 @@ class HelperFunctions : AppCompatActivity() {
             return int != 0
         }
 
-        fun confirmDelete(context: Context, id: Long, userName: String = "", isUserDel: Boolean) {
+        fun confirmUserDelete(context: Context, userId: Long, userName: String) {
             try {
                 val myDatabaseHelper = MyDatabaseHelper(context)
                 val alertBuilder = MaterialAlertDialogBuilder(context)
                 alertBuilder.setTitle(context.getString(R.string.confirmation))
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
-                val msg: String = if (isUserDel) {
+                alertBuilder.setMessage(
                     context.getString(R.string.user_delete_warning_msg, userName)
-                } else {
-                    context.getString(R.string.trans_delete_warning_msg)
-                }
-                alertBuilder.setMessage(msg)
+                )
                 alertBuilder.setCancelable(false)
                 alertBuilder.setPositiveButton(context.getString(R.string.delete)) { dialog, which ->
-                    val isDeleted: Boolean
-                    if (isUserDel) {
-                        isDeleted = myDatabaseHelper.deleteUserProfileData(id)
-                        if (isDeleted) {
-                            ToastUtils.showShort(
-                                context.getString(R.string.users_deleted, userName)
-                            )
-                        }
+                    val isDeleted: Boolean = myDatabaseHelper.deleteUserProfileData(userId)
+                    if (isDeleted) {
+                        ToastUtils.showShort(context.getString(R.string.trans_deleted))
+                    }
+                    dialog.dismiss()
+                }
+                alertBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
+                    dialog.dismiss()
+                }
+                val dialog = alertBuilder.create()
+                dialog.show()
+                dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(context.getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(context.getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(context.getColor(R.color.black))
                     } else {
-                        isDeleted = myDatabaseHelper.deleteTransactions(id)
-                        if (isDeleted) {
-                            ToastUtils.showShort(context.getString(R.string.trans_deleted))
-                        }
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(context.resources.getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(context.resources.getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(context.resources.getColor(R.color.black))
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(Constants.LOG_TAG, e.message, e)
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        }
+
+        fun confirmTransDelete(context: Context, transId: Long) {
+            try {
+                val myDatabaseHelper = MyDatabaseHelper(context)
+                val alertBuilder = MaterialAlertDialogBuilder(context)
+                alertBuilder.setTitle(context.getString(R.string.confirmation))
+                alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
+                alertBuilder.setMessage(context.getString(R.string.trans_delete_warning_msg))
+                alertBuilder.setCancelable(false)
+                alertBuilder.setPositiveButton(context.getString(R.string.delete)) { dialog, which ->
+                    val isDeleted: Boolean = myDatabaseHelper.deleteTransactions(transId)
+                    if (isDeleted) {
+                        ToastUtils.showShort(context.getString(R.string.trans_deleted))
                     }
                     dialog.dismiss()
                 }
