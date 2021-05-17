@@ -366,6 +366,7 @@ class MyDatabaseHelper(context: Context) :
             FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             getSumFromDatabase.setTransactionSuccessful()
+            getSumFromDatabase.endTransaction()
             cursor.close()
             getSumFromDatabase.close()
         }
