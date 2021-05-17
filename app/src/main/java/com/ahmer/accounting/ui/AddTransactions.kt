@@ -16,6 +16,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
@@ -414,14 +415,13 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 alertBuilder.setTitle(getString(R.string.confirmation))
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
                 alertBuilder.setMessage(
-                    getString(
-                        R.string.trans_bulk_delete_warning_msg, mSelectedIds.size
-                    )
+                    getString(R.string.trans_bulk_delete_warning_msg, mSelectedIds.size)
                 )
                 alertBuilder.setCancelable(false)
                 alertBuilder.setPositiveButton(getString(R.string.delete)) { dialog, which ->
                     var isDeletedSuccessfully = false
                     for (pos in mSelectedIds) {
+                        Log.v(Constants.LOG_TAG, "Pos: $pos")
                         isDeletedSuccessfully = myDatabaseHelper.deleteTransactions(pos.toLong())
                     }
                     if (isDeletedSuccessfully) {
@@ -434,7 +434,26 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                     dialog.dismiss()
                     mode?.finish()
                 }
-                alertBuilder.show()
+                val dialog = alertBuilder.create()
+                dialog.show()
+                dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(getColor(R.color.black))
+                    } else {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            .setTextColor(resources.getColor(R.color.black))
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(resources.getColor(R.color.black))
+                        dialog.findViewById<ImageView?>(android.R.id.icon)
+                            ?.setColorFilter(resources.getColor(R.color.black))
+                    }
+                }
             }
             R.id.menu_select_all_trans -> {
                 if (!mIsSelectAll) {
