@@ -150,7 +150,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             R.id.nav_backup -> {
                 if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        val fileName = HelperFunctions.getDateTimeForFileName() + "_backup.abf"
+                        val fileName =
+                            "backup_${HelperFunctions.getDateTime("ddMMyyHHmmss", false)}.abf"
                         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                             addCategory(Intent.CATEGORY_OPENABLE)
                             type = "application/vnd.sqlite3"

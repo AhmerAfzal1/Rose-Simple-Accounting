@@ -24,22 +24,19 @@ class HelperFunctions : AppCompatActivity() {
 
     companion object {
 
-        fun getDateTime(): String {
-            val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
+        fun getDateTime(format: String = "", isLocaleDefault: Boolean = true): String {
+            val locale: Locale = if (isLocaleDefault) {
+                Locale.getDefault()
+            } else {
+                Locale.ENGLISH
+            }
+            val dateFormat: SimpleDateFormat = if (format.isEmpty()) {
+                SimpleDateFormat(Constants.DATE_TIME_PATTERN, locale)
+            } else {
+                SimpleDateFormat(format, locale)
+            }
             val dateTime = Calendar.getInstance().time
             return dateFormat.format(dateTime)
-        }
-
-        fun getDateTimeForFileName(): String {
-            var dateTime = ""
-            try {
-                val format = SimpleDateFormat("ddMMyyHHmmss", Locale.ENGLISH)
-                dateTime = format.format(Date()).toString()
-            } catch (pe: Exception) {
-                Log.e(Constants.LOG_TAG, pe.message, pe)
-                FirebaseCrashlytics.getInstance().recordException(pe)
-            }
-            return dateTime
         }
 
         fun convertDateTimeShortFormat(dataTime: String, forStatement: Boolean = false): String {

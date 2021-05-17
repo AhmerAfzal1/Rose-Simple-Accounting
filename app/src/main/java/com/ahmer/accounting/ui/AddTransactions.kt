@@ -131,7 +131,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri: Uri? = result.data?.data
                     if (uri != null && mUserName != null) {
-                        val isGenerated = myDatabaseHelper.generatePdf(uri, mUserId, mUserName)
+                        val isGenerated = GeneratePdf.createPdf(this, uri, mUserId, mUserName)
                         if (isGenerated) {
                             ToastUtils.showShort(getString(R.string.pdf_generated))
                         }
@@ -164,7 +164,8 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 R.id.menu_export_to_pdf -> {
                     if (mAdapter.itemCount > 0) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            val fileName = HelperFunctions.getDateTimeForFileName() + ".pdf"
+                            val fileName =
+                                HelperFunctions.getDateTime("ddMMyyHHmmss", false) + ".pdf"
                             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                                 addCategory(Intent.CATEGORY_OPENABLE)
                                 type = "application/pdf"
@@ -179,11 +180,12 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                             }
                             val mFileName =
                                 File(
-                                    mDirPath, HelperFunctions.getDateTimeForFileName() + ".pdf"
+                                    mDirPath,
+                                    HelperFunctions.getDateTime("ddMMyyHHmmss", false) + ".pdf"
                                 )
                             if (mUserName != null) {
-                                val isGenerated = myDatabaseHelper.generatePdf(
-                                    Uri.fromFile(mFileName), mUserId, mUserName
+                                val isGenerated = GeneratePdf.createPdf(
+                                    this, Uri.fromFile(mFileName), mUserId, mUserName
                                 )
                                 if (isGenerated) {
                                     ToastUtils.showShort(getString(R.string.pdf_generated))
@@ -476,6 +478,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                     mActionMode!!.title = "${mSelectedIds.size} selected"
                 } else {
                     Log.v(Constants.LOG_TAG, "DeSelect All")
+                    mAdapter.setCanStart(true)
                     mIsSelectAll = false
                     mIsMultiSelect = false
                     mSelectedIds = ArrayList()
