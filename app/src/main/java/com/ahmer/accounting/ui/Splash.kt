@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.HelperFunctions
 import io.ahmer.utils.constants.PermissionConstants
 import io.ahmer.utils.utilcode.PermissionUtils
 import io.ahmer.utils.utilcode.SPUtils
@@ -39,7 +38,6 @@ class Splash : AppCompatActivity() {
             .callback(object : PermissionUtils.FullCallback {
                 override fun onGranted(granted: MutableList<String>) {
                     Log.v(Constants.LOG_TAG, "Permission has been granted")
-                    HelperFunctions.loadInterstitialAd(mActivity)
                     val intent = Intent(mActivity, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

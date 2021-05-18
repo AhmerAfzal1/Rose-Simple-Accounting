@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
+import com.ahmer.accounting.helper.MyAds
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
@@ -154,5 +155,7 @@ class AddUser : AppCompatActivity() {
                 finish()
             }
         }
+
+        MyAds.loadInterstitialAd(this)
     }
 }

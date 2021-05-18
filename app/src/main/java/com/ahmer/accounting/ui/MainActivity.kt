@@ -28,10 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.adapter.UsersAdapter
-import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.HelperFunctions
-import com.ahmer.accounting.helper.MyCursorLoader
-import com.ahmer.accounting.helper.MyDatabaseHelper
+import com.ahmer.accounting.helper.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -142,6 +139,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                     myDatabaseHelper.backupOrRestore(uri, false)
                 }
             }
+
+        MyAds.loadInterstitialAd(this)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

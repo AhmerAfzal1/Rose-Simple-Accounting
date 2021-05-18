@@ -226,6 +226,8 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             }
             true
         }
+
+        MyAds.loadInterstitialAd(this)
     }
 
     private fun showAddTransactionDialog(context: Context, userID: Long) {

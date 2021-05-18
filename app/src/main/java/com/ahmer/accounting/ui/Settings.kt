@@ -11,6 +11,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.MyAds
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.HelperUtils
@@ -41,6 +42,7 @@ class Settings : AppCompatActivity() {
         toolbar.setOnClickListener {
             finish()
         }
+        MyAds.loadInterstitialAd(this)
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

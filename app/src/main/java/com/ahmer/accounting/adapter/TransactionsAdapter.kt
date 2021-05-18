@@ -53,7 +53,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.bindView(transaction)
         addTransList(transaction)
         holder.cvTransactionEntry.setOnClickListener {
-                MyDialogs.showDropDownDialog(mContext, transaction)
+            MyDialogs.showDropDownDialog(mContext, transaction)
         }
         if (mSelectedIds.contains(position)) {
             holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
