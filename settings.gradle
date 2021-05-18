@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Rose Simple Accounting"
+rootProject.name = "Rose Account Manager"

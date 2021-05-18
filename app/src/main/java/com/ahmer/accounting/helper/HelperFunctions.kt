@@ -1,8 +1,13 @@
 package com.ahmer.accounting.helper
 
+import android.app.Activity
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -83,6 +88,44 @@ class HelperFunctions : AppCompatActivity() {
         fun checkBoolean(int: Int): Boolean {
             // 0 for false and 1 for true
             return int != 0
+        }
+
+        fun loadBannerAd(activity: Activity, adView: AdView) {
+            MobileAds.initialize(activity)
+            adView.adListener = object : AdListener() {
+                override fun onAdClosed() {
+                    super.onAdClosed()
+                    Log.v(Constants.LOG_TAG, "Banner: Ad closed")
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    Log.v(
+                        Constants.LOG_TAG,
+                        "Banner: Failed to load ad due to ${adError.message}, and error code is: ${adError.code}"
+                    )
+                }
+
+                override fun onAdOpened() {
+                    super.onAdOpened()
+                    Log.v(Constants.LOG_TAG, "Banner: Ad opened and displayed")
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    Log.v(Constants.LOG_TAG, "Banner: Ad received and loading...")
+                }
+
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    Log.v(Constants.LOG_TAG, "Banner: User clicked on ad")
+                }
+
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    Log.v(Constants.LOG_TAG, "Banner: Ad impression is recorded")
+                }
+            }
         }
     }
 }
