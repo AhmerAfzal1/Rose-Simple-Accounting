@@ -44,6 +44,7 @@ class EditUser : AppCompatActivity() {
         val userEmail = findViewById<TextInputLayout>(R.id.inputLayoutEmail)
         val userComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
         val btnSave = findViewById<MaterialButton>(R.id.btnSaveUserData)
+        btnSave.text = getString(R.string.update)
 
         var typeGender = ""
         toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->

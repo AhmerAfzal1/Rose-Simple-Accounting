@@ -474,15 +474,15 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                         mSelectedIds.add(i)
                     }
                     mAdapter.addSelectedIds(tempList)
-                    mActionMode!!.title = "${mSelectedIds.size} selected"
+                    mode?.title = "${mSelectedIds.size} selected"
                 } else {
                     Log.v(Constants.LOG_TAG, "DeSelect All")
                     mIsSelectAll = false
                     mIsMultiSelect = false
                     mSelectedIds = ArrayList()
                     mAdapter.addSelectedIds(ArrayList())
-                    mActionMode!!.title = ""
-                    mActionMode!!.finish()
+                    mode?.title = ""
+                    mode?.finish()
                 }
             }
         }
@@ -490,6 +490,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
+        mode?.finish()
         mActionMode = null
         mIsMultiSelect = false
         mIsSelectAll = false

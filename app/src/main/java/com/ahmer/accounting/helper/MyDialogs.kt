@@ -154,7 +154,7 @@ class MyDialogs {
                 }
                 inputDate.editText?.setText(HelperFunctions.getDateTime())
                 inputDescription.editText?.setText(trans.description)
-                addTransaction.text = context.getString(R.string.update_transaction)
+                addTransaction.text = context.getString(R.string.update)
                 addTransaction.setOnClickListener {
                     val myDatabaseHelper = MyDatabaseHelper(context)
                     val newAmount: Double = inputAmount.editText?.text.toString().trim().toDouble()
