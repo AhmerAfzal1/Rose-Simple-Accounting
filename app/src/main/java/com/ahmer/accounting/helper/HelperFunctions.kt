@@ -1,17 +1,9 @@
 package com.ahmer.accounting.helper
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.util.Log
-import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import com.ahmer.accounting.R
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.ahmer.utils.utilcode.ToastUtils
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -91,96 +83,6 @@ class HelperFunctions : AppCompatActivity() {
         fun checkBoolean(int: Int): Boolean {
             // 0 for false and 1 for true
             return int != 0
-        }
-
-        fun confirmUserDelete(context: Context, userId: Long, userName: String) {
-            try {
-                val myDatabaseHelper = MyDatabaseHelper(context)
-                val alertBuilder = MaterialAlertDialogBuilder(context)
-                alertBuilder.setTitle(context.getString(R.string.confirmation))
-                alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
-                alertBuilder.setMessage(
-                    context.getString(R.string.user_delete_warning_msg, userName)
-                )
-                alertBuilder.setCancelable(false)
-                alertBuilder.setPositiveButton(context.getString(R.string.delete)) { dialog, which ->
-                    val isDeleted: Boolean = myDatabaseHelper.deleteUserProfileData(userId)
-                    if (isDeleted) {
-                        ToastUtils.showShort(context.getString(R.string.trans_deleted))
-                    }
-                    dialog.dismiss()
-                }
-                alertBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                    dialog.dismiss()
-                }
-                val dialog = alertBuilder.create()
-                dialog.show()
-                dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
-                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                            .setTextColor(context.getColor(R.color.black))
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                            .setTextColor(context.getColor(R.color.black))
-                        dialog.findViewById<ImageView?>(android.R.id.icon)
-                            ?.setColorFilter(context.getColor(R.color.black))
-                    } else {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                            .setTextColor(context.resources.getColor(R.color.black))
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                            .setTextColor(context.resources.getColor(R.color.black))
-                        dialog.findViewById<ImageView?>(android.R.id.icon)
-                            ?.setColorFilter(context.resources.getColor(R.color.black))
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.LOG_TAG, e.message, e)
-                FirebaseCrashlytics.getInstance().recordException(e)
-            }
-        }
-
-        fun confirmTransDelete(context: Context, transId: Long) {
-            try {
-                val myDatabaseHelper = MyDatabaseHelper(context)
-                val alertBuilder = MaterialAlertDialogBuilder(context)
-                alertBuilder.setTitle(context.getString(R.string.confirmation))
-                alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
-                alertBuilder.setMessage(context.getString(R.string.trans_delete_warning_msg))
-                alertBuilder.setCancelable(false)
-                alertBuilder.setPositiveButton(context.getString(R.string.delete)) { dialog, which ->
-                    val isDeleted: Boolean = myDatabaseHelper.deleteTransactions(transId)
-                    if (isDeleted) {
-                        ToastUtils.showShort(context.getString(R.string.trans_deleted))
-                    }
-                    dialog.dismiss()
-                }
-                alertBuilder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                    dialog.dismiss()
-                }
-                val dialog = alertBuilder.create()
-                dialog.show()
-                dialog.findViewById<ImageView?>(android.R.id.icon)?.setColorFilter(Color.BLACK)
-                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                            .setTextColor(context.getColor(R.color.black))
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                            .setTextColor(context.getColor(R.color.black))
-                        dialog.findViewById<ImageView?>(android.R.id.icon)
-                            ?.setColorFilter(context.getColor(R.color.black))
-                    } else {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                            .setTextColor(context.resources.getColor(R.color.black))
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                            .setTextColor(context.resources.getColor(R.color.black))
-                        dialog.findViewById<ImageView?>(android.R.id.icon)
-                            ?.setColorFilter(context.resources.getColor(R.color.black))
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.LOG_TAG, e.message, e)
-                FirebaseCrashlytics.getInstance().recordException(e)
-            }
         }
     }
 }

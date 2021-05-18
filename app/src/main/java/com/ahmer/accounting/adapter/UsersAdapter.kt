@@ -1,31 +1,23 @@
 package com.ahmer.accounting.adapter
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.Build
 import android.provider.BaseColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.HelperFunctions
+import com.ahmer.accounting.helper.MyDialogs
 import com.ahmer.accounting.model.UserProfile
 import com.ahmer.accounting.ui.AddTransactions
 import com.ahmer.accounting.ui.EditUser
 import com.google.android.material.card.MaterialCardView
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class UsersAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
@@ -107,7 +99,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivInfoButton.setOnClickListener {
-            showDialogMoreInfo(userProfile)
+            MyDialogs.showUserProfileInfo(mContext, userProfile)
         }
         holder.ivEditButton.setOnClickListener {
             val intent = Intent(mContext, EditUser::class.java).apply {
@@ -130,7 +122,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivDeleteButton.setOnClickListener {
-            HelperFunctions.confirmUserDelete(mContext, userProfile.id, userProfile.name)
+            MyDialogs.confirmUserDelete(mContext, userProfile.id, userProfile.name)
         }
     }
 
@@ -139,72 +131,6 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             0
         } else {
             mCursor.count
-        }
-    }
-
-    private fun showDialogMoreInfo(userProfile: UserProfile) {
-        try {
-            val dialog = Dialog(mContext)
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setContentView(R.layout.user_profile_data_dialog)
-            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog.window?.setLayout(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-            )
-            dialog.setCancelable(false)
-            val getID = dialog.findViewById<TextView>(R.id.dialogUserID)
-            val getName = dialog.findViewById<TextView>(R.id.dialogUserName)
-            val getGender = dialog.findViewById<TextView>(R.id.dialogUserGender)
-            val getAddress = dialog.findViewById<TextView>(R.id.dialogUserAddress)
-            val getCity = dialog.findViewById<TextView>(R.id.dialogUserCity)
-            val getPhone1 = dialog.findViewById<TextView>(R.id.dialogUserPhone1)
-            val getPhone2 = dialog.findViewById<TextView>(R.id.dialogUserPhone2)
-            val getEmail = dialog.findViewById<TextView>(R.id.dialogUserEmail)
-            val getComments = dialog.findViewById<TextView>(R.id.dialogUserComments)
-            val getCreated = dialog.findViewById<TextView>(R.id.dialogUserCreated)
-            val getModified = dialog.findViewById<TextView>(R.id.dialogUserModified)
-            val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-            /*
-            Log.v(Constants.LOG_TAG, "Dialog ID: ${userProfile.id}")
-            Log.v(Constants.LOG_TAG, "Dialog Name: ${userProfile.name}")
-            Log.v(Constants.LOG_TAG, "Dialog Gender: ${userProfile.gender}")
-            Log.v(Constants.LOG_TAG, "Dialog Address: ${userProfile.address}")
-            Log.v(Constants.LOG_TAG, "Dialog Phone1: ${userProfile.phone1}")
-            Log.v(Constants.LOG_TAG, "Dialog Phone2: ${userProfile.phone2}")
-            Log.v(Constants.LOG_TAG, "Dialog Email: ${userProfile.email}")
-            Log.v(Constants.LOG_TAG, "Dialog Comments: ${userProfile.comment}")
-            Log.v(Constants.LOG_TAG, "Dialog Created: ${userProfile.created}")
-            Log.v(Constants.LOG_TAG, "Dialog Modified: ${userProfile.modified}")
-            */
-            getID.text = userProfile.id.toString()
-            getName.text = userProfile.name
-            getGender.text = userProfile.gender
-            getAddress.text = userProfile.address
-            getCity.text = userProfile.city
-            getPhone1.text = userProfile.phone1
-            getPhone2.text = userProfile.phone2
-            getEmail.text = userProfile.email
-            getComments.text = userProfile.comment
-            getCreated.text = userProfile.created
-            getModified.text = userProfile.modified
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    btnOk.backgroundTintList =
-                        ContextCompat.getColorStateList(mContext, R.color.black)
-                    btnOk.setTextColor(mContext.getColor(R.color.white))
-                } else {
-                    btnOk.setBackgroundColor(mContext.resources.getColor(R.color.black))
-                    btnOk.setTextColor(mContext.resources.getColor(R.color.white))
-                }
-            }
-            btnOk.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
-        } catch (e: Exception) {
-            Log.e(Constants.LOG_TAG, e.message, e)
-            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
