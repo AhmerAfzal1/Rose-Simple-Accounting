@@ -49,6 +49,8 @@ class MyDatabaseHelper(context: Context) :
             put(Constants.TranColumn.IS_DEBIT, trans.isDebit)
             if (isModified) {
                 put(Constants.TranColumn.LAST_MODIFIED, trans.modified)
+                put(Constants.TranColumn.LAST_MODIFIED_VALUE, trans.modifiedValue)
+                put(Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE, trans.modifiedAccountType)
             } else {
                 put(Constants.TranColumn.CREATED_ON, trans.created)
             }
@@ -87,6 +89,8 @@ class MyDatabaseHelper(context: Context) :
                     "${Constants.TranColumn.IS_DEBIT} INTEGER, " +
                     "${Constants.TranColumn.CREATED_ON} TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, " +
                     "${Constants.TranColumn.LAST_MODIFIED} TIMESTAMP DEFAULT \"\", " +
+                    "${Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE} TEXT DEFAULT \"\", " +
+                    "${Constants.TranColumn.LAST_MODIFIED_VALUE} REAL, " +
                     "CHECK(${Constants.TranColumn.IS_DEBIT} IN (0, 1)), " +
                     "FOREIGN KEY (${Constants.TranColumn.USER_ID}) REFERENCES ${Constants.UserColumn.TABLE_NAME}(${BaseColumns._ID}) ON DELETE CASCADE" +
                     ");"
@@ -313,7 +317,9 @@ class MyDatabaseHelper(context: Context) :
             Constants.TranColumn.DEBIT,
             Constants.TranColumn.IS_DEBIT,
             Constants.TranColumn.CREATED_ON,
-            Constants.TranColumn.LAST_MODIFIED
+            Constants.TranColumn.LAST_MODIFIED,
+            Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE,
+            Constants.TranColumn.LAST_MODIFIED_VALUE
         )
         val cursor: Cursor = database.query(
             Constants.TranColumn.TABLE_NAME,

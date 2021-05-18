@@ -20,4 +20,8 @@ class Transactions {
 
     var modified: String = ""
 
+    var modifiedValue: Double = 0.toDouble()
+
+    var modifiedAccountType: String = ""
+
 }

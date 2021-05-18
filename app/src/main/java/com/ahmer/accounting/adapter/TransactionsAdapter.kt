@@ -49,6 +49,10 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREATED_ON))
             modified =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED))
+            modifiedAccountType =
+                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE))
+            modifiedValue =
+                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_VALUE))
         }
         holder.bindView(transaction)
         addTransList(transaction)

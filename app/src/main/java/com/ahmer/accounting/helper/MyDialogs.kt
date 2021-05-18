@@ -48,18 +48,7 @@ class MyDialogs {
                 val getCreated = dialog.findViewById<TextView>(R.id.dialogUserCreated)
                 val getModified = dialog.findViewById<TextView>(R.id.dialogUserModified)
                 val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-                /*
-                Log.v(Constants.LOG_TAG, "Dialog ID: ${userProfile.id}")
-                Log.v(Constants.LOG_TAG, "Dialog Name: ${userProfile.name}")
-                Log.v(Constants.LOG_TAG, "Dialog Gender: ${userProfile.gender}")
-                Log.v(Constants.LOG_TAG, "Dialog Address: ${userProfile.address}")
-                Log.v(Constants.LOG_TAG, "Dialog Phone1: ${userProfile.phone1}")
-                Log.v(Constants.LOG_TAG, "Dialog Phone2: ${userProfile.phone2}")
-                Log.v(Constants.LOG_TAG, "Dialog Email: ${userProfile.email}")
-                Log.v(Constants.LOG_TAG, "Dialog Comments: ${userProfile.comment}")
-                Log.v(Constants.LOG_TAG, "Dialog Created: ${userProfile.created}")
-                Log.v(Constants.LOG_TAG, "Dialog Modified: ${userProfile.modified}")
-                */
+
                 getID.text = userProfile.id.toString()
                 getName.text = userProfile.name
                 getGender.text = userProfile.gender
@@ -105,10 +94,20 @@ class MyDialogs {
                 val tvTransId = dialog.findViewById<TextView>(R.id.dialogTransID)
                 val tvTransCreated = dialog.findViewById<TextView>(R.id.dialogTransCreated)
                 val tvTransModified = dialog.findViewById<TextView>(R.id.dialogTransModified)
+                val tvTransModifiedType =
+                    dialog.findViewById<TextView>(R.id.dialogTransModifiedType)
+                val tvTransModifiedValue =
+                    dialog.findViewById<TextView>(R.id.dialogTransModifiedValue)
                 val btnOk = dialog.findViewById<Button>(R.id.btnOk)
                 tvTransId.text = trans.transId.toString()
                 tvTransCreated.text = trans.created
                 tvTransModified.text = trans.modified
+                tvTransModifiedType.text = trans.modifiedAccountType
+                if (trans.modifiedValue == 0.toDouble()) {
+                    tvTransModifiedValue.text = ""
+                } else {
+                    tvTransModifiedValue.text = HelperFunctions.getRoundedValue(trans.modifiedValue)
+                }
                 btnOk.setOnClickListener {
                     dialog.dismiss()
                 }
@@ -131,8 +130,10 @@ class MyDialogs {
                 dialog.setCancelable(false)
                 var isSuccessfullyUpdated = false
                 val inputDate = dialog.findViewById<TextInputLayout>(R.id.textInputLayoutDate)
-                val toggle =
+                val toggleGroup =
                     dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
+                val btnCredit = dialog.findViewById<MaterialButton>(R.id.toggleBtnCredit)
+                val btnDebit = dialog.findViewById<MaterialButton>(R.id.toggleBtnDebit)
                 val inputAmount = dialog.findViewById<TextInputLayout>(R.id.textInputLayoutAmount)
                 val inputDescription =
                     dialog.findViewById<TextInputLayout>(R.id.textInputLayoutDescription)
@@ -140,17 +141,52 @@ class MyDialogs {
                 val cancelTransaction =
                     dialog.findViewById<MaterialButton>(R.id.btnCancelTransaction)
 
-                val typeAmount: String = if (trans.credit == 0.toDouble()) {
+                var newAccountType = ""
+                toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                    val checkedButton = dialog.findViewById<MaterialButton>(checkedId)
+                    newAccountType = checkedButton.text.toString()
+                    Log.v(Constants.LOG_TAG, "AccountType: $newAccountType")
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            when (newAccountType) {
+                                context.getString(R.string.credit_plus) -> {
+                                    btnCredit.backgroundTintList =
+                                        ContextCompat.getColorStateList(context, R.color.black)
+                                    btnDebit.backgroundTintList =
+                                        ContextCompat.getColorStateList(
+                                            context, android.R.color.transparent
+                                        )
+                                }
+                                else -> {
+                                    btnCredit.backgroundTintList =
+                                        ContextCompat.getColorStateList(
+                                            context, android.R.color.transparent
+                                        )
+                                    btnDebit.backgroundTintList =
+                                        ContextCompat.getColorStateList(context, R.color.black)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val lastAmountType: String
+                val lastAmountValue: Double
+                val oldAccountType: String = if (trans.credit == 0.toDouble()) {
                     context.getString(R.string.debit_minus)
                 } else {
                     context.getString(R.string.credit_plus)
                 }
-                if (typeAmount == context.getString(R.string.debit_minus)) {
-                    toggle.check(R.id.toggleBtnDebit)
+                if (oldAccountType == context.getString(R.string.debit_minus)) {
+                    toggleGroup.check(R.id.toggleBtnDebit)
                     inputAmount.editText?.setText(trans.debit.toString())
+                    lastAmountType = "Debit"
+                    lastAmountValue = trans.debit
                 } else {
-                    toggle.check(R.id.toggleBtnCredit)
+                    toggleGroup.check(R.id.toggleBtnCredit)
                     inputAmount.editText?.setText(trans.credit.toString())
+                    lastAmountType = "Credit"
+                    lastAmountValue = trans.credit
                 }
                 inputDate.editText?.setText(HelperFunctions.getDateTime())
                 inputDescription.editText?.setText(trans.description)
@@ -162,7 +198,7 @@ class MyDialogs {
                         newAmount == 0.toDouble() -> {
                             ToastUtils.showLong(context.getString(R.string.enter_the_amount))
                         }
-                        typeAmount.isEmpty() -> {
+                        oldAccountType.isEmpty() -> {
                             ToastUtils.showLong(context.getString(R.string.select_type_amount))
                         }
                         inputDescription.toString().trim().isEmpty() -> {
@@ -173,17 +209,19 @@ class MyDialogs {
                                 userId = trans.userId
                                 credit = 0.toDouble()
                                 debit = 0.toDouble()
-                                if (typeAmount == context.getString(R.string.credit_plus)) {
+                                if (newAccountType == context.getString(R.string.credit_plus)) {
                                     credit = newAmount
                                     isDebit = false
                                 }
-                                if (typeAmount == context.getString(R.string.debit_minus)) {
+                                if (newAccountType == context.getString(R.string.debit_minus)) {
                                     debit = newAmount
                                     isDebit = true
                                 }
                                 date = inputDate.editText?.text.toString()
                                 description = inputDescription.editText?.text.toString()
                                 modified = HelperFunctions.getDateTime()
+                                modifiedAccountType = lastAmountType
+                                modifiedValue = lastAmountValue
                             }
                             isSuccessfullyUpdated =
                                 myDatabaseHelper.updateTransactions(

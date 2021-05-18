@@ -52,6 +52,8 @@ class Constants {
             const val IS_DEBIT: String = "IsDebit"
             const val CREATED_ON: String = "Created"
             const val LAST_MODIFIED: String = "LastModified"
+            const val LAST_MODIFIED_VALUE: String = "ModifiedValue"
+            const val LAST_MODIFIED_ACCOUNT_TYPE: String = "ModifiedAccountType"
 
             val TRANSACTION_TABLE_URI: Uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
                 .authority(APPLICATION_ID)
