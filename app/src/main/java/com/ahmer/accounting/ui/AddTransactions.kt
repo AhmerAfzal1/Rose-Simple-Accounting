@@ -37,6 +37,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -130,9 +134,22 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri: Uri? = result.data?.data
                     if (uri != null && mUserName != null) {
-                        val isGenerated = GeneratePdf.createPdf(this, uri, mUserId, mUserName)
-                        if (isGenerated) {
-                            ToastUtils.showShort(getString(R.string.pdf_generated))
+                        var isGenerated = false
+                        val job: Job = CoroutineScope(Dispatchers.IO).launch {
+                            isGenerated =
+                                GeneratePdf.createPdf(
+                                    applicationContext,
+                                    uri,
+                                    mUserId,
+                                    mUserName
+                                )
+                        }
+                        job.invokeOnCompletion {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                if (isGenerated) {
+                                    ToastUtils.showShort(getString(R.string.pdf_generated))
+                                }
+                            }
                         }
                     }
                 }
@@ -183,11 +200,22 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                                     HelperFunctions.getDateTime("ddMMyyHHmmss", false) + ".pdf"
                                 )
                             if (mUserName != null) {
-                                val isGenerated = GeneratePdf.createPdf(
-                                    this, Uri.fromFile(mFileName), mUserId, mUserName
-                                )
-                                if (isGenerated) {
-                                    ToastUtils.showShort(getString(R.string.pdf_generated))
+                                var isGenerated = false
+                                val job: Job = CoroutineScope(Dispatchers.IO).launch {
+                                    isGenerated =
+                                        GeneratePdf.createPdf(
+                                            applicationContext,
+                                            Uri.fromFile(mFileName),
+                                            mUserId,
+                                            mUserName
+                                        )
+                                }
+                                job.invokeOnCompletion {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        if (isGenerated) {
+                                            ToastUtils.showShort(getString(R.string.pdf_generated))
+                                        }
+                                    }
                                 }
                             }
                         }
