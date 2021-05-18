@@ -4,10 +4,10 @@ import android.app.Activity
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
+import com.ahmer.accounting.R
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -125,6 +125,61 @@ class HelperFunctions : AppCompatActivity() {
                     super.onAdImpression()
                     Log.v(Constants.LOG_TAG, "Banner: Ad impression is recorded")
                 }
+            }
+        }
+
+        fun loadInterstitialAd(activity: Activity) {
+            MobileAds.initialize(activity)
+            val mAdRequest = AdRequest.Builder().build()
+            var mInterstitialAd: InterstitialAd? = null
+            InterstitialAd.load(
+                activity,
+                activity.getString(R.string.ad_interstitial_id),
+                mAdRequest,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                        super.onAdLoaded(interstitialAd)
+                        mInterstitialAd = interstitialAd
+                        Log.v(Constants.LOG_TAG, "Interstitial: Ad received and loading...")
+                    }
+
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        super.onAdFailedToLoad(adError)
+                        mInterstitialAd = null
+                        Log.v(
+                            Constants.LOG_TAG,
+                            "Interstitial: Failed to load ad due to ${adError.message}, and error code is: ${adError.code}"
+                        )
+                    }
+                })
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    super.onAdFailedToShowFullScreenContent(adError)
+                    Log.v(
+                        Constants.LOG_TAG,
+                        "Interstitial: Failed to show fullscreen content ad due to ${adError.message}, and error code is: ${adError.code}"
+                    )
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent()
+                    Log.v(Constants.LOG_TAG, "Interstitial: Ad showed fullscreen content")
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent()
+                    Log.v(Constants.LOG_TAG, "Interstitial: Ad was dismissed")
+                }
+
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    Log.v(Constants.LOG_TAG, "Interstitial: Ad impression is recorded")
+                }
+            }
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(activity)
+            } else {
+                Log.v(Constants.LOG_TAG, "The interstitial ad wasn't ready yet.")
             }
         }
     }

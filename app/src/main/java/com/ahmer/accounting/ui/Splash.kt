@@ -1,6 +1,6 @@
 package com.ahmer.accounting.ui
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.ahmer.accounting.R
 import com.ahmer.accounting.helper.Constants
+import com.ahmer.accounting.helper.HelperFunctions
 import io.ahmer.utils.constants.PermissionConstants
 import io.ahmer.utils.utilcode.PermissionUtils
 import io.ahmer.utils.utilcode.SPUtils
@@ -29,7 +30,7 @@ class Splash : AppCompatActivity() {
         checkPermission(this)
     }
 
-    private fun checkPermission(context: Context) {
+    private fun checkPermission(mActivity: Activity) {
         PermissionUtils.permission(PermissionConstants.STORAGE)
             .rationale { activity, shouldRequest ->
                 Log.v(Constants.LOG_TAG, "Again permission checking")
@@ -38,14 +39,15 @@ class Splash : AppCompatActivity() {
             .callback(object : PermissionUtils.FullCallback {
                 override fun onGranted(granted: MutableList<String>) {
                     Log.v(Constants.LOG_TAG, "Permission has been granted")
-                    val intent = Intent(context, MainActivity::class.java).apply {
+                    HelperFunctions.loadInterstitialAd(mActivity)
+                    val intent = Intent(mActivity, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         }
                     }
-                    startActivity(intent)
-                    finish()
+                    mActivity.startActivity(intent)
+                    mActivity.finish()
                 }
 
                 override fun onDenied(
@@ -54,7 +56,7 @@ class Splash : AppCompatActivity() {
                 ) {
                     Log.v(Constants.LOG_TAG, "Permission has not been granted")
                     if (denied.isNotEmpty() || deniedForever.isNotEmpty()) {
-                        finish()
+                        mActivity.finish()
                     }
                 }
             })
