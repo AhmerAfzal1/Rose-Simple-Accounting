@@ -18,7 +18,6 @@ import com.google.android.material.card.MaterialCardView
 class TransactionsAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
-    private var mCanStart = true
     private val mContext = context
     private val mCursor = cursor
     private var mSelectedIds = ArrayList<Int>()
@@ -54,9 +53,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.bindView(transaction)
         addTransList(transaction)
         holder.cvTransactionEntry.setOnClickListener {
-            if (mCanStart) {
                 MyDialogs.showDropDownDialog(mContext, transaction)
-            }
         }
         if (mSelectedIds.contains(position)) {
             holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
@@ -71,10 +68,6 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         } else {
             mCursor.count
         }
-    }
-
-    fun setCanStart(start: Boolean) {
-        mCanStart = start
     }
 
     private fun addTransList(transactions: Transactions) {

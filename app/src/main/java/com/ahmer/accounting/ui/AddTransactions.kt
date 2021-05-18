@@ -114,7 +114,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
                 override fun onItemLongClick(view: View, position: Int) {
                     if (!mIsMultiSelect) {
-                        mAdapter.setCanStart(false)
                         mSelectedIds = ArrayList()
                         mIsMultiSelect = true
                         mActionMode = startActionMode(this@AddTransactions)
@@ -478,7 +477,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                     mActionMode!!.title = "${mSelectedIds.size} selected"
                 } else {
                     Log.v(Constants.LOG_TAG, "DeSelect All")
-                    mAdapter.setCanStart(true)
                     mIsSelectAll = false
                     mIsMultiSelect = false
                     mSelectedIds = ArrayList()
@@ -492,7 +490,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-        mAdapter.setCanStart(true)
         mActionMode = null
         mIsMultiSelect = false
         mIsSelectAll = false
