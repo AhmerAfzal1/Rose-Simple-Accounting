@@ -8,9 +8,9 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="10dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="15dp">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -20,7 +20,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             app:boxStrokeColor="@color/colorTextInputLayout"
-            app:hintTextColor="@color/black">
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDate"
@@ -40,10 +43,11 @@
             android:id="@+id/btnToggleGroupAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textInputLayoutDate"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDate"
             app:selectionRequired="true"
             app:singleSelection="true">
 
@@ -71,10 +75,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnToggleGroupAmount"
-            android:layout_marginEnd="3dp"
+            android:layout_marginTop="8dp"
             app:boxStrokeColor="@color/colorTextInputLayout"
-            app:hintTextColor="@color/black">
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnToggleGroupAmount">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputAmount"
@@ -95,10 +101,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textInputLayoutAmount"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             app:boxStrokeColor="@color/colorTextInputLayout"
-            app:hintTextColor="@color/black">
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAmount">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDescription"
@@ -115,34 +123,32 @@
                 android:textCursorDrawable="@drawable/insertion_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelTransaction"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textInputLayoutDescription"
-            android:gravity="end">
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@android:string/cancel"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="?attr/colorSecondaryVariant"
+            app:layout_constraintEnd_toStartOf="@+id/btnAddTransaction"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDescription" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCancelTransaction"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:text="@android:string/cancel"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="?attr/colorSecondaryVariant" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddTransaction"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="?attr/colorSecondaryVariant"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDescription" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddTransaction"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/add"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="?attr/colorSecondaryVariant" />
-        </LinearLayout>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
