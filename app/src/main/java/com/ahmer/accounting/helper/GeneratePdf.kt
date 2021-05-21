@@ -14,7 +14,7 @@ class GeneratePdf {
     companion object {
 
         fun createPdf(context: Context, uri: Uri, id: Long, userName: String): Boolean {
-            val database = MyDatabaseHelper(context)
+            val database = MyDatabaseHelper()
             val mDocument = Document(PageSize.A4, 54F, 54F, 54F, 54F)
             val mOrderBy: String = BaseColumns._ID + " ASC"
             val mCursor = database.getAllTransactionsByUserId(id, mOrderBy)

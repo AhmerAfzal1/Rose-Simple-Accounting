@@ -1,7 +1,6 @@
 package com.ahmer.accounting.helper
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
@@ -14,12 +13,13 @@ import com.ahmer.accounting.model.Transactions
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
+import io.ahmer.utils.utilcode.Utils
 import java.io.*
 
-class MyDatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION) {
+class MyDatabaseHelper :
+    SQLiteOpenHelper(Utils.getApp(), Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION) {
 
-    private val mContext = context
+    private val mContext = Utils.getApp()
 
     private fun cvUser(userProfile: UserProfile, isCreated: Boolean = true): ContentValues {
         return ContentValues().apply {

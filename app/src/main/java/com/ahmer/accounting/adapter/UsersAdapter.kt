@@ -3,15 +3,20 @@ package com.ahmer.accounting.adapter
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
+import com.ahmer.accounting.dialog.UserProfileInfo
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyDialogs
 import com.ahmer.accounting.model.UserProfile
@@ -99,7 +104,14 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             mContext.startActivity(intent)
         }
         holder.ivInfoButton.setOnClickListener {
-            MyDialogs.showUserProfileInfo(mContext, userProfile)
+            val dialog = UserProfileInfo(mContext, userProfile)
+            val dialogWindow: Window? = dialog.window
+            dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+            dialogWindow.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
         holder.ivEditButton.setOnClickListener {
             val intent = Intent(mContext, EditUser::class.java).apply {

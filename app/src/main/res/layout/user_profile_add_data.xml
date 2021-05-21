@@ -1,290 +1,313 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBgMainLayout"
-    tools:context=".ui.AddUser">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="@style/Theme.RoseSimpleAccounting.Toolbar"
+    <data>
+
+        <variable
+            name="mAddUserProfileActivity"
+            type="com.ahmer.accounting.ui.AddUser" />
+
+        <variable
+            name="mAddUserProfile"
+            type="com.ahmer.accounting.model.UserProfile" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        app:contentInsetEnd="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_baseline_back"
-        app:title="@string/title_toolbar_add_user"
-        app:titleMarginStart="0dp"
-        app:titleTextColor="@android:color/white" />
+        android:layout_height="match_parent"
+        android:background="@color/colorBgMainLayout"
+        tools:context=".ui.AddUser">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Theme.RoseSimpleAccounting.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:onClick="@{() -> mAddUserProfileActivity.finish()}"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_baseline_back"
+            app:title="@string/title_toolbar_add_user"
+            app:titleMarginStart="0dp"
+            app:titleTextColor="@android:color/white" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_margin="10dp"
+                android:gravity="center">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/name"
-                    android:inputType="textCapWords"
-                    android:maxLength="46"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor"
-                    app:counterEnabled="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/btnToggleGroupGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutName"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/name"
+                        android:inputType="textCapWords"
+                        android:maxLength="46"
+                        android:maxLines="1"
+                        android:text="@={mAddUserProfile.name}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor"
+                        app:counterEnabled="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMale"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gender_male"
-                    app:icon="@drawable/ic_gender_male"
-                    app:iconSize="24dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFemale"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="@color/colorTextInputLayout"
-                    android:text="@string/gender_female"
-                    app:icon="@drawable/ic_gender_female"
-                    app:iconSize="24dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnUnknown"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="@color/colorTextInputLayout"
-                    android:text="@string/gender_unknown"
-                    app:icon="@drawable/ic_gender_unknown"
-                    app:iconSize="24dp" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutAddress"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnToggleGroupGender">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="top|start"
-                    android:hint="@string/address"
-                    android:inputType="textMultiLine|textCapWords"
-                    android:lines="3"
-                    android:maxLength="255"
-                    android:maxLines="4"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutCity"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutAddress">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/btnToggleGroupGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/city"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutName"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutPhone1"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutCity">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMale"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender_male"
+                        app:icon="@drawable/ic_gender_male"
+                        app:iconSize="24dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/phone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFemale"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="@color/colorTextInputLayout"
+                        android:text="@string/gender_female"
+                        app:icon="@drawable/ic_gender_female"
+                        app:iconSize="24dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutPhone2"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutPhone1">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUnknown"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="@color/colorTextInputLayout"
+                        android:text="@string/gender_unknown"
+                        app:icon="@drawable/ic_gender_unknown"
+                        app:iconSize="24dp" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/phone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutPhone2">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="@string/email_address"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputLayoutComments"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="1dp"
-                app:boxStrokeColor="@color/colorTextInputLayout"
-                app:hintTextColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutEmail">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="top|start"
-                    android:hint="@string/comments"
-                    android:inputType="textMultiLine|textCapWords"
-                    android:lines="4"
-                    android:maxLines="10"
-                    android:textColor="@color/black"
-                    android:textCursorDrawable="@drawable/insertion_cursor" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnToggleGroupGender">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSaveUserData"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="@string/save"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="?attr/colorSecondaryVariant"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputLayoutComments" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top|start"
+                        android:hint="@string/address"
+                        android:inputType="textMultiLine|textCapWords"
+                        android:lines="3"
+                        android:maxLength="255"
+                        android:maxLines="4"
+                        android:text="@={mAddUserProfile.address}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnSaveUserData" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutCity"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutAddress">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/city"
+                        android:inputType="textCapWords"
+                        android:maxLines="1"
+                        android:text="@={mAddUserProfile.city}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutPhone1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutCity">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/phone"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:text="@={mAddUserProfile.phone1}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutPhone2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutPhone1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/phone"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:text="@={mAddUserProfile.phone2}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutPhone2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/email_address"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:text="@={mAddUserProfile.email}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutComments"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:padding="1dp"
+                    app:boxStrokeColor="@color/colorTextInputLayout"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutEmail">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top|start"
+                        android:hint="@string/comments"
+                        android:inputType="textMultiLine|textCapWords"
+                        android:lines="4"
+                        android:maxLines="10"
+                        android:text="@={mAddUserProfile.comment}"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/insertion_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveUserData"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/save"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:onClick="@{() -> mAddUserProfileActivity.saveData()}"
+                    android:textStyle="bold"
+                    app:backgroundTint="?attr/colorSecondaryVariant"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputLayoutComments" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnSaveUserData" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

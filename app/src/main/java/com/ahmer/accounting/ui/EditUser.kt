@@ -109,7 +109,7 @@ class EditUser : AppCompatActivity() {
                     ToastUtils.showLong(getString(R.string.toast_select_gender))
                 }
                 else -> {
-                    val myDatabaseHelper = MyDatabaseHelper(it.context)
+                    val myDatabaseHelper = MyDatabaseHelper()
                     isSuccessfullyUpdated = myDatabaseHelper.updateUserProfileData(userProfile, id)
                     /*
                     Log.v(Constants.LOG_TAG, "Updated Record")

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -51,8 +52,10 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
     private lateinit var mAdapter: TransactionsAdapter
     private lateinit var mCvTotalBal: MaterialCardView
-    private lateinit var mLayoutNoTransaction: LinearLayout
-    private lateinit var mLayoutSubTotal: LinearLayout
+    private lateinit var mIvWarning: ImageView
+    private lateinit var mTvNoTransHeading: TextView
+    private lateinit var mTvAddNewTrans: TextView
+    private lateinit var mLayoutSubTotal: ConstraintLayout
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mTvTotalBal: TextView
     private lateinit var mTvTotalBalHeading: TextView
@@ -83,11 +86,13 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         val mUserName = intent.getStringExtra("mPosUserName")
         val mUserPhone = intent.getStringExtra("mPosUserPhone")
 
-        myDatabaseHelper = MyDatabaseHelper(this)
+        myDatabaseHelper = MyDatabaseHelper()
 
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
         val tvUserPhone = findViewById<TextView>(R.id.tvUserPhone)
-        mLayoutNoTransaction = findViewById(R.id.layoutNoTransaction)
+        mIvWarning = findViewById(R.id.ivWarning)
+        mTvNoTransHeading = findViewById(R.id.tvNoTransHeading)
+        mTvAddNewTrans = findViewById(R.id.tvAddNewTrans)
         mLayoutSubTotal = findViewById(R.id.layoutSubTotal)
         mTvTotalDeb = findViewById(R.id.tvTotalDebit)
         mTvTotalCre = findViewById(R.id.tvTotalCredit)
@@ -230,6 +235,22 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         MyAds.loadInterstitialAd(this)
     }
 
+    fun dateTimePickerOpen(view: View) {
+        val currentDate = Calendar.getInstance()
+        val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            currentDate.set(year, month, dayOfMonth)
+        }
+        val datePicker = DatePickerDialog(
+            view.context,
+            listener,
+            currentDate.get(Calendar.YEAR),
+            currentDate.get(Calendar.MONTH),
+            currentDate.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
+
+    }
+
     private fun showAddTransactionDialog(context: Context, userID: Long) {
         try {
             val dialog = Dialog(context)
@@ -241,7 +262,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 RelativeLayout.LayoutParams.WRAP_CONTENT
             )
             dialog.setCancelable(false)
-            val myDatabaseHelper = MyDatabaseHelper(context)
+            val myDatabaseHelper = MyDatabaseHelper()
             val inputAmount = dialog.findViewById<TextInputEditText>(R.id.inputAmount)
             val toggleGroup =
                 dialog.findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupAmount)
@@ -285,18 +306,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             val currentDate = Calendar.getInstance()
             inputDate.setText(dateFormat.format(currentDate.time))
             inputDate.setOnClickListener {
-                val listener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                    currentDate.set(year, month, dayOfMonth)
-                    inputDate.setText(dateFormat.format(currentDate.time))
-                }
-                val datePicker = DatePickerDialog(
-                    context,
-                    listener,
-                    currentDate.get(Calendar.YEAR),
-                    currentDate.get(Calendar.MONTH),
-                    currentDate.get(Calendar.DAY_OF_MONTH)
-                )
-                datePicker.show()
+                dateTimePickerOpen(it)
             }
 
             addTransactions.setOnClickListener {
@@ -401,11 +411,15 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         val context: Context = applicationContext
         mAdapter = TransactionsAdapter(this, cursor!!)
         if (mAdapter.itemCount > 0) {
-            mLayoutNoTransaction.visibility = View.GONE
+            mIvWarning.visibility = View.GONE
+            mTvNoTransHeading.visibility = View.GONE
+            mTvAddNewTrans.visibility = View.GONE
             mRecyclerView.visibility = View.VISIBLE
             mLayoutSubTotal.visibility = View.VISIBLE
         } else {
-            mLayoutNoTransaction.visibility = View.VISIBLE
+            mIvWarning.visibility = View.VISIBLE
+            mTvNoTransHeading.visibility = View.VISIBLE
+            mTvAddNewTrans.visibility = View.VISIBLE
             mRecyclerView.visibility = View.GONE
             mLayoutSubTotal.visibility = View.GONE
         }

@@ -3,6 +3,7 @@ package com.ahmer.accounting.helper
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.util.Log
 import android.view.Window
@@ -11,8 +12,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.ahmer.accounting.R
+import com.ahmer.accounting.dialog.TransactionsInfo
 import com.ahmer.accounting.model.Transactions
-import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -24,99 +25,6 @@ import io.ahmer.utils.utilcode.ToastUtils
 class MyDialogs {
 
     companion object {
-
-        fun showUserProfileInfo(context: Context, userProfile: UserProfile) {
-            try {
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setContentView(R.layout.user_profile_data_dialog)
-                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-                dialog.window?.setLayout(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-                )
-                dialog.setCancelable(false)
-                val getID = dialog.findViewById<TextView>(R.id.dialogUserID)
-                val getName = dialog.findViewById<TextView>(R.id.dialogUserName)
-                val getGender = dialog.findViewById<TextView>(R.id.dialogUserGender)
-                val getAddress = dialog.findViewById<TextView>(R.id.dialogUserAddress)
-                val getCity = dialog.findViewById<TextView>(R.id.dialogUserCity)
-                val getPhone1 = dialog.findViewById<TextView>(R.id.dialogUserPhone1)
-                val getPhone2 = dialog.findViewById<TextView>(R.id.dialogUserPhone2)
-                val getEmail = dialog.findViewById<TextView>(R.id.dialogUserEmail)
-                val getComments = dialog.findViewById<TextView>(R.id.dialogUserComments)
-                val getCreated = dialog.findViewById<TextView>(R.id.dialogUserCreated)
-                val getModified = dialog.findViewById<TextView>(R.id.dialogUserModified)
-                val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-
-                getID.text = userProfile.id.toString()
-                getName.text = userProfile.name
-                getGender.text = userProfile.gender
-                getAddress.text = userProfile.address
-                getCity.text = userProfile.city
-                getPhone1.text = userProfile.phone1
-                getPhone2.text = userProfile.phone2
-                getEmail.text = userProfile.email
-                getComments.text = userProfile.comment
-                getCreated.text = userProfile.created
-                getModified.text = userProfile.modified
-                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        btnOk.backgroundTintList =
-                            ContextCompat.getColorStateList(context, R.color.black)
-                        btnOk.setTextColor(context.getColor(R.color.white))
-                    } else {
-                        btnOk.setBackgroundColor(context.resources.getColor(R.color.black))
-                        btnOk.setTextColor(context.resources.getColor(R.color.white))
-                    }
-                }
-                btnOk.setOnClickListener {
-                    dialog.dismiss()
-                }
-                dialog.show()
-            } catch (e: Exception) {
-                Log.e(Constants.LOG_TAG, e.message, e)
-                FirebaseCrashlytics.getInstance().recordException(e)
-            }
-        }
-
-        fun showTransInfoDialog(context: Context, trans: Transactions) {
-            try {
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setContentView(R.layout.transactions_info_dialog)
-                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-                dialog.window?.setLayout(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-                )
-                dialog.setCancelable(false)
-                val tvTransId = dialog.findViewById<TextView>(R.id.dialogTransID)
-                val tvTransCreated = dialog.findViewById<TextView>(R.id.dialogTransCreated)
-                val tvTransModified = dialog.findViewById<TextView>(R.id.dialogTransModified)
-                val tvTransModifiedType =
-                    dialog.findViewById<TextView>(R.id.dialogTransModifiedType)
-                val tvTransModifiedValue =
-                    dialog.findViewById<TextView>(R.id.dialogTransModifiedValue)
-                val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-                tvTransId.text = trans.transId.toString()
-                tvTransCreated.text = trans.created
-                tvTransModified.text = trans.modified
-                tvTransModifiedType.text = trans.modifiedAccountType
-                if (trans.modifiedValue == 0.toDouble()) {
-                    tvTransModifiedValue.text = ""
-                } else {
-                    tvTransModifiedValue.text = HelperFunctions.getRoundedValue(trans.modifiedValue)
-                }
-                btnOk.setOnClickListener {
-                    dialog.dismiss()
-                }
-                dialog.show()
-            } catch (e: Exception) {
-                Log.e(Constants.LOG_TAG, e.message, e)
-                FirebaseCrashlytics.getInstance().recordException(e)
-            }
-        }
 
         fun showTransEditDialog(context: Context, trans: Transactions) {
             try {
@@ -192,7 +100,7 @@ class MyDialogs {
                 inputDescription.editText?.setText(trans.description)
                 addTransaction.text = context.getString(R.string.update)
                 addTransaction.setOnClickListener {
-                    val myDatabaseHelper = MyDatabaseHelper(context)
+                    val myDatabaseHelper = MyDatabaseHelper()
                     val newAmount: Double = inputAmount.editText?.text.toString().trim().toDouble()
                     when {
                         newAmount == 0.toDouble() -> {
@@ -266,7 +174,14 @@ class MyDialogs {
                             showTransEditDialog(context, trans)
                         }
                         1 -> {
-                            showTransInfoDialog(context, trans)
+                           val dialog1 = TransactionsInfo(context, trans)
+                            val dialogWindow: Window? = dialog1.window
+                            dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            dialog1.show()
+                            dialogWindow.setLayout(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
                         }
                         2 -> {
                             confirmTransDelete(context, trans.transId)
@@ -293,7 +208,7 @@ class MyDialogs {
 
         fun confirmUserDelete(context: Context, userId: Long, userName: String) {
             try {
-                val myDatabaseHelper = MyDatabaseHelper(context)
+                val myDatabaseHelper = MyDatabaseHelper()
                 val alertBuilder = MaterialAlertDialogBuilder(context)
                 alertBuilder.setTitle(context.getString(R.string.confirmation))
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)
@@ -339,7 +254,7 @@ class MyDialogs {
 
         fun confirmTransDelete(context: Context, transId: Long) {
             try {
-                val myDatabaseHelper = MyDatabaseHelper(context)
+                val myDatabaseHelper = MyDatabaseHelper()
                 val alertBuilder = MaterialAlertDialogBuilder(context)
                 alertBuilder.setTitle(context.getString(R.string.confirmation))
                 alertBuilder.setIcon(R.drawable.ic_baseline_delete_forever)

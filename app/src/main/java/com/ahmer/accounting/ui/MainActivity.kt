@@ -13,7 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,13 +21,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.databinding.DataBindingUtil
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.adapter.UsersAdapter
+import com.ahmer.accounting.databinding.ActivityMainBinding
 import com.ahmer.accounting.helper.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -43,9 +44,11 @@ import java.io.File
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     NavigationView.OnNavigationItemSelectedListener {
 
+    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: UsersAdapter
-    private lateinit var mDrawerLayout: DrawerLayout
-    private lateinit var mLayoutNoUserAccount: LinearLayout
+    private lateinit var mIvWarning: ImageView
+    private lateinit var mTvNoUserAccountHeading: TextView
+    private lateinit var mTvAddUserAccountHeading: TextView
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mResultLauncherCreateDB: ActivityResultLauncher<Intent>
     private lateinit var mResultLauncherRestoreDB: ActivityResultLauncher<Intent>
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
@@ -66,29 +69,28 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         }
         setSupportActionBar(toolbar)
 
-        mDrawerLayout = findViewById(R.id.drawer_layout)
         val drawerToggle = ActionBarDrawerToggle(
             this,
-            mDrawerLayout,
+            mBinding.drawerLayout,
             toolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
         drawerToggle.drawerArrowDrawable.color = Color.WHITE
-        mDrawerLayout.addDrawerListener(drawerToggle)
+        mBinding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        navView.setNavigationItemSelectedListener(this)
-        val headerNavView = navView.getHeaderView(0)
+        mBinding.navView.setNavigationItemSelectedListener(this)
+        val headerNavView = mBinding.navView.getHeaderView(0)
         mTvTotalAllDebit = headerNavView.findViewById(R.id.tvAllTotalDebit)
         mTvTotalAllCredit = headerNavView.findViewById(R.id.tvAllTotalCredit)
         mTvTotalAllBalances = headerNavView.findViewById(R.id.tvAllTotalBalance)
 
         val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
-        mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
+        mIvWarning = findViewById(R.id.ivWarningMain)
+        mTvNoUserAccountHeading = findViewById(R.id.tvNoUserAccountHeadingMain)
+        mTvAddUserAccountHeading = findViewById(R.id.tvAddUserAccountHeadingMain)
         mRecyclerView = findViewById(R.id.rvMain)
-        mLayoutNoUserAccount = findViewById(R.id.layoutNoUserAccount)
-        myDatabaseHelper = MyDatabaseHelper(applicationContext)
+        myDatabaseHelper = MyDatabaseHelper()
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.isSmoothScrollbarEnabled = true
@@ -213,7 +215,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                 AppUtils.exitApp()
             }
         }
-        mDrawerLayout.closeDrawer(GravityCompat.START)
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -260,10 +262,14 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         mAdapter = UsersAdapter(this, cursor!!)
         if (mAdapter.itemCount > 0) {
-            mLayoutNoUserAccount.visibility = View.GONE
+            mIvWarning.visibility = View.GONE
+            mTvNoUserAccountHeading.visibility = View.GONE
+            mTvAddUserAccountHeading.visibility = View.GONE
             mRecyclerView.visibility = View.VISIBLE
         } else {
-            mLayoutNoUserAccount.visibility = View.VISIBLE
+            mIvWarning.visibility = View.VISIBLE
+            mTvNoUserAccountHeading.visibility = View.VISIBLE
+            mTvAddUserAccountHeading.visibility = View.VISIBLE
             mRecyclerView.visibility = View.GONE
         }
         mRecyclerView.adapter = mAdapter

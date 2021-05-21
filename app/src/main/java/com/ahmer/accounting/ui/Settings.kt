@@ -6,13 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.databinding.DataBindingUtil
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.ahmer.accounting.R
+import com.ahmer.accounting.databinding.SettingsBinding
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyAds
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.HelperUtils
 import io.ahmer.utils.utilcode.AppUtils
@@ -24,9 +25,11 @@ import java.util.*
 
 class Settings : AppCompatActivity() {
 
+    private lateinit var mBinding: SettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.settings)
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -35,13 +38,10 @@ class Settings : AppCompatActivity() {
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.overflowIcon?.setTint(Color.WHITE)
+            mBinding.toolbarSettings.overflowIcon?.setTint(Color.WHITE)
         }
-        toolbar.setOnClickListener {
-            finish()
-        }
+        mBinding.mSettingsToolbar = this
         MyAds.loadInterstitialAd(this)
     }
 

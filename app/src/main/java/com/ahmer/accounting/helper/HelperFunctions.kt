@@ -2,6 +2,7 @@ package com.ahmer.accounting.helper
 
 import android.os.Build
 import android.util.Log
+import androidx.databinding.BindingConversion
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -11,10 +12,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 
+
 class HelperFunctions {
 
     companion object {
 
+        @JvmStatic
         fun getDateTime(format: String = "", isLocaleDefault: Boolean = true): String {
             val locale: Locale = if (isLocaleDefault) {
                 Locale.getDefault()
@@ -30,6 +33,7 @@ class HelperFunctions {
             return dateFormat.format(dateTime)
         }
 
+        @JvmStatic
         fun convertDateTimeShortFormat(dataTime: String, forStatement: Boolean = false): String {
             var dateTimeShort = ""
             try {
@@ -73,15 +77,22 @@ class HelperFunctions {
             return dateTimeShort
         }
 
+        @JvmStatic
         fun getRoundedValue(value: Double): String {
             val round = DecimalFormat("#,##0.##")
             round.roundingMode = RoundingMode.HALF_UP
             return round.format(value)
         }
 
+        @JvmStatic
         fun checkBoolean(int: Int): Boolean {
             // 0 for false and 1 for true
             return int != 0
+        }
+
+        @JvmStatic
+        fun setEmptyString(): String {
+            return ""
         }
     }
 }
