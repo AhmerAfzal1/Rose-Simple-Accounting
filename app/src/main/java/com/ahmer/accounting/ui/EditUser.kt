@@ -17,6 +17,7 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.NetworkUtils
 import io.ahmer.utils.utilcode.ToastUtils
 
 class EditUser : AppCompatActivity() {
@@ -126,7 +127,9 @@ class EditUser : AppCompatActivity() {
         mUserProfile.email = intentEmail!!
         mUserProfile.comment = intentComment!!
 
-        MyAds.loadInterstitialAd(this)
+        if (NetworkUtils.isConnected()) {
+            MyAds.loadInterstitialAd(this)
+        }
     }
 
     fun saveData() {

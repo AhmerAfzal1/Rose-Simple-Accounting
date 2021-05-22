@@ -78,26 +78,26 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
         }
 
         val lastAmountType: String
-        val lastAmountValue: String
-        val oldAccountType: String = if (mTransactions.credit == 0.toDouble().toString()) {
+        val lastAmountValue: Double
+        val oldAccountType: String = if (mTransactions.credit == 0.toDouble()) {
             context.getString(R.string.debit_minus)
         } else {
             context.getString(R.string.credit_plus)
         }
         if (oldAccountType == context.getString(R.string.debit_minus)) {
             mBinding.btnToggleGroupAmount.check(R.id.toggleBtnDebit)
-            mTransactions.enteredAmount = mTransactions.debit
+            mBinding.mEnteredAmount = mTransactions.debit.toString()
             lastAmountType = "Debit"
             lastAmountValue = mTransactions.debit
         } else {
             mBinding.btnToggleGroupAmount.check(R.id.toggleBtnCredit)
-            mTransactions.enteredAmount = mTransactions.credit
+            mBinding.mEnteredAmount = mTransactions.credit.toString()
             lastAmountType = "Credit"
             lastAmountValue = mTransactions.credit
         }
         mBinding.btnAddTransaction.text = context.getString(R.string.update)
         mBinding.btnAddTransaction.setOnClickListener {
-            val newAmount: Double = mTransactions.enteredAmount.trim().toDouble()
+            val newAmount: Double = mBinding.mEnteredAmount!!.trim().toDouble()
             when {
                 newAmount == 0.toDouble() -> {
                     ToastUtils.showLong(context.getString(R.string.enter_the_amount))
@@ -111,14 +111,14 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
                 else -> {
                     val transContentValues = Transactions().apply {
                         userId = mTransactions.userId
-                        credit = 0.toDouble().toString()
-                        debit = 0.toDouble().toString()
+                        credit = 0.toDouble()
+                        debit = 0.toDouble()
                         if (newAccountType == context.getString(R.string.credit_plus)) {
-                            credit = newAmount.toString()
+                            credit = newAmount
                             isDebit = false
                         }
                         if (newAccountType == context.getString(R.string.debit_minus)) {
-                            debit = newAmount.toString()
+                            debit = newAmount
                             isDebit = true
                         }
                         date = mTransactions.date

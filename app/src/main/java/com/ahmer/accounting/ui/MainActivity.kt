@@ -35,10 +35,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.constants.PermissionConstants
-import io.ahmer.utils.utilcode.AppUtils
-import io.ahmer.utils.utilcode.FileUtils
-import io.ahmer.utils.utilcode.PermissionUtils
-import io.ahmer.utils.utilcode.ToastUtils
+import io.ahmer.utils.utilcode.*
 import java.io.File
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
@@ -142,7 +139,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                 }
             }
 
-        MyAds.loadInterstitialAd(this)
+        if (NetworkUtils.isConnected()) {
+            MyAds.loadInterstitialAd(this)
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -276,9 +275,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
         val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
         val mAllBalance = mAllCredit - mAllDebit
-        mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit.toString())
-        mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit.toString())
-        mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance.toString())
+        mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit)
+        mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit)
+        mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

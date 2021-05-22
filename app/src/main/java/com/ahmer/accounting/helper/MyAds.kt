@@ -51,12 +51,8 @@ class MyAds {
             }
         }
 
-        fun loadInterstitialAd(activity: Activity, turnOffAds: Boolean = true) {
-            if (turnOffAds) {
-                MobileAds.initialize(activity) {
-                    Log.v(Constants.LOG_TAG, "AdMob Sdk Initialize")
-                }
-            } else {
+        fun loadInterstitialAd(activity: Activity, turnOffAds: Boolean = false) {
+            if (!turnOffAds) {
                 MobileAds.initialize(activity) {
                     Log.v(Constants.LOG_TAG, "AdMob Sdk Initialize")
                 }

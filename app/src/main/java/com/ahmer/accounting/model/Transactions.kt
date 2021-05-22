@@ -34,14 +34,14 @@ class Transactions : BaseObservable() {
         }
 
     @get:Bindable
-    var credit: String = ""
+    var credit: Double = 0.toDouble()
         set(value) {
             field = value
             notifyPropertyChanged(BR.credit)
         }
 
     @get:Bindable
-    var debit: String = ""
+    var debit: Double = 0.toDouble()
         set(value) {
             field = value
             notifyPropertyChanged(BR.debit)
@@ -64,7 +64,7 @@ class Transactions : BaseObservable() {
         }
 
     @get:Bindable
-    var modifiedValue: String = ""
+    var modifiedValue: Double = 0.toDouble()
         set(value) {
             field = value
             notifyPropertyChanged(BR.modifiedValue)
@@ -77,22 +77,15 @@ class Transactions : BaseObservable() {
             notifyPropertyChanged(BR.modifiedAccountType)
         }
 
-    @get:Bindable
-    var enteredAmount: String = ""
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.enteredAmount)
-        }
-
     fun hasCreditZero(): Boolean {
-        return credit == "0"
+        return credit == 0.toDouble()
     }
 
     fun hasDebitZero(): Boolean {
-        return debit == "0"
+        return debit == 0.toDouble()
     }
 
     fun hasModifiedValueZero(): Boolean {
-        return modifiedValue == "0"
+        return modifiedValue == 0.toDouble()
     }
 }

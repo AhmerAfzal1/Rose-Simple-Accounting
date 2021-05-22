@@ -66,7 +66,7 @@ class GeneratePdf {
                         mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
                     val mCredit: String =
                         HelperFunctions.getRoundedValue(
-                            mCursor.getString(
+                            mCursor.getDouble(
                                 mCursor.getColumnIndexOrThrow(
                                     Constants.TranColumn.CREDIT
                                 )
@@ -74,7 +74,7 @@ class GeneratePdf {
                         )
                     val mDebit: String =
                         HelperFunctions.getRoundedValue(
-                            mCursor.getString(
+                            mCursor.getDouble(
                                 mCursor.getColumnIndexOrThrow(
                                     Constants.TranColumn.DEBIT
                                 )
@@ -102,7 +102,7 @@ class GeneratePdf {
                 mTableTotal.addCell(cellFormat("Total", false, "Center", true))
                 mTableTotal.addCell(
                     cellFormat(
-                        HelperFunctions.getRoundedValue(mTotalDebit.toString()),
+                        HelperFunctions.getRoundedValue(mTotalDebit),
                         false,
                         "Right",
                         true
@@ -110,7 +110,7 @@ class GeneratePdf {
                 )
                 mTableTotal.addCell(
                     cellFormat(
-                        HelperFunctions.getRoundedValue(mTotalCredit.toString()),
+                        HelperFunctions.getRoundedValue(mTotalCredit),
                         false,
                         "Right",
                         true
@@ -124,7 +124,7 @@ class GeneratePdf {
                 mTableBalance.addCell(cellFormat("Balance", false, "Center", true))
                 mTableBalance.addCell(
                     cellFormat(
-                        HelperFunctions.getRoundedValue(mTotalBalance.toString()),
+                        HelperFunctions.getRoundedValue(mTotalBalance),
                         false,
                         "Right",
                         true

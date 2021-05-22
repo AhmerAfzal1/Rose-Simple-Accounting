@@ -16,10 +16,7 @@ import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyAds
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.HelperUtils
-import io.ahmer.utils.utilcode.AppUtils
-import io.ahmer.utils.utilcode.CleanUtils
-import io.ahmer.utils.utilcode.SPUtils
-import io.ahmer.utils.utilcode.Utils
+import io.ahmer.utils.utilcode.*
 import java.io.File
 import java.util.*
 
@@ -42,7 +39,9 @@ class Settings : AppCompatActivity() {
             mBinding.toolbarSettings.overflowIcon?.setTint(Color.WHITE)
         }
         mBinding.mSettingsToolbar = this
-        MyAds.loadInterstitialAd(this)
+        if (NetworkUtils.isConnected()) {
+            MyAds.loadInterstitialAd(this)
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

@@ -79,8 +79,8 @@ class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
         mBinding.btnAddTransaction.setOnClickListener {
             var isSuccessfullyInserted = false
             var newAmount: Double = 0.toDouble()
-            if (mTransactions.enteredAmount.trim().isNotEmpty()) {
-                newAmount = mTransactions.enteredAmount.trim().toDouble()
+            if (mBinding.mEnteredAmount!!.trim().isNotEmpty()) {
+                newAmount = mBinding.mEnteredAmount!!.trim().toDouble()
             }
             val newDate: String = mTransactions.date
             val newDescription: String = mTransactions.description.trim()
@@ -98,19 +98,22 @@ class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
                 else -> {
                     val addNewTransaction = Transactions().apply {
                         userId = mUserID
-                        credit = 0.toDouble().toString()
-                        debit = 0.toDouble().toString()
+                        credit = 0.toDouble()
+                        debit = 0.toDouble()
                         if (typeAccount == mContext.getString(R.string.credit_plus)) {
-                            credit = newAmount.toString()
+                            credit = newAmount
                             isDebit = false
                         }
                         if (typeAccount == mContext.getString(R.string.debit_minus)) {
-                            debit = newAmount.toString()
+                            debit = newAmount
                             isDebit = true
                         }
                         date = newDate
                         description = newDescription
                         created = HelperFunctions.getDateTime()
+                        modified = ""
+                        modifiedAccountType = ""
+                        modifiedValue = 0.toDouble()
                     }
                     isSuccessfullyInserted =
                         myDatabaseHelper.insertTransactions(addNewTransaction)

@@ -37,16 +37,12 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         mCursor.moveToPosition(position)
         val transaction = Transactions().apply {
             transId = mCursor.getLong(mCursor.getColumnIndexOrThrow(BaseColumns._ID))
-            userId =
-                mCursor.getLong(mCursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
-            date =
-                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
+            userId = mCursor.getLong(mCursor.getColumnIndexOrThrow(Constants.TranColumn.USER_ID))
+            date = mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DATE))
             description =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
-            credit =
-                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
-            debit =
-                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
+            credit = mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
+            debit = mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
             isDebit =
                 HelperFunctions.checkBoolean(mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.IS_DEBIT)))
             created =
@@ -56,7 +52,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             modifiedAccountType =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE))
             modifiedValue =
-                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_VALUE))
+                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_VALUE))
         }
         holder.bindView(transaction)
         addTransList(transaction)

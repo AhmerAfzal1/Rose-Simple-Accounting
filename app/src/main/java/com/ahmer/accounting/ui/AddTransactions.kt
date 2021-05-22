@@ -32,6 +32,7 @@ import com.ahmer.accounting.helper.*
 import com.ahmer.accounting.model.TransactionsBalance
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.NetworkUtils
 import io.ahmer.utils.utilcode.ToastUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -139,7 +140,9 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 }
             }
 
-        MyAds.loadInterstitialAd(this)
+        if (NetworkUtils.isConnected()) {
+            MyAds.loadInterstitialAd(this)
+        }
     }
 
     fun getUserName(): String {
@@ -280,7 +283,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
         val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
         val mUserBalance = mUserCredit - mUserDebit
-        val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance.toString())
+        val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
         mAdapterTrans = TransactionsAdapter(this, cursor!!)
         if (mAdapterTrans.itemCount > 0) {
             mBinding.ivWarning.visibility = View.GONE
@@ -300,12 +303,12 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         debit.accountType = "Debit"
         debit.cvBgColor = HelperFunctions.convertColorIntToHexString(R.color.colorRedLight)
         debit.tvColor = HelperFunctions.convertColorIntToHexString(R.color.colorRedDark)
-        debit.totalAmount = HelperFunctions.getRoundedValue(mUserDebit.toString())
+        debit.totalAmount = HelperFunctions.getRoundedValue(mUserDebit)
         val credit = TransactionsBalance()
         credit.accountType = "Credit"
         credit.cvBgColor = HelperFunctions.convertColorIntToHexString(R.color.colorGreenLight)
         credit.tvColor = HelperFunctions.convertColorIntToHexString(R.color.colorGreenDark)
-        credit.totalAmount = HelperFunctions.getRoundedValue(mUserCredit.toString())
+        credit.totalAmount = HelperFunctions.getRoundedValue(mUserCredit)
         val balance = TransactionsBalance()
         balance.accountType = "Balance"
         if (mTotalBalance > "0") {

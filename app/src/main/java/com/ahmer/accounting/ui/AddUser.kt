@@ -19,6 +19,7 @@ import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.NetworkUtils
 import io.ahmer.utils.utilcode.ToastUtils
 
 class AddUser : AppCompatActivity() {
@@ -97,7 +98,9 @@ class AddUser : AppCompatActivity() {
             }
         }
         mUserProfile.created = HelperFunctions.getDateTime()
-        MyAds.loadInterstitialAd(this)
+        if (NetworkUtils.isConnected()) {
+            MyAds.loadInterstitialAd(this)
+        }
     }
 
     fun saveData() {

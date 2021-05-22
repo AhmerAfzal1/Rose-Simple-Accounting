@@ -80,11 +80,10 @@ class HelperFunctions {
         }
 
         @JvmStatic
-        fun getRoundedValue(value: String): String {
-            val newValue = value.toDouble()
+        fun getRoundedValue(value: Double): String {
             val round = DecimalFormat("#,##0.##")
             round.roundingMode = RoundingMode.HALF_UP
-            return round.format(newValue)
+            return round.format(value)
         }
 
         @JvmStatic
