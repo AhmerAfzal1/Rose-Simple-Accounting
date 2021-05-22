@@ -4,11 +4,11 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
+import com.ahmer.accounting.databinding.TransContainerAddBinding
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyDialogs
@@ -24,9 +24,13 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
     private val mTransactions = ArrayList<Transactions>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.transactions_add_container, parent, false)
-        return TransactionsViewHolder(layoutInflater)
+        val mBinding: TransContainerAddBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.trans_container_add,
+            parent,
+            false
+        )
+        return TransactionsViewHolder(mBinding)
     }
 
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
@@ -40,9 +44,9 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             description =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DESCRIPTION))
             credit =
-                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
+                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.CREDIT))
             debit =
-                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
+                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.DEBIT))
             isDebit =
                 HelperFunctions.checkBoolean(mCursor.getInt(mCursor.getColumnIndexOrThrow(Constants.TranColumn.IS_DEBIT)))
             created =
@@ -52,7 +56,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
             modifiedAccountType =
                 mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_ACCOUNT_TYPE))
             modifiedValue =
-                mCursor.getDouble(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_VALUE))
+                mCursor.getString(mCursor.getColumnIndexOrThrow(Constants.TranColumn.LAST_MODIFIED_VALUE))
         }
         holder.bindView(transaction)
         addTransList(transaction)
@@ -92,27 +96,14 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         notifyDataSetChanged()
     }
 
-    class TransactionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TransactionsViewHolder(binding: TransContainerAddBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        val cvTransactionEntry: MaterialCardView = itemView.findViewById(R.id.cvTransactionEntry)
+        val cvTransactionEntry: MaterialCardView = binding.cvTransactionEntry
+        val mBinding = binding
 
         fun bindView(trans: Transactions) {
-            val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
-            val tvDesc = itemView.findViewById<TextView>(R.id.tvDescription)
-            val tvDeb = itemView.findViewById<TextView>(R.id.tvDebit)
-            val tvCre = itemView.findViewById<TextView>(R.id.tvCredit)
-            tvDate.text = HelperFunctions.convertDateTimeShortFormat(trans.date)
-            tvDesc.text = trans.description
-            if (trans.debit == 0.toDouble()) {
-                tvDeb.text = ""
-            } else {
-                tvDeb.text = HelperFunctions.getRoundedValue(trans.debit)
-            }
-            if (trans.credit == 0.toDouble()) {
-                tvCre.text = ""
-            } else {
-                tvCre.text = HelperFunctions.getRoundedValue(trans.credit)
-            }
+            mBinding.mTransactionModel = trans
         }
     }
 }

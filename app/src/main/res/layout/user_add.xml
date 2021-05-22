@@ -6,12 +6,20 @@
     <data>
 
         <variable
+            name="mAddUserProfile"
+            type="com.ahmer.accounting.model.UserProfile" />
+
+        <variable
+            name="isAddOrEdit"
+            type="Boolean" />
+
+        <variable
             name="mAddUserProfileActivity"
             type="com.ahmer.accounting.ui.AddUser" />
 
         <variable
-            name="mAddUserProfile"
-            type="com.ahmer.accounting.model.UserProfile" />
+            name="mEditUserProfileActivity"
+            type="com.ahmer.accounting.ui.EditUser" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,13 +29,12 @@
         tools:context=".ui.AddUser">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarAddUserProfile"
             style="@style/Theme.RoseSimpleAccounting.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:onClick="@{() -> mAddUserProfileActivity.finish()}"
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
@@ -36,7 +43,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_baseline_back"
-            app:title="@string/title_toolbar_add_user"
+            app:navigationOnClickListener="@{() -> isAddOrEdit ? mAddUserProfileActivity.finish() : mEditUserProfileActivity.finish()}"
+            app:title="@{isAddOrEdit ? @string/title_toolbar_add_user : @string/title_toolbar_edit_user}"
             app:titleMarginStart="0dp"
             app:titleTextColor="@android:color/white" />
 
@@ -46,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbarAddUserProfile">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -291,10 +299,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="@string/save"
+                    android:onClick="@{() -> isAddOrEdit ? mAddUserProfileActivity.saveData():mEditUserProfileActivity.saveData()}"
+                    android:text="@{isAddOrEdit ? @string/save : @string/update"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:onClick="@{() -> mAddUserProfileActivity.saveData()}"
                     android:textStyle="bold"
                     app:backgroundTint="?attr/colorSecondaryVariant"
                     app:layout_constraintEnd_toEndOf="parent"

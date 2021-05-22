@@ -19,10 +19,11 @@ import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
-class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) {
+class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
 
     private val mContext = context
-    private val mTransactions = trans
+    private val mUserID = userID
+    private val mTransactions = Transactions()
     private lateinit var mBinding: TransDialogAddBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,16 +43,14 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
 
         mBinding.mAddEditDialog = mTransactions
 
-        var isSuccessfullyUpdated = false
-
-        var newAccountType = ""
+        var typeAccount = ""
         mBinding.btnToggleGroupAmount.addOnButtonCheckedListener { group, checkedId, isChecked ->
             val checkedButton = findViewById<MaterialButton>(checkedId)
-            newAccountType = checkedButton.text.toString()
-            Log.v(Constants.LOG_TAG, "AccountType: $newAccountType")
+            typeAccount = checkedButton.text.toString()
+            Log.v(Constants.LOG_TAG, "TypeAmount: $typeAccount")
             if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    when (newAccountType) {
+                    when (typeAccount) {
                         mContext.getString(R.string.credit_plus) -> {
                             mBinding.toggleBtnCredit.backgroundTintList =
                                 ContextCompat.getColorStateList(mContext, R.color.black)
@@ -77,69 +76,53 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
             mTransactions.date = HelperFunctions.dateTimePickerShow(it)
         }
 
-        val lastAmountType: String
-        val lastAmountValue: String
-        val oldAccountType: String = if (mTransactions.credit == 0.toDouble().toString()) {
-            context.getString(R.string.debit_minus)
-        } else {
-            context.getString(R.string.credit_plus)
-        }
-        if (oldAccountType == context.getString(R.string.debit_minus)) {
-            mBinding.btnToggleGroupAmount.check(R.id.toggleBtnDebit)
-            mTransactions.enteredAmount = mTransactions.debit
-            lastAmountType = "Debit"
-            lastAmountValue = mTransactions.debit
-        } else {
-            mBinding.btnToggleGroupAmount.check(R.id.toggleBtnCredit)
-            mTransactions.enteredAmount = mTransactions.credit
-            lastAmountType = "Credit"
-            lastAmountValue = mTransactions.credit
-        }
-        mBinding.btnAddTransaction.text = context.getString(R.string.update)
         mBinding.btnAddTransaction.setOnClickListener {
-            val newAmount: Double = mTransactions.enteredAmount.trim().toDouble()
+            var isSuccessfullyInserted = false
+            var newAmount: Double = 0.toDouble()
+            if (mTransactions.enteredAmount.trim().isNotEmpty()) {
+                newAmount = mTransactions.enteredAmount.trim().toDouble()
+            }
+            val newDate: String = mTransactions.date
+            val newDescription: String = mTransactions.description.trim()
+
             when {
                 newAmount == 0.toDouble() -> {
-                    ToastUtils.showLong(context.getString(R.string.enter_the_amount))
+                    ToastUtils.showLong(mContext.getString(R.string.enter_the_amount))
                 }
-                oldAccountType.isEmpty() -> {
-                    ToastUtils.showLong(context.getString(R.string.select_type_amount))
+                typeAccount.isEmpty() -> {
+                    ToastUtils.showLong(mContext.getString(R.string.select_type_amount))
                 }
-                mTransactions.description.trim().isEmpty() -> {
-                    ToastUtils.showLong(context.getString(R.string.enter_transaction_description))
+                newDescription.trim().isEmpty() -> {
+                    ToastUtils.showLong(mContext.getString(R.string.enter_transaction_description))
                 }
                 else -> {
-                    val transContentValues = Transactions().apply {
-                        userId = mTransactions.userId
+                    val addNewTransaction = Transactions().apply {
+                        userId = mUserID
                         credit = 0.toDouble().toString()
                         debit = 0.toDouble().toString()
-                        if (newAccountType == context.getString(R.string.credit_plus)) {
+                        if (typeAccount == mContext.getString(R.string.credit_plus)) {
                             credit = newAmount.toString()
                             isDebit = false
                         }
-                        if (newAccountType == context.getString(R.string.debit_minus)) {
+                        if (typeAccount == mContext.getString(R.string.debit_minus)) {
                             debit = newAmount.toString()
                             isDebit = true
                         }
-                        date = mTransactions.date
-                        description = mTransactions.description
-                        modified = HelperFunctions.getDateTime()
-                        modifiedAccountType = lastAmountType
-                        modifiedValue = lastAmountValue
+                        date = newDate
+                        description = newDescription
+                        created = HelperFunctions.getDateTime()
                     }
-                    isSuccessfullyUpdated =
-                        myDatabaseHelper.updateTransactions(
-                            mTransactions.transId,
-                            transContentValues
-                        )
+                    isSuccessfullyInserted =
+                        myDatabaseHelper.insertTransactions(addNewTransaction)
                 }
             }
-            if (isSuccessfullyUpdated) {
-                ToastUtils.showShort(context.getString(R.string.transaction_updated_successfully))
+            if (isSuccessfullyInserted) {
+                ToastUtils.showShort(mContext.getString(R.string.transaction_added_successfully))
                 Thread.sleep(200)
                 dismiss()
             }
         }
+
         mBinding.btnCancelTransaction.setOnClickListener {
             dismiss()
         }

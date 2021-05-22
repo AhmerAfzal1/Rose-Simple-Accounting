@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.ahmer.accounting.R
-import com.ahmer.accounting.databinding.TransactionsInfoDialogBinding
-import com.ahmer.accounting.databinding.UserProfileDataDialogBinding
+import com.ahmer.accounting.databinding.TransDialogInfoBinding
 import com.ahmer.accounting.model.Transactions
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
@@ -21,8 +20,8 @@ class TransactionsInfo(context: Context, transactions: Transactions) : Dialog(co
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        val mBinding: TransactionsInfoDialogBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context), R.layout.transactions_info_dialog, null, false
+        val mBinding: TransDialogInfoBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context), R.layout.trans_dialog_info, null, false
         )
         setContentView(mBinding.root)
         mBinding.mDialogTransInfo = mTransactions

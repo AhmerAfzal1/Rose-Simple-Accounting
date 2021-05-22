@@ -1,9 +1,12 @@
 package com.ahmer.accounting.helper
 
+import android.app.DatePickerDialog
 import android.os.Build
 import android.util.Log
-import androidx.databinding.BindingConversion
+import android.view.View
+import androidx.core.content.ContextCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.ahmer.utils.utilcode.Utils
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -11,7 +14,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.util.*
-
 
 class HelperFunctions {
 
@@ -34,7 +36,7 @@ class HelperFunctions {
         }
 
         @JvmStatic
-        fun convertDateTimeShortFormat(dataTime: String, forStatement: Boolean = false): String {
+        fun convertDateTimeShortFormat(dateTime: String, forStatement: Boolean = false): String {
             var dateTimeShort = ""
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,7 +48,7 @@ class HelperFunctions {
                             )
                         )
                         .toFormatter()
-                    val parsed = LocalDateTime.parse(dataTime, inputFormatter)
+                    val parsed = LocalDateTime.parse(dateTime, inputFormatter)
 
                     val outputFormatter: DateTimeFormatter = if (!forStatement) {
                         DateTimeFormatter.ofPattern(
@@ -62,7 +64,7 @@ class HelperFunctions {
                     dateTimeShort = outputFormatter.format(parsed)
                 } else {
                     val sdfOld = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
-                    val date: Date = sdfOld.parse(dataTime)!!
+                    val date: Date = sdfOld.parse(dateTime)!!
                     val sdfNew: SimpleDateFormat = if (!forStatement) {
                         SimpleDateFormat(Constants.DATE_SHORT_PATTERN, Locale.getDefault())
                     } else {
@@ -78,10 +80,11 @@ class HelperFunctions {
         }
 
         @JvmStatic
-        fun getRoundedValue(value: Double): String {
+        fun getRoundedValue(value: String): String {
+            val newValue = value.toDouble()
             val round = DecimalFormat("#,##0.##")
             round.roundingMode = RoundingMode.HALF_UP
-            return round.format(value)
+            return round.format(newValue)
         }
 
         @JvmStatic
@@ -91,8 +94,28 @@ class HelperFunctions {
         }
 
         @JvmStatic
-        fun setEmptyString(): String {
-            return ""
+        fun convertColorIntToHexString(int: Int): String {
+            return "#${Integer.toHexString(ContextCompat.getColor(Utils.getApp(), int))}"
+        }
+
+        @JvmStatic
+        fun dateTimePickerShow(view: View): String {
+            var dateTime = ""
+            val dateFormat = SimpleDateFormat(Constants.DATE_TIME_PATTERN, Locale.getDefault())
+            val currentDate = Calendar.getInstance()
+            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                currentDate.set(year, month, dayOfMonth)
+                dateTime = dateFormat.format(currentDate.time)
+            }
+            val datePicker = DatePickerDialog(
+                view.context,
+                listener,
+                currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),
+                currentDate.get(Calendar.DAY_OF_MONTH)
+            )
+            datePicker.show()
+            return dateTime
         }
     }
 }

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.ahmer.accounting.R
-import com.ahmer.accounting.databinding.UserProfileAddDataBinding
+import com.ahmer.accounting.databinding.UserAddBinding
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyAds
@@ -23,20 +23,21 @@ import io.ahmer.utils.utilcode.ToastUtils
 
 class AddUser : AppCompatActivity() {
 
-    private lateinit var mBinding: UserProfileAddDataBinding
+    private lateinit var mBinding: UserAddBinding
     private val mUserProfile = UserProfile()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.user_profile_add_data)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.user_add)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        mBinding.mAddUserProfileActivity = this
-        mBinding.mAddUserProfile = mUserProfile
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBinding.toolbar.overflowIcon?.setTint(Color.WHITE)
+            mBinding.toolbarAddUserProfile.overflowIcon?.setTint(Color.WHITE)
         }
+
+        mBinding.mAddUserProfile = mUserProfile
+        mBinding.isAddOrEdit = true
+        mBinding.mAddUserProfileActivity = this
 
         mBinding.inputLayoutName.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -45,7 +46,7 @@ class AddUser : AppCompatActivity() {
         mBinding.btnToggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
             val checkedButton = findViewById<MaterialButton>(checkedId)
             mUserProfile.gender = checkedButton.text.toString()
-            Log.v(Constants.LOG_TAG, "TypeGender: $mUserProfile.gender")
+            Log.v(Constants.LOG_TAG, "GenderType: ${mUserProfile.gender}")
             if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     when (mUserProfile.gender) {

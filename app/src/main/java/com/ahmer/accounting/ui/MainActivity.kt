@@ -276,9 +276,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
         val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
         val mAllBalance = mAllCredit - mAllDebit
-        mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit)
-        mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit)
-        mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance)
+        mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit.toString())
+        mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit.toString())
+        mTvTotalAllBalances.text = HelperFunctions.getRoundedValue(mAllBalance.toString())
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

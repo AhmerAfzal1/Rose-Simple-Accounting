@@ -8,21 +8,19 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.provider.BaseColumns
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
+import com.ahmer.accounting.databinding.UserContainerAddBinding
 import com.ahmer.accounting.dialog.UserProfileInfo
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyDialogs
 import com.ahmer.accounting.model.UserProfile
 import com.ahmer.accounting.ui.AddTransactions
 import com.ahmer.accounting.ui.EditUser
-import com.google.android.material.card.MaterialCardView
 
 class UsersAdapter(context: Context, cursor: Cursor) :
     RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
@@ -31,9 +29,14 @@ class UsersAdapter(context: Context, cursor: Cursor) :
     private val mCursor = cursor
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-            .inflate(R.layout.user_profile_data_container, parent, false)
-        return UsersViewHolder(inflater)
+        val mBinding: UserContainerAddBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.user_container_add,
+            parent,
+            false
+        )
+        mBinding.mUserAddButtons = this
+        return UsersViewHolder(mBinding)
     }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
@@ -89,53 +92,6 @@ class UsersAdapter(context: Context, cursor: Cursor) :
             */
         }
         holder.bindItems(userProfile)
-        holder.cvMain.setOnClickListener {
-            val intent = Intent(mContext, AddTransactions::class.java).apply {
-                putExtra("mPosUserID", userProfile.id)
-                putExtra("mPosUserName", userProfile.name)
-                putExtra("mPosUserPhone", userProfile.phone1)
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-                ) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            }
-            mContext.startActivity(intent)
-        }
-        holder.ivInfoButton.setOnClickListener {
-            val dialog = UserProfileInfo(mContext, userProfile)
-            val dialogWindow: Window? = dialog.window
-            dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.show()
-            dialogWindow.setLayout(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-        holder.ivEditButton.setOnClickListener {
-            val intent = Intent(mContext, EditUser::class.java).apply {
-                putExtra("mID", userProfile.id)
-                putExtra("mName", userProfile.name)
-                putExtra("mGender", userProfile.gender)
-                putExtra("mAddress", userProfile.address)
-                putExtra("mCity", userProfile.city)
-                putExtra("mPhone1", userProfile.phone1)
-                putExtra("mPhone2", userProfile.phone2)
-                putExtra("mEmail", userProfile.email)
-                putExtra("mComments", userProfile.comment)
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-                ) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            }
-            mContext.startActivity(intent)
-        }
-        holder.ivDeleteButton.setOnClickListener {
-            MyDialogs.confirmUserDelete(mContext, userProfile.id, userProfile.name)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -146,16 +102,64 @@ class UsersAdapter(context: Context, cursor: Cursor) :
         }
     }
 
-    class UsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun cvMain(userProfile: UserProfile) {
+        val intent = Intent(mContext, AddTransactions::class.java).apply {
+            putExtra("mPosUserID", userProfile.id)
+            putExtra("mPosUserName", userProfile.name)
+            putExtra("mPosUserPhone", userProfile.phone1)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+            ) {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+        mContext.startActivity(intent)
+    }
 
-        val cvMain: MaterialCardView = itemView.findViewById(R.id.cardView)
-        val ivEditButton: ImageView = itemView.findViewById(R.id.ivBtnEdit)
-        val ivInfoButton: ImageView = itemView.findViewById(R.id.ivBtnInfo)
-        val ivDeleteButton: ImageView = itemView.findViewById(R.id.ivBtnDelete)
+    fun showUserInfo(userProfile: UserProfile) {
+        val dialog = UserProfileInfo(mContext, userProfile)
+        val dialogWindow: Window? = dialog.window
+        dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        dialogWindow.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    fun showEditUser(userProfile: UserProfile) {
+        val intent = Intent(mContext, EditUser::class.java).apply {
+            putExtra("mID", userProfile.id)
+            putExtra("mName", userProfile.name)
+            putExtra("mGender", userProfile.gender)
+            putExtra("mAddress", userProfile.address)
+            putExtra("mCity", userProfile.city)
+            putExtra("mPhone1", userProfile.phone1)
+            putExtra("mPhone2", userProfile.phone2)
+            putExtra("mEmail", userProfile.email)
+            putExtra("mComments", userProfile.comment)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+            ) {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+        mContext.startActivity(intent)
+    }
+
+    fun deleteUser(userProfile: UserProfile) {
+        MyDialogs.confirmUserDelete(mContext, userProfile.id, userProfile.name)
+    }
+
+    class UsersViewHolder(binding: UserContainerAddBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        val mBinding = binding
 
         fun bindItems(userProfile: UserProfile) {
-            val mUserName = itemView.findViewById<TextView>(R.id.tvGetUserName)
-            mUserName.text = userProfile.name
+            mBinding.mUserProfile = userProfile
         }
     }
 }

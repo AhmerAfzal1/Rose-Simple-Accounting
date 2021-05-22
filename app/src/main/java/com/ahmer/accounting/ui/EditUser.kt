@@ -7,133 +7,173 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.ahmer.accounting.R
+import com.ahmer.accounting.databinding.UserAddBinding
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
 import com.ahmer.accounting.helper.MyAds
 import com.ahmer.accounting.helper.MyDatabaseHelper
 import com.ahmer.accounting.model.UserProfile
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
 class EditUser : AppCompatActivity() {
 
+    private lateinit var mBinding: UserAddBinding
+    private val mUserProfile = UserProfile()
+    private var mIntentId: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_profile_add_data)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.user_add)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.title = resources.getString(R.string.title_toolbar_edit_user)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.overflowIcon?.setTint(Color.WHITE)
-        }
-        toolbar.setOnClickListener {
-            finish()
+            mBinding.toolbarAddUserProfile.overflowIcon?.setTint(Color.WHITE)
         }
 
-        val userName = findViewById<TextInputLayout>(R.id.inputLayoutName)
-        val toggleGroupGender = findViewById<MaterialButtonToggleGroup>(R.id.btnToggleGroupGender)
-        val userAddress = findViewById<TextInputLayout>(R.id.inputLayoutAddress)
-        val userCity = findViewById<TextInputLayout>(R.id.inputLayoutCity)
-        val userPhone1 = findViewById<TextInputLayout>(R.id.inputLayoutPhone1)
-        val userPhone2 = findViewById<TextInputLayout>(R.id.inputLayoutPhone2)
-        val userEmail = findViewById<TextInputLayout>(R.id.inputLayoutEmail)
-        val userComments = findViewById<TextInputLayout>(R.id.inputLayoutComments)
-        val btnSave = findViewById<MaterialButton>(R.id.btnSaveUserData)
-        btnSave.text = getString(R.string.update)
+        mIntentId = intent.getLongExtra("mID", -1)
+        val intentName = intent.getStringExtra("mName")
+        val intentGender = intent.getStringExtra("mGender")
+        val intentAddress = intent.getStringExtra("mAddress")
+        val intentCity = intent.getStringExtra("mCity")
+        val intentPhone1 = intent.getStringExtra("mPhone1")
+        val intentPhone2 = intent.getStringExtra("mPhone2")
+        val intentEmail = intent.getStringExtra("mEmail")
+        val intentComment = intent.getStringExtra("mComments")
 
-        var typeGender = ""
-        toggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            val checkedButton = findViewById<MaterialButton>(checkedId)
-            typeGender = checkedButton.text.toString()
-        }
+        mBinding.mAddUserProfile = mUserProfile
+        mBinding.isAddOrEdit = false
+        mBinding.mEditUserProfileActivity = this
 
-        val id = intent.getLongExtra("mID", -1)
-        val name = intent.getStringExtra("mName")
-        val gender = intent.getStringExtra("mGender")
-        val address = intent.getStringExtra("mAddress")
-        val city = intent.getStringExtra("mCity")
-        val phone1 = intent.getStringExtra("mPhone1")
-        val phone2 = intent.getStringExtra("mPhone2")
-        val email = intent.getStringExtra("mEmail")
-        val comment = intent.getStringExtra("mComments")
-
-        userName.requestFocus()
+        mBinding.inputLayoutName.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(userName, InputMethodManager.SHOW_IMPLICIT)
+        imm.showSoftInput(mBinding.inputLayoutName, InputMethodManager.SHOW_IMPLICIT)
 
-        userName.editText?.setText(name.toString())
-        Log.v(Constants.LOG_TAG, "Gender type: $gender")
-        when (gender) {
+        mBinding.btnToggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            val checkedButton = findViewById<MaterialButton>(checkedId)
+            mUserProfile.gender = checkedButton.text.toString()
+            Log.v(Constants.LOG_TAG, "GenderType: ${mUserProfile.gender}")
+            /*if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    when (mUserProfile.gender) {
+                        "Male" -> {
+                            mBinding.btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                            mBinding.btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            mBinding.btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                        }
+                        "Female" -> {
+                            mBinding.btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            mBinding.btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            mBinding.btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                        }
+                        else -> {
+                            mBinding.btnMale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            mBinding.btnFemale.backgroundTintList =
+                                ContextCompat.getColorStateList(this, android.R.color.transparent)
+                            mBinding.btnUnknown.backgroundTintList =
+                                ContextCompat.getColorStateList(this, R.color.black)
+                        }
+                    }
+                } else {
+                    when (mUserProfile.gender) {
+                        "Male" -> {
+                            mBinding.btnMale.setBackgroundResource(R.color.black)
+                            mBinding.btnFemale.setBackgroundResource(android.R.color.transparent)
+                            mBinding.btnUnknown.setBackgroundResource(android.R.color.transparent)
+                        }
+                        "Female" -> {
+                            mBinding.btnMale.setBackgroundResource(android.R.color.transparent)
+                            mBinding.btnUnknown.setBackgroundResource(android.R.color.transparent)
+                            mBinding.btnFemale.setBackgroundResource(R.color.black)
+                        }
+                        else -> {
+                            mBinding.btnMale.setBackgroundResource(android.R.color.transparent)
+                            mBinding.btnFemale.setBackgroundResource(android.R.color.transparent)
+                            mBinding.btnUnknown.setBackgroundResource(R.color.black)
+                        }
+                    }
+                }
+            }*/
+        }
+
+        mUserProfile.name = intentName!!
+        Log.v(Constants.LOG_TAG, "Gender type: $intentGender")
+        when (intentGender) {
             "Male" -> {
-                toggleGroupGender.check(R.id.btnMale)
+                mBinding.btnToggleGroupGender.check(R.id.btnMale)
             }
             "Female" -> {
-                toggleGroupGender.check(R.id.btnFemale)
+                mBinding.btnToggleGroupGender.check(R.id.btnFemale)
             }
             else -> {
-                toggleGroupGender.check(R.id.btnUnknown)
+                mBinding.btnToggleGroupGender.check(R.id.btnUnknown)
             }
         }
-        userAddress.editText?.setText(address.toString())
-        userCity.editText?.setText(city.toString())
-        userPhone1.editText?.setText(phone1.toString())
-        userPhone2.editText?.setText(phone2.toString())
-        userEmail.editText?.setText(email.toString())
-        userComments.editText?.setText(comment.toString())
-
-        btnSave.setOnClickListener {
-            var isSuccessfullyUpdated = false
-            val userProfile = UserProfile().apply {
-                this.name = userName.editText?.text.toString().trim()
-                this.gender = typeGender
-                this.address = userAddress.editText?.text.toString().trim()
-                this.city = userCity.editText?.text.toString().trim()
-                this.phone1 = userPhone1.editText?.text.toString().trim()
-                this.phone2 = userPhone2.editText?.text.toString().trim()
-                this.email = userEmail.editText?.text.toString().trim()
-                this.comment = userComments.editText?.text.toString().trim()
-                this.modified = HelperFunctions.getDateTime()
-            }
-
-            when {
-                userProfile.name.trim().isEmpty() -> {
-                    ToastUtils.showLong(getString(R.string.toast_enter_name))
-                }
-                userProfile.gender.trim().isEmpty() -> {
-                    ToastUtils.showLong(getString(R.string.toast_select_gender))
-                }
-                else -> {
-                    val myDatabaseHelper = MyDatabaseHelper()
-                    isSuccessfullyUpdated = myDatabaseHelper.updateUserProfileData(userProfile, id)
-                    /*
-                    Log.v(Constants.LOG_TAG, "Updated Record")
-                    Log.v(Constants.LOG_TAG, "Name: ${userProfile.name}")
-                    Log.v(Constants.LOG_TAG, "Gender: ${userProfile.gender}")
-                    Log.v(Constants.LOG_TAG, "Address: ${userProfile.address}")
-                    Log.v(Constants.LOG_TAG, "City: ${userProfile.city}")
-                    Log.v(Constants.LOG_TAG, "Phone1: ${userProfile.phone1}")
-                    Log.v(Constants.LOG_TAG, "Phone2: ${userProfile.phone2}")
-                    Log.v(Constants.LOG_TAG, "Email: ${userProfile.email}")
-                    Log.v(Constants.LOG_TAG, "Comments: ${userProfile.comment}")
-                    Log.v(Constants.LOG_TAG, "Created: ${userProfile.created}")
-                    Log.v(Constants.LOG_TAG, "Modified: ${userProfile.modified}")
-                    */
-                }
-            }
-
-            if (isSuccessfullyUpdated) {
-                ToastUtils.showShort(getString(R.string.toast_record_updated))
-                Thread.sleep(200)
-                finish()
-            }
-        }
+        mUserProfile.address = intentAddress!!
+        mUserProfile.city = intentCity!!
+        mUserProfile.phone1 = intentPhone1!!
+        mUserProfile.phone2 = intentPhone2!!
+        mUserProfile.email = intentEmail!!
+        mUserProfile.comment = intentComment!!
 
         MyAds.loadInterstitialAd(this)
+    }
+
+    fun saveData() {
+        var isSuccessfullyUpdated = false
+        val userProfile = UserProfile().apply {
+            this.name = mUserProfile.name
+            this.gender = mUserProfile.gender
+            this.address = mUserProfile.address
+            this.city = mUserProfile.city
+            this.phone1 = mUserProfile.phone1
+            this.phone2 = mUserProfile.phone2
+            this.email = mUserProfile.email
+            this.comment = mUserProfile.comment
+            this.modified = HelperFunctions.getDateTime()
+        }
+
+        when {
+            userProfile.name.trim().isEmpty() -> {
+                ToastUtils.showLong(getString(R.string.toast_enter_name))
+            }
+            userProfile.gender.trim().isEmpty() -> {
+                ToastUtils.showLong(getString(R.string.toast_select_gender))
+            }
+            else -> {
+                val myDatabaseHelper = MyDatabaseHelper()
+                isSuccessfullyUpdated =
+                    myDatabaseHelper.updateUserProfileData(userProfile, mIntentId)
+                /*
+                Log.v(Constants.LOG_TAG, "Updated Record")
+                Log.v(Constants.LOG_TAG, "Name: ${userProfile.name}")
+                Log.v(Constants.LOG_TAG, "Gender: ${userProfile.gender}")
+                Log.v(Constants.LOG_TAG, "Address: ${userProfile.address}")
+                Log.v(Constants.LOG_TAG, "City: ${userProfile.city}")
+                Log.v(Constants.LOG_TAG, "Phone1: ${userProfile.phone1}")
+                Log.v(Constants.LOG_TAG, "Phone2: ${userProfile.phone2}")
+                Log.v(Constants.LOG_TAG, "Email: ${userProfile.email}")
+                Log.v(Constants.LOG_TAG, "Comments: ${userProfile.comment}")
+                Log.v(Constants.LOG_TAG, "Created: ${userProfile.created}")
+                Log.v(Constants.LOG_TAG, "Modified: ${userProfile.modified}")
+                */
+            }
+        }
+
+        if (isSuccessfullyUpdated) {
+            ToastUtils.showShort(getString(R.string.toast_record_updated))
+            Thread.sleep(200)
+            finish()
+        }
     }
 }

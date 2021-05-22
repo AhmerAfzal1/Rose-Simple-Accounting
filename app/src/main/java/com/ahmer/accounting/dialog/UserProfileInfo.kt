@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.ahmer.accounting.R
-import com.ahmer.accounting.databinding.UserProfileDataDialogBinding
+import com.ahmer.accounting.databinding.UserDialogInfoBinding
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
@@ -20,8 +20,8 @@ class UserProfileInfo(context: Context, userProfile: UserProfile) : Dialog(conte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        val mBinding: UserProfileDataDialogBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context), R.layout.user_profile_data_dialog, null, false
+        val mBinding: UserDialogInfoBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context), R.layout.user_dialog_info, null, false
         )
         setContentView(mBinding.root)
         mBinding.mDialogUserProfile = mUserProfile
