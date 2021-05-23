@@ -6,6 +6,8 @@ import com.ahmer.accounting.R
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 object MyAds {
 
@@ -111,6 +113,76 @@ object MyAds {
                     }
                 }
             )
+        }
+    }
+
+    @JvmStatic
+    fun loadRewardedAd(activity: Activity, turnOffAds: Boolean = false) {
+        if (!turnOffAds) {
+            MobileAds.initialize(activity) {
+                Log.v(Constants.LOG_TAG, "AdMob Sdk Initialize")
+            }
+            val mAdRequest = AdRequest.Builder().build()
+            RewardedAd.load(
+                activity,
+                activity.getString(R.string.ad_rewarded_id),
+                mAdRequest,
+                object : RewardedAdLoadCallback() {
+                    override fun onAdLoaded(rewardedAd: RewardedAd) {
+                        super.onAdLoaded(rewardedAd)
+                        var mRewardedAd: RewardedAd?
+                        mRewardedAd = rewardedAd
+                        mRewardedAd.fullScreenContentCallback =
+                            object : FullScreenContentCallback() {
+                                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                                    super.onAdFailedToShowFullScreenContent(adError)
+                                    Log.v(
+                                        Constants.LOG_TAG,
+                                        "Rewarded: Failed to show fullscreen content ad due to ${adError.message}, and error code is: ${adError.code}"
+                                    )
+                                }
+
+                                override fun onAdShowedFullScreenContent() {
+                                    super.onAdShowedFullScreenContent()
+                                    Log.v(
+                                        Constants.LOG_TAG,
+                                        "Rewarded: Ad showed fullscreen content"
+                                    )
+                                }
+
+                                override fun onAdDismissedFullScreenContent() {
+                                    super.onAdDismissedFullScreenContent()
+                                    mRewardedAd = null
+                                    Log.v(Constants.LOG_TAG, "Rewarded: Ad was dismissed")
+                                }
+
+                                override fun onAdImpression() {
+                                    super.onAdImpression()
+                                    Log.v(
+                                        Constants.LOG_TAG,
+                                        "Rewarded: Ad impression is recorded"
+                                    )
+                                }
+                            }
+                        mRewardedAd!!.show(activity) {
+                            val rewardAmount = it.amount
+                            val rewardType = it.type
+                            Log.d(
+                                Constants.LOG_TAG,
+                                "Rewarded: User earned the reward. $rewardAmount and $rewardType"
+                            )
+                        }
+                    }
+
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        super.onAdFailedToLoad(loadAdError)
+                        Log.v(
+                            Constants.LOG_TAG,
+                            "Rewarded: Failed to load ad due to ${loadAdError.message}, and error code is: ${loadAdError.code}"
+                        )
+                    }
+                })
+
         }
     }
 }
