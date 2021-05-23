@@ -13,8 +13,12 @@
             type="Boolean" />
 
         <variable
-            name="rvTransactionsActivity"
-            type="com.ahmer.accounting.ui.AddTransactions" />
+            name="mUserName"
+            type="String" />
+
+        <variable
+            name="mUserPhone"
+            type="String" />
 
         <variable
             name="rvTransactionsAdapter"
@@ -84,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@{rvTransactionsActivity.userName}"
+                        android:text="@{mUserName}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/white" />
                 </TableRow>
@@ -104,7 +108,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@{rvTransactionsActivity.userPhone}"
+                        android:text="@{mUserPhone}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/white" />
                 </TableRow>

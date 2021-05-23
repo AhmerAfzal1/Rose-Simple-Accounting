@@ -67,12 +67,14 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             mBinding.toolbarRvTrans.overflowIcon?.setTint(Color.WHITE)
         }
         setSupportActionBar(mBinding.toolbarRvTrans)
-        mBinding.executePendingBindings()
 
         mUserId = intent.getLongExtra("mPosUserID", -1)
         mUserName = intent.getStringExtra("mPosUserName")
         mUserPhone = intent.getStringExtra("mPosUserPhone")
 
+        mBinding.mUserName = mUserName
+        mBinding.mUserPhone = mUserPhone
+        mBinding.executePendingBindings()
         myDatabaseHelper = MyDatabaseHelper()
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -143,14 +145,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         if (NetworkUtils.isConnected()) {
             MyAds.loadInterstitialAd(this)
         }
-    }
-
-    fun getUserName(): String {
-        return mUserName!!
-    }
-
-    fun getUserPhone(): String {
-        return mUserPhone!!
     }
 
     private fun searchTransactionDescription(keyword: String) {

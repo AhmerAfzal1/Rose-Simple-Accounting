@@ -6,7 +6,6 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.ahmer.accounting.BR
 import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.HelperFunctions
 import java.text.SimpleDateFormat
 import java.util.*
 
