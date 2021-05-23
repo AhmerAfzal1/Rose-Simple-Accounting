@@ -39,6 +39,7 @@ class AddUser : AppCompatActivity() {
         mBinding.mAddUserProfile = mUserProfile
         mBinding.isAddOrEdit = true
         mBinding.mAddUserProfileActivity = this
+        mBinding.executePendingBindings()
 
         mBinding.inputLayoutName.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -35,6 +35,11 @@
         <item name="colorControlNormal">@android:color/white</item>
     </style>
 
+    <style name="Theme.RoseSimpleAccounting.Dialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="windowMinWidthMajor">0%</item>
+        <item name="android:windowMinWidthMajor">0%</item>
+    </style>
+
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>

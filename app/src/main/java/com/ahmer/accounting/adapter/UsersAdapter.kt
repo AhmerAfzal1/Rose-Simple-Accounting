@@ -10,14 +10,13 @@ import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.databinding.UserContainerAddBinding
+import com.ahmer.accounting.dialog.DialogUtils
 import com.ahmer.accounting.dialog.UserProfileInfo
 import com.ahmer.accounting.helper.Constants
-import com.ahmer.accounting.helper.MyDialogs
 import com.ahmer.accounting.model.UserProfile
 import com.ahmer.accounting.ui.AddTransactions
 import com.ahmer.accounting.ui.EditUser
@@ -122,10 +121,6 @@ class UsersAdapter(context: Context, cursor: Cursor) :
         val dialogWindow: Window? = dialog.window
         dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
-        dialogWindow.setLayout(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
     }
 
     fun showEditUser(userProfile: UserProfile) {
@@ -150,7 +145,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
     }
 
     fun deleteUser(userProfile: UserProfile) {
-        MyDialogs.confirmUserDelete(mContext, userProfile.id, userProfile.name)
+        DialogUtils.deleteUser(mContext, userProfile.id, userProfile.name)
     }
 
     class UsersViewHolder(binding: UserContainerAddBinding) :
@@ -160,6 +155,7 @@ class UsersAdapter(context: Context, cursor: Cursor) :
 
         fun bindItems(userProfile: UserProfile) {
             mBinding.mUserProfile = userProfile
+            mBinding.executePendingBindings()
         }
     }
 }

@@ -38,6 +38,7 @@ class TransactionsBalanceAdapter(list: ArrayList<TransactionsBalance>) :
 
         fun bind(transactionsBalance: TransactionsBalance) {
             mBinding.mAccountTypeModel = transactionsBalance
+            mBinding.executePendingBindings()
         }
     }
 }

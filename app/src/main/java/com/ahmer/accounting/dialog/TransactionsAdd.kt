@@ -19,7 +19,8 @@ import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
-class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
+class TransactionsAdd(context: Context, userID: Long) :
+    Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
     private val mContext = context
     private val mUserID = userID
@@ -42,6 +43,7 @@ class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
         mTransactions.date = HelperFunctions.getDateTime()
 
         mBinding.mAddEditDialog = mTransactions
+        mBinding.executePendingBindings()
 
         var typeAccount = ""
         mBinding.btnToggleGroupAmount.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -72,25 +74,22 @@ class TransactionsAdd(context: Context, userID: Long) : Dialog(context) {
             }
         }
 
-        mBinding.inputDate.setOnClickListener {
-            mTransactions.date = HelperFunctions.dateTimePickerShow(it)
-        }
-
         mBinding.btnAddTransaction.setOnClickListener {
             var isSuccessfullyInserted = false
-            var newAmount: Double = 0.toDouble()
-            if (mBinding.mEnteredAmount!!.trim().isNotEmpty()) {
-                newAmount = mBinding.mEnteredAmount!!.trim().toDouble()
+            val newAmount: Double = if (mBinding.mEnteredAmount?.trim()?.isNotEmpty() == true) {
+                mBinding.mEnteredAmount!!.trim().toDouble()
+            } else {
+                0.toDouble()
             }
             val newDate: String = mTransactions.date
             val newDescription: String = mTransactions.description.trim()
 
             when {
-                newAmount == 0.toDouble() -> {
-                    ToastUtils.showLong(mContext.getString(R.string.enter_the_amount))
-                }
                 typeAccount.isEmpty() -> {
                     ToastUtils.showLong(mContext.getString(R.string.select_type_amount))
+                }
+                newAmount == 0.toDouble() -> {
+                    ToastUtils.showLong(mContext.getString(R.string.enter_the_amount))
                 }
                 newDescription.trim().isEmpty() -> {
                     ToastUtils.showLong(mContext.getString(R.string.enter_transaction_description))

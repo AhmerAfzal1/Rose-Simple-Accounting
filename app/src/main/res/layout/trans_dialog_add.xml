@@ -2,7 +2,6 @@
 <layout>
 
     <data>
-
         <variable
             name="mAddEditDialog"
             type="com.ahmer.accounting.model.Transactions" />
@@ -48,6 +47,7 @@
                     android:hint="@string/date"
                     android:inputType="date"
                     android:lines="1"
+                    android:onClick="@{(v) -> mAddEditDialog.dateTimePickerShow(v)}"
                     android:text="@={mAddEditDialog.date}"
                     android:textColor="@color/black"
                     android:textCursorDrawable="@drawable/insertion_cursor" />

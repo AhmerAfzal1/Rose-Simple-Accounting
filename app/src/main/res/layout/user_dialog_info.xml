@@ -283,7 +283,7 @@
                         style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{()-> btnOkDialogUserProfile.dismiss()}"
+                        android:onClick="@{() -> btnOkDialogUserProfile.dismiss()}"
                         android:text="@android:string/ok"
                         android:textAllCaps="true"
                         android:textColor="@color/white"

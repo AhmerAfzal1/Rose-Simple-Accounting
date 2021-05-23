@@ -38,7 +38,6 @@ class Settings : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBinding.toolbarSettings.overflowIcon?.setTint(Color.WHITE)
         }
-        mBinding.mSettingsToolbar = this
         if (NetworkUtils.isConnected()) {
             MyAds.loadInterstitialAd(this)
         }

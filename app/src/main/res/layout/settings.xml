@@ -3,9 +3,7 @@
 
     <data>
 
-        <variable
-            name="mSettingsToolbar"
-            type="com.ahmer.accounting.ui.Settings" />
+        <import type="android.app.Activity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,6 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_baseline_back"
+            app:navigationOnClickListener="@{() -> ((Activity) context).finish()}"
             app:title="@string/settings"
             app:titleMarginStart="0dp"
             app:titleTextColor="@android:color/white" />

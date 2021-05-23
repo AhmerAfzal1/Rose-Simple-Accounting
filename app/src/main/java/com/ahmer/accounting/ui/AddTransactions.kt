@@ -67,7 +67,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             mBinding.toolbarRvTrans.overflowIcon?.setTint(Color.WHITE)
         }
         setSupportActionBar(mBinding.toolbarRvTrans)
-        mBinding.rvTransactionsActivity = this
+        mBinding.executePendingBindings()
 
         mUserId = intent.getLongExtra("mPosUserID", -1)
         mUserName = intent.getStringExtra("mPosUserName")
@@ -193,10 +193,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 val dialogWindow: Window? = dialog.window
                 dialogWindow!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 dialog.show()
-                dialogWindow.setLayout(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
             }
             R.id.menu_search_trans_desc -> {
                 val searchView: SearchView = item.actionView as SearchView
@@ -285,19 +281,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         val mUserBalance = mUserCredit - mUserDebit
         val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
         mAdapterTrans = TransactionsAdapter(this, cursor!!)
-        if (mAdapterTrans.itemCount > 0) {
-            mBinding.ivWarning.visibility = View.GONE
-            mBinding.tvNoTransHeading.visibility = View.GONE
-            mBinding.tvAddNewTrans.visibility = View.GONE
-            mBinding.rvGetAllRecords.visibility = View.VISIBLE
-            mBinding.rvTotalBalances.visibility = View.VISIBLE
-        } else {
-            mBinding.ivWarning.visibility = View.VISIBLE
-            mBinding.tvNoTransHeading.visibility = View.VISIBLE
-            mBinding.tvAddNewTrans.visibility = View.VISIBLE
-            mBinding.rvGetAllRecords.visibility = View.GONE
-            mBinding.rvTotalBalances.visibility = View.GONE
-        }
+        mBinding.isTransactionsAdapter = mAdapterTrans.itemCount > 0
         val mListBalance = ArrayList<TransactionsBalance>()
         val debit = TransactionsBalance()
         debit.accountType = "Debit"

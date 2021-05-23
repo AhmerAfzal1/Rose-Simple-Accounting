@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.app.Activity" />
+
         <variable
             name="mAddUserProfile"
             type="com.ahmer.accounting.model.UserProfile" />
@@ -43,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_baseline_back"
-            app:navigationOnClickListener="@{() -> isAddOrEdit ? mAddUserProfileActivity.finish() : mEditUserProfileActivity.finish()}"
+            app:navigationOnClickListener="@{() -> ((Activity) context).finish()}"
             app:title="@{isAddOrEdit ? @string/title_toolbar_add_user : @string/title_toolbar_edit_user}"
             app:titleMarginStart="0dp"
             app:titleTextColor="@android:color/white" />

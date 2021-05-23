@@ -9,9 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmer.accounting.R
 import com.ahmer.accounting.databinding.TransContainerAddBinding
+import com.ahmer.accounting.dialog.DialogUtils
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.HelperFunctions
-import com.ahmer.accounting.helper.MyDialogs
 import com.ahmer.accounting.model.Transactions
 import com.google.android.material.card.MaterialCardView
 
@@ -57,7 +57,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
         holder.bindView(transaction)
         addTransList(transaction)
         holder.cvTransactionEntry.setOnClickListener {
-            MyDialogs.showDropDownDialog(mContext, transaction)
+            DialogUtils.showDialogOptions(mContext, transaction)
         }
         if (mSelectedIds.contains(position)) {
             holder.itemView.setBackgroundResource(R.color.secondaryLightColor)
@@ -100,6 +100,7 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
 
         fun bindView(trans: Transactions) {
             mBinding.mTransactionModel = trans
+            mBinding.executePendingBindings()
         }
     }
 }

@@ -13,7 +13,8 @@ import com.ahmer.accounting.databinding.UserDialogInfoBinding
 import com.ahmer.accounting.model.UserProfile
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class UserProfileInfo(context: Context, userProfile: UserProfile) : Dialog(context) {
+class UserProfileInfo(context: Context, userProfile: UserProfile) :
+    Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
     private val mUserProfile = userProfile
 
@@ -26,6 +27,7 @@ class UserProfileInfo(context: Context, userProfile: UserProfile) : Dialog(conte
         setContentView(mBinding.root)
         mBinding.mDialogUserProfile = mUserProfile
         mBinding.btnOkDialogUserProfile = this
+        mBinding.executePendingBindings()
         setCancelable(false)
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

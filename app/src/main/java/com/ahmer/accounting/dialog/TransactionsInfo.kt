@@ -13,7 +13,8 @@ import com.ahmer.accounting.databinding.TransDialogInfoBinding
 import com.ahmer.accounting.model.Transactions
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class TransactionsInfo(context: Context, transactions: Transactions) : Dialog(context) {
+class TransactionsInfo(context: Context, transactions: Transactions) :
+    Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
     private val mTransactions = transactions
 
@@ -26,6 +27,7 @@ class TransactionsInfo(context: Context, transactions: Transactions) : Dialog(co
         setContentView(mBinding.root)
         mBinding.mDialogTransInfo = mTransactions
         mBinding.btnOkDialogTrans = this
+        mBinding.executePendingBindings()
         setCancelable(false)
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

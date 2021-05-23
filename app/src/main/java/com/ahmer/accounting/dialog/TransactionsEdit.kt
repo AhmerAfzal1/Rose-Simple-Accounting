@@ -19,7 +19,8 @@ import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
-class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) {
+class TransactionsEdit(context: Context, trans: Transactions) :
+    Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
     private val mContext = context
     private val mTransactions = trans
@@ -41,6 +42,7 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
         mTransactions.date = HelperFunctions.getDateTime()
 
         mBinding.mAddEditDialog = mTransactions
+        mBinding.executePendingBindings()
 
         var isSuccessfullyUpdated = false
 
@@ -71,10 +73,6 @@ class TransactionsEdit(context: Context, trans: Transactions) : Dialog(context) 
                     }
                 }
             }
-        }
-
-        mBinding.inputDate.setOnClickListener {
-            mTransactions.date = HelperFunctions.dateTimePickerShow(it)
         }
 
         val lastAmountType: String
