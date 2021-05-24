@@ -1,55 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBgMainLayout"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main">
+<layout>
 
-    <ImageView
-        android:id="@+id/ivWarningMain"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:alpha="0.5"
-        android:contentDescription="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_warning"
-        app:tint="@color/colorRedDark" />
+    <data>
 
-    <TextView
-        android:id="@+id/tvNoUserAccountHeadingMain"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:text="@string/no_user_account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivWarningMain" />
+        <import type="android.view.View" />
 
-    <TextView
-        android:id="@+id/tvAddUserAccountHeadingMain"
-        style="@style/TextAppearance.AppCompat.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:text="@string/add_new_user_account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNoUserAccountHeadingMain" />
+        <variable
+            name="mVisibility"
+            type="Boolean" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMain"
+        <variable
+            name="mAdapter"
+            type="com.ahmer.accounting.adapter.UsersAdapter" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:background="@color/colorBgMainLayout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/app_bar_main">
+
+        <ImageView
+            android:id="@+id/ivWarningMain"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:alpha="0.5"
+            android:contentDescription="@null"
+            android:visibility="@{mVisibility ? View.VISIBLE : View.GONE, default=visible}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_warning"
+            app:tint="@color/colorRedDark" />
+
+        <TextView
+            android:id="@+id/tvNoUserAccountHeadingMain"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:text="@string/no_user_account"
+            android:visibility="@{mVisibility ? View.VISIBLE : View.GONE, default=visible}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivWarningMain" />
+
+        <TextView
+            android:id="@+id/tvAddUserAccountHeadingMain"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:text="@string/add_new_user_account"
+            android:visibility="@{mVisibility ? View.VISIBLE : View.GONE, default=visible}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNoUserAccountHeadingMain" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:adapter="@{mAdapter}"
+            android:visibility="@{mVisibility ? View.GONE : View.VISIBLE, default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+<layout>
 
-    <com.google.android.material.appbar.AppBarLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="mActivity"
+            type="com.ahmer.accounting.ui.MainActivity" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar.AppBarOverlay">
+        android:layout_height="match_parent"
+        tools:context=".ui.MainActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.RoseSimpleAccounting.NoActionBar.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.RoseSimpleAccounting.NoActionBar.AppBarOverlay">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarMain"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/Theme.RoseSimpleAccounting.NoActionBar.PopupOverlay"
+                app:title="@string/app_name" />
 
-    <include layout="@layout/content_main" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabAddNewUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:gravity="end"
-        android:text="@string/add_new_user"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:visibility="visible"
-        app:backgroundTint="?attr/colorSecondaryVariant"
-        app:borderWidth="2dp"
-        app:elevation="6dp"
-        app:icon="@drawable/ic_baseline_person_add"
-        app:iconTint="@color/white"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <include
+            android:id="@+id/contentMain"
+            layout="@layout/content_main" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabAddNewUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:gravity="end"
+            android:onClick="@{(v) -> mActivity.fabRun(v)}"
+            android:text="@string/add_new_user"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            app:backgroundTint="?attr/colorSecondaryVariant"
+            app:borderWidth="2dp"
+            app:elevation="6dp"
+            app:icon="@drawable/ic_baseline_person_add"
+            app:iconTint="@color/white"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

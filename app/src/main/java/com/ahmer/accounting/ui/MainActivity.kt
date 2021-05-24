@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,8 +29,6 @@ import com.ahmer.accounting.R
 import com.ahmer.accounting.adapter.UsersAdapter
 import com.ahmer.accounting.databinding.ActivityMainBinding
 import com.ahmer.accounting.helper.*
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.constants.PermissionConstants
@@ -43,10 +40,6 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: UsersAdapter
-    private lateinit var mIvWarning: ImageView
-    private lateinit var mTvNoUserAccountHeading: TextView
-    private lateinit var mTvAddUserAccountHeading: TextView
-    private lateinit var mRecyclerView: RecyclerView
     private lateinit var mResultLauncherCreateDB: ActivityResultLauncher<Intent>
     private lateinit var mResultLauncherRestoreDB: ActivityResultLauncher<Intent>
     private lateinit var myDatabaseHelper: MyDatabaseHelper
@@ -57,19 +50,18 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        mBinding.executePendingBindings()
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.title = getString(R.string.app_name)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.overflowIcon?.setTint(Color.WHITE)
+            mBinding.appBar.toolbarMain.overflowIcon?.setTint(Color.WHITE)
         }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.appBar.toolbarMain)
 
         val drawerToggle = ActionBarDrawerToggle(
             this,
             mBinding.drawerLayout,
-            toolbar,
+            mBinding.appBar.toolbarMain,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -82,46 +74,30 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         mTvTotalAllCredit = headerNavView.findViewById(R.id.tvAllTotalCredit)
         mTvTotalAllBalances = headerNavView.findViewById(R.id.tvAllTotalBalance)
 
-        val fabAddNewUser = findViewById<ExtendedFloatingActionButton>(R.id.fabAddNewUser)
-        mIvWarning = findViewById(R.id.ivWarningMain)
-        mTvNoUserAccountHeading = findViewById(R.id.tvNoUserAccountHeadingMain)
-        mTvAddUserAccountHeading = findViewById(R.id.tvAddUserAccountHeadingMain)
-        mRecyclerView = findViewById(R.id.rvMain)
+        mBinding.appBar.mActivity = this
         myDatabaseHelper = MyDatabaseHelper()
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.isSmoothScrollbarEnabled = true
         linearLayoutManager.isAutoMeasureEnabled
-        mRecyclerView.recycledViewPool.clear()
-        mRecyclerView.clearOnScrollListeners()
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.isNestedScrollingEnabled = false
-        mRecyclerView.layoutManager = linearLayoutManager
-        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        mBinding.appBar.contentMain.rvMain.recycledViewPool.clear()
+        mBinding.appBar.contentMain.rvMain.clearOnScrollListeners()
+        mBinding.appBar.contentMain.rvMain.setHasFixedSize(true)
+        mBinding.appBar.contentMain.rvMain.isNestedScrollingEnabled = false
+        mBinding.appBar.contentMain.rvMain.layoutManager = linearLayoutManager
+        mBinding.appBar.contentMain.rvMain.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0 && fabAddNewUser.visibility == View.VISIBLE) {
-                    fabAddNewUser.hide()
-                } else if (dy < 0 && fabAddNewUser.visibility != View.VISIBLE) {
-                    fabAddNewUser.show()
+                if (dy > 0 && mBinding.appBar.fabAddNewUser.visibility == View.VISIBLE) {
+                    mBinding.appBar.fabAddNewUser.hide()
+                } else if (dy < 0 && mBinding.appBar.fabAddNewUser.visibility != View.VISIBLE) {
+                    mBinding.appBar.fabAddNewUser.show()
                 }
             }
         })
 
         LoaderManager.getInstance(this).initLoader(1, null, this)
-
-        fabAddNewUser.setOnClickListener {
-            val intent = Intent(it.context, AddUser::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-                ) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            }
-            Log.v(Constants.LOG_TAG, "Add record activity opened")
-            startActivity(intent)
-        }
 
         mResultLauncherCreateDB =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -142,6 +118,19 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         if (NetworkUtils.isConnected()) {
             MyAds.loadInterstitialAd(this)
         }
+    }
+
+    fun fabRun(view: View) {
+        val intent = Intent(view.context, AddUser::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+            ) {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+        Log.v(Constants.LOG_TAG, "Add record activity opened")
+        startActivity(intent)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -221,7 +210,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     fun searchUser(name: String) {
         val cursor = myDatabaseHelper.searchUsersName(name)
         mAdapter = UsersAdapter(applicationContext, cursor)
-        mRecyclerView.adapter = mAdapter
+        mBinding.appBar.contentMain.mAdapter = mAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -260,18 +249,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
         mAdapter = UsersAdapter(this, cursor!!)
-        if (mAdapter.itemCount > 0) {
-            mIvWarning.visibility = View.GONE
-            mTvNoUserAccountHeading.visibility = View.GONE
-            mTvAddUserAccountHeading.visibility = View.GONE
-            mRecyclerView.visibility = View.VISIBLE
-        } else {
-            mIvWarning.visibility = View.VISIBLE
-            mTvNoUserAccountHeading.visibility = View.VISIBLE
-            mTvAddUserAccountHeading.visibility = View.VISIBLE
-            mRecyclerView.visibility = View.GONE
-        }
-        mRecyclerView.adapter = mAdapter
+        mBinding.appBar.contentMain.mVisibility = mAdapter.itemCount <= 0
+        mBinding.appBar.contentMain.mAdapter = mAdapter
         val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
         val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
         val mAllBalance = mAllCredit - mAllDebit
