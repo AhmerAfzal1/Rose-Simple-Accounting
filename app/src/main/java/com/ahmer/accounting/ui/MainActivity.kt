@@ -38,14 +38,14 @@ import java.io.File
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: UsersAdapter
+    private lateinit var mBinding: ActivityMainBinding
+    private lateinit var mMyDatabaseHelper: MyDatabaseHelper
     private lateinit var mResultLauncherCreateDB: ActivityResultLauncher<Intent>
     private lateinit var mResultLauncherRestoreDB: ActivityResultLauncher<Intent>
-    private lateinit var myDatabaseHelper: MyDatabaseHelper
-    private lateinit var mTvTotalAllDebit: TextView
-    private lateinit var mTvTotalAllCredit: TextView
     private lateinit var mTvTotalAllBalances: TextView
+    private lateinit var mTvTotalAllCredit: TextView
+    private lateinit var mTvTotalAllDebit: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         mTvTotalAllBalances = headerNavView.findViewById(R.id.tvAllTotalBalance)
 
         mBinding.appBar.mActivity = this
-        myDatabaseHelper = MyDatabaseHelper()
+        mMyDatabaseHelper = MyDatabaseHelper()
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.isSmoothScrollbarEnabled = true
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri: Uri? = result.data?.data
-                    myDatabaseHelper.backupOrRestore(uri, true)
+                    mMyDatabaseHelper.backupOrRestore(uri, true)
                 }
             }
 
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri: Uri? = result.data?.data
-                    myDatabaseHelper.backupOrRestore(uri, false)
+                    mMyDatabaseHelper.backupOrRestore(uri, false)
                 }
             }
 
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
                             "Backup.abf"
                         )
                         if (src.exists()) {
-                            myDatabaseHelper.backupOrRestore(Uri.fromFile(src), false)
+                            mMyDatabaseHelper.backupOrRestore(Uri.fromFile(src), false)
                         } else {
                             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                                 addCategory(Intent.CATEGORY_OPENABLE)
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     fun searchUser(name: String) {
-        val cursor = myDatabaseHelper.searchUsersName(name)
+        val cursor = mMyDatabaseHelper.searchUsersName(name)
         mAdapter = UsersAdapter(applicationContext, cursor)
         mBinding.appBar.contentMain.mAdapter = mAdapter
     }
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         return object : MyCursorLoader(applicationContext) {
             private val mObserver = ForceLoadContentObserver()
             override fun loadInBackground(): Cursor {
-                val mCursor = myDatabaseHelper.getAllUserProfileData()
+                val mCursor = mMyDatabaseHelper.getAllUserProfileData()
                 mCursor.registerContentObserver(mObserver)
                 mCursor.setNotificationUri(contentResolver, Constants.UserColumn.USER_TABLE_URI)
                 return mCursor
@@ -251,8 +251,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         mAdapter = UsersAdapter(this, cursor!!)
         mBinding.appBar.contentMain.mVisibility = mAdapter.itemCount <= 0
         mBinding.appBar.contentMain.mAdapter = mAdapter
-        val mAllCredit = myDatabaseHelper.getSumForColumns(0, "Credit", true)
-        val mAllDebit = myDatabaseHelper.getSumForColumns(0, "Debit", true)
+        val mAllCredit = mMyDatabaseHelper.getSumForColumns(0, "Credit", true)
+        val mAllDebit = mMyDatabaseHelper.getSumForColumns(0, "Debit", true)
         val mAllBalance = mAllCredit - mAllDebit
         mTvTotalAllDebit.text = HelperFunctions.getRoundedValue(mAllDebit)
         mTvTotalAllCredit.text = HelperFunctions.getRoundedValue(mAllCredit)
@@ -265,6 +265,6 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
 
     override fun onDestroy() {
         super.onDestroy()
-        myDatabaseHelper.close()
+        mMyDatabaseHelper.close()
     }
 }

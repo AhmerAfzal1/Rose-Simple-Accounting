@@ -18,6 +18,14 @@
         app:iconSpaceReserved="false"
         app:title="@string/header_general">
 
+        <SwitchPreferenceCompat
+            app:fontFamily="@font/roboto"
+            app:iconSpaceReserved="false"
+            app:key="lockScreen"
+            app:summaryOff="@string/summary_activate_lock"
+            app:summaryOn="@string/summary_deactivate_lock"
+            app:title="@string/title_lock" />
+
         <Preference
             app:fontFamily="@font/roboto"
             app:iconSpaceReserved="false"

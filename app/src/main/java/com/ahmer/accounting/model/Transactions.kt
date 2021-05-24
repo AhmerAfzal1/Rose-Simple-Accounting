@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Transactions : BaseObservable() {
+
     @get:Bindable
     var userId: Long = 0
         set(value) {

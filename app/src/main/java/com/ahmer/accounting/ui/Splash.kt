@@ -6,14 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.ahmer.accounting.R
 import com.ahmer.accounting.databinding.SplashBinding
 import com.ahmer.accounting.helper.Constants
 import io.ahmer.utils.constants.PermissionConstants
 import io.ahmer.utils.utilcode.PermissionUtils
-import io.ahmer.utils.utilcode.SPUtils
 import io.ahmer.utils.utilcode.ScreenUtils
 
 class Splash : AppCompatActivity() {
@@ -23,13 +21,6 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.splash)
-        val themePref = SPUtils.getInstance(Constants.PREFERENCE_THEME)
-        val isChecked = themePref.getBoolean(Constants.PREFERENCE_THEME_KEY)
-        if (isChecked) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
         checkPermission(this)
     }
 

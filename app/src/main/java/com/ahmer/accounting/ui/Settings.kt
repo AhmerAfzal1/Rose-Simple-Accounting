@@ -15,6 +15,8 @@ import com.ahmer.accounting.databinding.SettingsBinding
 import com.ahmer.accounting.helper.Constants
 import com.ahmer.accounting.helper.MyAds
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.guardanis.applock.AppLock
+import com.guardanis.applock.dialogs.LockCreationDialogBuilder
 import io.ahmer.utils.HelperUtils
 import io.ahmer.utils.utilcode.*
 import java.io.File
@@ -71,6 +73,27 @@ class Settings : AppCompatActivity() {
                     prefTheme.put(Constants.PREFERENCE_THEME_KEY, isChecked)
                     true
                 }
+
+            val lockScreenPref: SPUtils = SPUtils.getInstance(Constants.PREFERENCE_LOCKSCREEN)
+            val btnLockScreen: SwitchPreferenceCompat = findPreference("lockScreen")!!
+            btnLockScreen.setOnPreferenceChangeListener { preference, newValue ->
+                val isChecked = newValue as Boolean
+                if (isChecked) {
+                    LockCreationDialogBuilder(requireActivity())
+                        .onCanceled {
+                            ToastUtils.showShort("You canceled...")
+                        }
+                        .onLockCreated {
+                            ToastUtils.showShort("Lock created!")
+                        }
+                        .show()
+                    lockScreenPref.put(Constants.PREFERENCE_LOCKSCREEN_KEY, isChecked)
+                } else {
+                    AppLock.getInstance(context).invalidateEnrollments()
+                    lockScreenPref.put(Constants.PREFERENCE_LOCKSCREEN_KEY, isChecked)
+                }
+                true
+            }
 
             btnCaches = findPreference("clearCaches")!!
             btnCaches.setOnPreferenceClickListener {

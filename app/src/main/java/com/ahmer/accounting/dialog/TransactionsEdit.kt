@@ -19,12 +19,12 @@ import com.google.android.material.button.MaterialButton
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.ahmer.utils.utilcode.ToastUtils
 
-class TransactionsEdit(context: Context, trans: Transactions) :
+class TransactionsEdit(context: Context, transactions: Transactions) :
     Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
-    private val mContext = context
-    private val mTransactions = trans
     private lateinit var mBinding: TransDialogAddBinding
+    private val mContext = context
+    private val mTransactions = transactions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

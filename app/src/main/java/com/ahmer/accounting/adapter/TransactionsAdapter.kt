@@ -20,8 +20,8 @@ class TransactionsAdapter(context: Context, cursor: Cursor) :
 
     private val mContext = context
     private val mCursor = cursor
-    private var mSelectedIds = ArrayList<Int>()
     private val mTransactions = ArrayList<Transactions>()
+    private var mSelectedIds = ArrayList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val mBinding: TransContainerAddBinding = DataBindingUtil.inflate(

@@ -48,8 +48,8 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     private lateinit var mAdapterBalance: TransactionsBalanceAdapter
     private lateinit var mAdapterTrans: TransactionsAdapter
     private lateinit var mBinding: TransAddBinding
+    private lateinit var mMyDatabaseHelper: MyDatabaseHelper
     private lateinit var mResultLauncherGeneratePdf: ActivityResultLauncher<Intent>
-    private lateinit var myDatabaseHelper: MyDatabaseHelper
     private var mActionMode: ActionMode? = null
     private var mIsMultiSelect = false
     private var mIsSelectAll = false
@@ -75,7 +75,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         mBinding.mUserName = mUserName
         mBinding.mUserPhone = mUserPhone
         mBinding.executePendingBindings()
-        myDatabaseHelper = MyDatabaseHelper()
+        mMyDatabaseHelper = MyDatabaseHelper()
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.isSmoothScrollbarEnabled = true
@@ -148,7 +148,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     private fun searchTransactionDescription(keyword: String) {
-        val cursor = myDatabaseHelper.searchTransDesc(mUserId, keyword)
+        val cursor = mMyDatabaseHelper.searchTransDesc(mUserId, keyword)
         mAdapterTrans = TransactionsAdapter(this, cursor)
         mBinding.rvTransactionsAdapter = mAdapterTrans
     }
@@ -259,7 +259,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         return object : MyCursorLoader(applicationContext) {
             private val mObserver = ForceLoadContentObserver()
             override fun loadInBackground(): Cursor {
-                val mCursor = myDatabaseHelper.getAllTransactionsByUserId(mUserId)
+                val mCursor = mMyDatabaseHelper.getAllTransactionsByUserId(mUserId)
                 mCursor.registerContentObserver(mObserver)
                 mCursor.setNotificationUri(
                     contentResolver, Constants.TranColumn.TRANSACTION_TABLE_URI
@@ -270,8 +270,8 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-        val mUserCredit = myDatabaseHelper.getSumForColumns(mUserId, "Credit")
-        val mUserDebit = myDatabaseHelper.getSumForColumns(mUserId, "Debit")
+        val mUserCredit = mMyDatabaseHelper.getSumForColumns(mUserId, "Credit")
+        val mUserDebit = mMyDatabaseHelper.getSumForColumns(mUserId, "Debit")
         val mUserBalance = mUserCredit - mUserDebit
         val mTotalBalance = HelperFunctions.getRoundedValue(mUserBalance)
         mAdapterTrans = TransactionsAdapter(this, cursor!!)
@@ -334,7 +334,7 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                     for (pos in mSelectedIds) {
                         val trans = mAdapterTrans.getTransList()
                         isDeletedSuccessfully =
-                            myDatabaseHelper.deleteTransactions(trans[pos].transId)
+                            mMyDatabaseHelper.deleteTransactions(trans[pos].transId)
                     }
                     if (isDeletedSuccessfully) {
                         ToastUtils.showShort(getString(R.string.trans_deleted))
@@ -406,6 +406,6 @@ class AddTransactions : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
     override fun onDestroy() {
         super.onDestroy()
-        myDatabaseHelper.close()
+        mMyDatabaseHelper.close()
     }
 }

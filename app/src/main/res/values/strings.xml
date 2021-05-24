@@ -103,4 +103,8 @@
     <string name="ad_rewarded_id">ca-app-pub-0672688958454166/1710562874</string>
     <string name="last_modified_type">Modified Type:</string>
     <string name="last_modified_value">Modified Value:</string>
+
+    <string name="summary_activate_lock">Secure your data with pin code or fingerprint lock</string>
+    <string name="summary_deactivate_lock">Disable lock screen</string>
+    <string name="title_lock">Lock Screen</string>
 </resources>

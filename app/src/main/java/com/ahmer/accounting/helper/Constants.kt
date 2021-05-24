@@ -16,6 +16,8 @@ class Constants {
         const val DATE_SHORT_PATTERN = "dd-MM-yy"
         const val DATE_TIME_PATTERN = "dd MMM yyyy hh:mm:ss a"
         const val PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=$APPLICATION_ID"
+        const val PREFERENCE_LOCKSCREEN = "LockScreen"
+        const val PREFERENCE_LOCKSCREEN_KEY = "LockScreenKey"
         const val PREFERENCE_THEME = "Theme"
         const val PREFERENCE_THEME_KEY = "ThemeKey"
     }

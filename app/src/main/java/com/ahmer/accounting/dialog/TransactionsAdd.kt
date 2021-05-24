@@ -22,10 +22,10 @@ import io.ahmer.utils.utilcode.ToastUtils
 class TransactionsAdd(context: Context, userID: Long) :
     Dialog(context, R.style.Theme_RoseSimpleAccounting_Dialog) {
 
-    private val mContext = context
-    private val mUserID = userID
-    private val mTransactions = Transactions()
     private lateinit var mBinding: TransDialogAddBinding
+    private val mContext = context
+    private val mTransactions = Transactions()
+    private val mUserID = userID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
